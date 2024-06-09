@@ -1,5 +1,6 @@
-package garlicbears._quiz.domain;
+package garlicbears._quiz.domain.game.domain;
 
+import garlicbears._quiz.domain.user.domain.User;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -7,14 +8,19 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "game_sessions")
-public class GameSession {
+public class GameSessions {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "game_session_seq")
     private long gameSessionId;
 
-    // Topic
-    // User
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_seq")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "topic_seq")
+    Topics  topic;
 
     @Column(name = "game_started_at", nullable = false)
     @ColumnDefault("CURRENT_TIMESTAMP")

@@ -1,26 +1,28 @@
-package garlicbears._quiz.domain;
+package garlicbears._quiz.domain.game.domain;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "user_answers")
-public class UserAnswer {
+public class UserAnswers {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_answer_seq")
     private long userAnswerId;
 
-    //  Topic
-    //  Question
-    //  User
-    //  GameSession
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "game_session_seq")
+    private GameSessions gameSession;
 
-    @Column(name = "user_answer_text", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_seq")
+    private Questions question;
+
+    @Column(name = "user_answer_text", nullable = false, length = 100)
     private String userAnswerText;
 
     @Column(name = "user_answer_status", nullable = false)

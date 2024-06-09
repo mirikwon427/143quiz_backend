@@ -1,10 +1,13 @@
-package garlicbears._quiz.domain;
+package garlicbears._quiz.domain.admin;
 
+import garlicbears._quiz.global.domain.Active;
+import garlicbears._quiz.global.domain.BaseTimeEntity;
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "admin")
-public class Admin {
+public class Admin extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "admin_seq")
@@ -16,6 +19,8 @@ public class Admin {
     @Column(name = "admin_password", nullable = false, length = 100)
     private String adminPassword;
 
-    //  BaseTimeEntity
-    //  Active
+    @Enumerated(EnumType.STRING)
+    @Column(name = "admin_active")
+    @ColumnDefault("'active'")
+    private Active active;
 }
