@@ -11,7 +11,7 @@ public class GameSession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "game_session_seq")
-    private Long gameSessionId;
+    private long gameSessionId;
 
     // Topic
     // User
@@ -25,10 +25,10 @@ public class GameSession {
 
     @Column(name = "game_dropout", nullable = false)
     @ColumnDefault("TRUE")
-    private Boolean gameDropout;
+    private boolean gameDropout;
 
     @Column(name = "game_hearts_count", nullable = false)
     @ColumnDefault("0")
-    private Integer heartsCount;
+    private int heartsCount;
 
 }

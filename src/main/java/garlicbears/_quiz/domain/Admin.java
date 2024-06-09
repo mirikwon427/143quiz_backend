@@ -8,7 +8,7 @@ public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "admin_seq")
-    private Long adminId;
+    private long adminId;
 
     @Column(name = "admin_email", nullable = false, unique = true, length = 200)
     private String adminEmail;

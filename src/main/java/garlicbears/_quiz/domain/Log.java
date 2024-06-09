@@ -11,7 +11,7 @@ public class Log {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "log_seq")
-    private Long logId;
+    private long logId;
 
     //  User
 

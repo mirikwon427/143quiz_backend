@@ -13,7 +13,7 @@ public class UserAnswer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_answer_seq")
-    private Long userAnswerId;
+    private long userAnswerId;
 
     //  Topic
     //  Question
@@ -24,15 +24,15 @@ public class UserAnswer {
     private String userAnswerText;
 
     @Column(name = "user_answer_status", nullable = false)
-    private Character userAnswerStatus;
+    private char userAnswerStatus;
 
     @Column(name = "hint_usage_count", nullable = false)
     @ColumnDefault("0")
-    private Integer hintUsageCount;
+    private int hintUsageCount;
 
     @Column(name = "user_answer_time_taken", nullable = false)
     @ColumnDefault("0")
-    private Integer timeTaken;
+    private int timeTaken;
 
     @Column(name = "user_answered_at", nullable = false)
     @CreationTimestamp

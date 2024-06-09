@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ratingId;
+    private long ratingId;
 
     //  User
 
     @Column(name = "rating_value", nullable = false)
     @ColumnDefault("5")
-    private Double ratingValue;
+    private double ratingValue;
 
     @Column(name = "rating_at", nullable = false)
     @ColumnDefault("CURRENT_TIMESTAMP")
