@@ -1,5 +1,7 @@
-package garlicbears._quiz.domain;
+package garlicbears._quiz.domain.game.domain;
 
+import garlicbears._quiz.global.domain.Active;
+import garlicbears._quiz.global.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class Topics extends BaseTimeEntity{
+public class Topics extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "topic_seq")

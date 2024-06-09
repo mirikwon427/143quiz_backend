@@ -1,5 +1,6 @@
-package garlicbears._quiz.domain;
+package garlicbears._quiz.domain.user.domain;
 
+import garlicbears._quiz.global.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class User extends BaseTimeEntity{
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,24 +43,5 @@ public class User extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     @Column(name = "user_active")
     private Active userActive;
-
-    @Getter
-    enum Gender{
-        male,
-        female,
-        other,
-    }
-
-    @Getter
-    enum Location{
-        Seoul,
-        Gyeonggi,
-        Incheon,
-        Chungcheong,
-        Jeolla,
-        Gyeongsang,
-        Jeju,
-        Overseas,
-    }
 
 }

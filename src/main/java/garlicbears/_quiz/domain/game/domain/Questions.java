@@ -1,6 +1,7 @@
-package garlicbears._quiz.domain;
+package garlicbears._quiz.domain.game.domain;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
+import garlicbears._quiz.global.domain.Active;
+import garlicbears._quiz.global.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
