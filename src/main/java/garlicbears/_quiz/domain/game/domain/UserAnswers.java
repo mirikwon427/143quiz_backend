@@ -22,7 +22,7 @@ public class UserAnswers {
     @JoinColumn(name = "question_seq")
     private Questions question;
 
-    @Column(name = "user_answer_text", nullable = false)
+    @Column(name = "user_answer_text", nullable = false, length = 100)
     private String userAnswerText;
 
     @Column(name = "user_answer_status", nullable = false)

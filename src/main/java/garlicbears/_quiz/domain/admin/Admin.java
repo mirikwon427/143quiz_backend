@@ -3,6 +3,7 @@ package garlicbears._quiz.domain.admin;
 import garlicbears._quiz.global.domain.Active;
 import garlicbears._quiz.global.domain.BaseTimeEntity;
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "admin")
@@ -20,5 +21,6 @@ public class Admin extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "admin_active")
+    @ColumnDefault("'active'")
     private Active active;
 }
