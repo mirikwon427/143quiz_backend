@@ -1,5 +1,6 @@
 package garlicbears._quiz.domain.user.domain;
 
+import garlicbears._quiz.global.domain.Active;
 import garlicbears._quiz.global.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
