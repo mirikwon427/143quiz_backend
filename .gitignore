@@ -38,3 +38,6 @@ out/
 
 ### AWS ###
 application-aws.properties
+
+### JWT Properties ###
+JwtProperties.java

@@ -1,5 +1,7 @@
 package garlicbears._quiz.config.auth;
 
+import garlicbears._quiz.domain.user.domain.User;
+import garlicbears._quiz.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,7 +15,9 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User userEntity = userRepository.findByUsername(username);
+        System.out.println("loadUserByUsername: " + username);
+        User userEntity = userRepository.findByUserEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("not found userEmail : " + username));
         return new PrincipalDetails(userEntity);
     }
 }

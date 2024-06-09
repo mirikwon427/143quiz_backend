@@ -1,5 +1,8 @@
 package garlicbears._quiz.config;
 
+import garlicbears._quiz.config.jwt.JwtAuthenticationFilter;
+import garlicbears._quiz.config.jwt.JwtAuthorizationFilter;
+import garlicbears._quiz.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +21,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig {
 
     private final CorsFilter corsFilter;
-//    private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -35,10 +38,11 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilter(corsFilter)
-//                .addFilter(new JwtAuthenticationFilter(authenticationManager))
-//                .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository))
+                .addFilter(new JwtAuthenticationFilter(authenticationManager))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").authenticated()
+                        .requestMatchers("/api/user/signup", "api/user/login").permitAll()
+                        .requestMatchers("/api/user/**").authenticated()
 //                        .requestMatchers("/api/v1/manager/**").hasAnyRole("ADMIN", "MANAGER")
 //                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().permitAll()

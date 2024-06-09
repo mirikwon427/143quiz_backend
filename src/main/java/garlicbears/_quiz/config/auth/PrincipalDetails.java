@@ -1,5 +1,6 @@
 package garlicbears._quiz.config.auth;
 
+import garlicbears._quiz.domain.user.domain.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,10 @@ public class PrincipalDetails implements UserDetails {
 
     private User user;
 
+    public PrincipalDetails(User user) {
+        this.user = user;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
@@ -19,12 +24,12 @@ public class PrincipalDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return "";
+        return user.getUserPassword();
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return user.getUserEmail();
     }
 
     @Override
