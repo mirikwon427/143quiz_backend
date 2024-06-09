@@ -1,10 +1,11 @@
-package garlicbears._quiz.domain;
+package garlicbears._quiz.domain.admin;
 
+import garlicbears._quiz.global.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "role")
-public class Role {
+public class Role extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_seq")
@@ -12,7 +13,5 @@ public class Role {
 
     @Column(name = "role_name", nullable = false)
     private String roleName;
-
-    //  BaseTimeEntity
 
 }

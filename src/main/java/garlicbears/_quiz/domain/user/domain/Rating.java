@@ -1,4 +1,4 @@
-package garlicbears._quiz.domain;
+package garlicbears._quiz.domain.user.domain;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -12,7 +12,9 @@ public class Rating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long ratingId;
 
-    //  User
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_seq")
+    private User user;
 
     @Column(name = "rating_value", nullable = false)
     @ColumnDefault("5")
