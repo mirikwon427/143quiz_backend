@@ -1,10 +1,11 @@
 package garlicbears._quiz.domain.user.domain;
 
+import garlicbears._quiz.domain.user.dto.SignUpDto;
 import garlicbears._quiz.global.domain.Active;
 import garlicbears._quiz.global.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static garlicbears._quiz.global.domain.Active.active;
 
@@ -46,7 +47,16 @@ public class User extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_active", nullable = false)
-    @ColumnDefault("'active'")
-    private Active userActive;
+    private Active userActive = active;
 
+    @Builder
+    public User(SignUpDto signUpDto, PasswordEncoder passwordEncoder) {
+        this.userEmail = signUpDto.getEmail();
+        this.userPassword = passwordEncoder.encode(signUpDto.getPassword());
+        this.userNickname = signUpDto.getNickname();
+        this.userBirthYear = signUpDto.getBirthYear();
+        this.userAge = signUpDto.getAge();
+        this.userGender = Gender.fromKoreanName(signUpDto.getGender());
+        this.userLocation = Location.fromKoreanName(signUpDto.getLocation());
+    }
 }

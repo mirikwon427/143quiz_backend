@@ -27,6 +27,4 @@ public enum Location {
         }
         throw new CustomException(ErrorCode.UNKNOWN_LOCATION);
     }
-
-
 }
