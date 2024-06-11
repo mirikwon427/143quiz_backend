@@ -1,6 +1,6 @@
-package garlicbears._quiz.domain;
+package garlicbears._quiz.domain.log.entity;
 
-import garlicbears._quiz.domain.user.domain.User;
+import garlicbears._quiz.domain.user.entity.User;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 

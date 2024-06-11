@@ -1,4 +1,4 @@
-package garlicbears._quiz.global.domain;
+package garlicbears._quiz.global.entity;
 
 public enum Active {
     active,

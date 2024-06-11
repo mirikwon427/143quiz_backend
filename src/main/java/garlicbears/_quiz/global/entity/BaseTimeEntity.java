@@ -1,4 +1,4 @@
-package garlicbears._quiz.global.domain;
+package garlicbears._quiz.global.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

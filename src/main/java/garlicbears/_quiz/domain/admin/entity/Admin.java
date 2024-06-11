@@ -1,7 +1,7 @@
-package garlicbears._quiz.domain.admin;
+package garlicbears._quiz.domain.admin.entity;
 
-import garlicbears._quiz.global.domain.Active;
-import garlicbears._quiz.global.domain.BaseTimeEntity;
+import garlicbears._quiz.global.entity.Active;
+import garlicbears._quiz.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 

@@ -1,4 +1,4 @@
-package garlicbears._quiz.domain.user.domain;
+package garlicbears._quiz.domain.user.entity;
 
 import garlicbears._quiz.global.exception.CustomException;
 import garlicbears._quiz.global.exception.ErrorCode;
@@ -8,8 +8,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Gender {
-    male("남성"),
-    female("여성"),
+    male("남자"),
+    female("여자"),
     other("기타");
 
     private final String koreanName;

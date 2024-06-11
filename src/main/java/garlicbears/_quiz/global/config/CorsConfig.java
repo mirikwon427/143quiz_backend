@@ -1,4 +1,4 @@
-package garlicbears._quiz.config;
+package garlicbears._quiz.global.config;
 
 
 import org.springframework.context.annotation.Bean;
