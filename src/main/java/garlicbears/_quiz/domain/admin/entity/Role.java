@@ -1,6 +1,6 @@
-package garlicbears._quiz.domain.admin.domain;
+package garlicbears._quiz.domain.admin.entity;
 
-import garlicbears._quiz.global.domain.BaseTimeEntity;
+import garlicbears._quiz.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 
 @Entity

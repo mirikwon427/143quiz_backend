@@ -1,6 +1,6 @@
 package garlicbears._quiz.domain.user.service;
 
-import garlicbears._quiz.domain.user.domain.User;
+import garlicbears._quiz.domain.user.entity.User;
 import garlicbears._quiz.domain.user.dto.SignUpDto;
 import garlicbears._quiz.domain.user.repository.UserRepository;
 import garlicbears._quiz.global.exception.CustomException;
