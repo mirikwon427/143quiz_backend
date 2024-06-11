@@ -1,13 +1,13 @@
-package garlicbears._quiz.domain.user.domain;
+package garlicbears._quiz.domain.user.entity;
 
 import garlicbears._quiz.domain.user.dto.SignUpDto;
-import garlicbears._quiz.global.domain.Active;
-import garlicbears._quiz.global.domain.BaseTimeEntity;
+import garlicbears._quiz.global.entity.Active;
+import garlicbears._quiz.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static garlicbears._quiz.global.domain.Active.active;
+import static garlicbears._quiz.global.entity.Active.active;
 
 @Data
 @EqualsAndHashCode(callSuper = false)

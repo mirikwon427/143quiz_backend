@@ -1,6 +1,6 @@
 package garlicbears._quiz.global.config.auth;
 
-import garlicbears._quiz.domain.user.domain.User;
+import garlicbears._quiz.domain.user.entity.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

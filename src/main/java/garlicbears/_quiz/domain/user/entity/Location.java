@@ -1,4 +1,4 @@
-package garlicbears._quiz.domain.user.domain;
+package garlicbears._quiz.domain.user.entity;
 
 import garlicbears._quiz.global.exception.CustomException;
 import garlicbears._quiz.global.exception.ErrorCode;

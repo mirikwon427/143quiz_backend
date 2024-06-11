@@ -1,4 +1,4 @@
-package garlicbears._quiz.domain.user.domain;
+package garlicbears._quiz.domain.user.entity;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;

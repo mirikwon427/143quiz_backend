@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import garlicbears._quiz.domain.user.repository.UserRepository;
 import garlicbears._quiz.global.config.auth.PrincipalDetails;
-import garlicbears._quiz.domain.user.domain.User;
+import garlicbears._quiz.domain.user.entity.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
