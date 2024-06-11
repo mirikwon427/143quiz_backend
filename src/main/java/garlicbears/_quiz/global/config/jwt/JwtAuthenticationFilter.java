@@ -25,7 +25,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        System.out.println("attemptAuthentication");
+        // 로그인 시도할 경우 도달하게 되는 필터
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             User user = objectMapper.readValue(request.getInputStream(), User.class);
@@ -42,8 +42,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        System.out.println("successfulAuthentication");
+        // 로그인 성공한 경우 도착하는 함수
+        // Jwt 토큰을 발급해 헤더(Authorization)로 전달
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
+
+        // 삭제 회원의 경우 토큰을 발급해서는 안된다.
+
         String jwtToken = JWT.create()
                 .withSubject("143quiz")
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION))
@@ -51,7 +55,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withClaim("username", principalDetails.getUser().getUserEmail())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET.getBytes()));
 
-        System.out.println(jwtToken);
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
     }
 }
