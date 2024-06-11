@@ -9,6 +9,11 @@ import garlicbears._quiz.global.config.auth.PrincipalDetails;
 import garlicbears._quiz.global.dto.ResponseDto;
 import garlicbears._quiz.global.exception.CustomException;
 import garlicbears._quiz.global.exception.ErrorCode;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,6 +65,12 @@ public class UserController {
         return ResponseEntity.ok(ResponseDto.success());
     }
 
+    @Operation(summary = "유저 정보(내 정보) 조회", description = "jwt token을 받아 유저 정보를 반환합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved",
+                content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+            @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)")
+    })
     @GetMapping("/")
     public ResponseEntity<?> searchUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         // 현재 인증된 사용자의 정보를 userDetails로부터 가져올 수 있습니다.
