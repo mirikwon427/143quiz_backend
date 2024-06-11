@@ -26,10 +26,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder sharedObject = http.getSharedObject(AuthenticationManagerBuilder.class);
-
         AuthenticationManager authenticationManager = sharedObject.build();
-
         http.authenticationManager(authenticationManager);
+
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager);
+        jwtAuthenticationFilter.setFilterProcessesUrl("/user/login");
+
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -38,10 +40,10 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilter(corsFilter)
-                .addFilter(new JwtAuthenticationFilter(authenticationManager))
+                .addFilter(jwtAuthenticationFilter)
                 .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/signup", "/user/login").permitAll()
+                        .requestMatchers("/user/signup", "/user/checkEmail", "/user/checkNickname").permitAll()
                         .requestMatchers("/user/**").authenticated()
 //                        .requestMatchers("/api/v1/manager/**").hasAnyRole("ADMIN", "MANAGER")
 //                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
