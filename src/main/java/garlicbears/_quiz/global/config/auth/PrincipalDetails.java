@@ -1,4 +1,4 @@
-package garlicbears._quiz.config.auth;
+package garlicbears._quiz.global.config.auth;
 
 import garlicbears._quiz.domain.user.domain.User;
 import lombok.Data;

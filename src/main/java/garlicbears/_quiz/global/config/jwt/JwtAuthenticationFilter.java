@@ -1,9 +1,9 @@
-package garlicbears._quiz.config.jwt;
+package garlicbears._quiz.global.config.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import garlicbears._quiz.config.auth.PrincipalDetails;
+import garlicbears._quiz.global.config.auth.PrincipalDetails;
 import garlicbears._quiz.domain.user.domain.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

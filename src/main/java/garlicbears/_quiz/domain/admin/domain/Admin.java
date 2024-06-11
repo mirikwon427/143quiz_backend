@@ -1,4 +1,4 @@
-package garlicbears._quiz.domain.admin;
+package garlicbears._quiz.domain.admin.domain;
 
 import garlicbears._quiz.global.domain.Active;
 import garlicbears._quiz.global.domain.BaseTimeEntity;

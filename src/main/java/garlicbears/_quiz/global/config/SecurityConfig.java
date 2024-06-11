@@ -1,8 +1,8 @@
-package garlicbears._quiz.config;
+package garlicbears._quiz.global.config;
 
-import garlicbears._quiz.config.jwt.JwtAuthenticationFilter;
-import garlicbears._quiz.config.jwt.JwtAuthorizationFilter;
-import garlicbears._quiz.repository.UserRepository;
+import garlicbears._quiz.domain.user.repository.UserRepository;
+import garlicbears._quiz.global.config.jwt.JwtAuthenticationFilter;
+import garlicbears._quiz.global.config.jwt.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,8 +41,8 @@ public class SecurityConfig {
                 .addFilter(new JwtAuthenticationFilter(authenticationManager))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/user/signup", "api/user/login").permitAll()
-                        .requestMatchers("/api/user/**").authenticated()
+                        .requestMatchers("/user/signup", "/user/login").permitAll()
+                        .requestMatchers("/user/**").authenticated()
 //                        .requestMatchers("/api/v1/manager/**").hasAnyRole("ADMIN", "MANAGER")
 //                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().permitAll()

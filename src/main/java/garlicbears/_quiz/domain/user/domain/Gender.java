@@ -8,8 +8,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Gender {
-    male("남성"),
-    female("여성"),
+    male("남자"),
+    female("여자"),
     other("기타");
 
     private final String koreanName;

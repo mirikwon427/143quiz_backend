@@ -1,4 +1,4 @@
-package garlicbears._quiz.domain;
+package garlicbears._quiz.domain.log.domain;
 
 import garlicbears._quiz.domain.user.domain.User;
 import jakarta.persistence.*;

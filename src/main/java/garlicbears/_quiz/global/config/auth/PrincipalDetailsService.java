@@ -1,7 +1,7 @@
-package garlicbears._quiz.config.auth;
+package garlicbears._quiz.global.config.auth;
 
 import garlicbears._quiz.domain.user.domain.User;
-import garlicbears._quiz.repository.UserRepository;
+import garlicbears._quiz.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
