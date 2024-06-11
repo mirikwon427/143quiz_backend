@@ -47,6 +47,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
         // 삭제 회원의 경우 토큰을 발급해서는 안된다.
+        User user = principalDetails.getUser();
+        if (user.getUserActive().toString().equals("inactive")){
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
 
         String jwtToken = JWT.create()
                 .withSubject("143quiz")

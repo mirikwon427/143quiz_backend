@@ -81,4 +81,14 @@ public class UserController {
         // 업데이트가 성공했을 때
         return ResponseEntity.ok(ResponseUserDto.fromUser(user));
     }
+
+    @DeleteMapping("/")
+    public ResponseEntity<?> deleteUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        User user = principalDetails.getUser();
+
+        userService.delete(user);
+
+        return ResponseEntity.ok(ResponseDto.success());
+    }
+
 }

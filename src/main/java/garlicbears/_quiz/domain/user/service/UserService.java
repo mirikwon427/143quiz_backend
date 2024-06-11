@@ -6,6 +6,7 @@ import garlicbears._quiz.domain.user.entity.Location;
 import garlicbears._quiz.domain.user.entity.User;
 import garlicbears._quiz.domain.user.dto.SignUpDto;
 import garlicbears._quiz.domain.user.repository.UserRepository;
+import garlicbears._quiz.global.entity.Active;
 import garlicbears._quiz.global.exception.CustomException;
 import garlicbears._quiz.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +58,12 @@ public class UserService {
         }
         if (updateUserDto.getGender() != null) user.setUserGender(Gender.fromKoreanName(updateUserDto.getGender()));
         if (updateUserDto.getLocation() != null) user.setUserLocation(Location.fromKoreanName(updateUserDto.getLocation()));
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void delete(User user) {
+        user.setUserActive(Active.inactive);
         userRepository.save(user);
     }
 }
