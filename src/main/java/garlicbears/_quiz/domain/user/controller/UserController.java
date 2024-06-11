@@ -1,7 +1,11 @@
 package garlicbears._quiz.domain.user.controller;
 
+import garlicbears._quiz.domain.user.dto.ResponseUserDto;
 import garlicbears._quiz.domain.user.dto.SignUpDto;
+import garlicbears._quiz.domain.user.dto.UpdateUserDto;
+import garlicbears._quiz.domain.user.entity.User;
 import garlicbears._quiz.domain.user.service.UserService;
+import garlicbears._quiz.global.config.auth.PrincipalDetails;
 import garlicbears._quiz.global.dto.ResponseDto;
 import garlicbears._quiz.global.exception.CustomException;
 import garlicbears._quiz.global.exception.ErrorCode;
@@ -9,11 +13,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -56,5 +58,27 @@ public class UserController {
         }
         userService.signUp(signUpDto);
         return ResponseEntity.ok(ResponseDto.success());
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<?> searchUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        // 현재 인증된 사용자의 정보를 userDetails로부터 가져올 수 있습니다.
+        User user = principalDetails.getUser();
+
+        System.out.println(user);
+
+        return ResponseEntity.ok(ResponseUserDto.fromUser(user));
+    }
+
+    @PatchMapping("/")
+    public ResponseEntity<?> updateUser(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody UpdateUserDto updateUserDto) {
+        // 현재 인증된 사용자의 정보를 userDetails로부터 가져올 수 있습니다.
+        User user = principalDetails.getUser();
+
+        // TODO: 사용자 정보 업데이트 로직 구현
+        userService.update(user, updateUserDto);
+
+        // 업데이트가 성공했을 때
+        return ResponseEntity.ok(ResponseUserDto.fromUser(user));
     }
 }

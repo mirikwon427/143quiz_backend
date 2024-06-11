@@ -1,5 +1,8 @@
 package garlicbears._quiz.domain.user.service;
 
+import garlicbears._quiz.domain.user.dto.UpdateUserDto;
+import garlicbears._quiz.domain.user.entity.Gender;
+import garlicbears._quiz.domain.user.entity.Location;
 import garlicbears._quiz.domain.user.entity.User;
 import garlicbears._quiz.domain.user.dto.SignUpDto;
 import garlicbears._quiz.domain.user.repository.UserRepository;
@@ -10,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Year;
 import java.util.Optional;
 
 @Service
@@ -42,6 +46,17 @@ public class UserService {
                 .passwordEncoder(passwordEncoder)
                 .build();
 
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void update(User user, UpdateUserDto updateUserDto) {
+        if (updateUserDto.getBirthYear() != null) {
+            user.setUserBirthYear(updateUserDto.getBirthYear());
+            user.setUserAge(Year.now().getValue() - updateUserDto.getBirthYear());
+        }
+        if (updateUserDto.getGender() != null) user.setUserGender(Gender.fromKoreanName(updateUserDto.getGender()));
+        if (updateUserDto.getLocation() != null) user.setUserLocation(Location.fromKoreanName(updateUserDto.getLocation()));
         userRepository.save(user);
     }
 }
