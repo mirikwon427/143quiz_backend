@@ -33,9 +33,12 @@ public class QuestionService {
 
         StringBuilder questionAnswer = new StringBuilder();
 
-        for (int i = 0; i < questionText.length(); i++) {
-            char c = questionText.substring(i, i+1).charAt(0);
-            int initial = (((c - 0xAC00) / 28) / 21);
+        for (char c : questionText.toCharArray()) {
+            if (c < '가' || c > '힣')
+            {
+                throw new CustomException(ErrorCode.INVALID_INPUT);
+            }
+            int initial = (((c - '가') / 28) / 21);
             questionAnswer.append(initialChs[initial]);
         }
 
