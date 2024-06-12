@@ -1,5 +1,7 @@
 package garlicbears._quiz.domain.admin.controller;
 
+import garlicbears._quiz.domain.admin.dto.CreateQuestionsDto;
+import garlicbears._quiz.domain.admin.dto.CreateTopicsDto;
 import garlicbears._quiz.domain.game.entity.Topic;
 import garlicbears._quiz.domain.game.service.QuestionService;
 import garlicbears._quiz.domain.game.service.TopicService;
@@ -28,7 +30,7 @@ public class AdminController {
     private final TopicService topicService;
     private final QuestionService questionService;
 
-    @PostMapping("/topics")
+    @PostMapping("/topic")
     @Operation(summary = "주제 생성", description = "입력된 주제를 생성합니다.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
@@ -61,7 +63,25 @@ public class AdminController {
         return ResponseEntity.ok(ResponseDto.success());
     }
 
-    @PostMapping("/topics/{topicId}/questions")
+    @PostMapping("/topics")
+    public ResponseEntity<?> createTopics(@Valid @RequestBody CreateTopicsDto request) {
+        for (String topicTitle : request.getTopics()) {
+            if (topicTitle == null || topicTitle.trim().isEmpty()) {
+                continue;
+            }
+
+            try {
+                topicService.save(topicTitle);
+            } catch (CustomException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+
+
+        return ResponseEntity.ok(ResponseDto.success());
+    }
+
+    @PostMapping("/topics/{topicId}/question")
     @Operation(summary = "문제 생성", description = "입력된 문제를 생성합니다.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
@@ -103,6 +123,34 @@ public class AdminController {
         }
 
         questionService.save(topic.get(), questionText);
+
+        return ResponseEntity.ok(ResponseDto.success());
+    }
+
+    @PostMapping("/questions")
+    public ResponseEntity<?> createQuestions(@Valid @RequestBody CreateQuestionsDto request)
+    {
+        Topic topicEntity = null;
+        for (Topic topic : topicService.findByTopicTitle(request.getTopicTitle())) {
+            if (topic.getTopicActive() == Active.active) {
+                topicEntity = topic;
+                break;
+            }
+        }
+        if (topicEntity == null) {
+            throw new CustomException(ErrorCode.UNKNOWN_TOPIC);
+        }
+
+        for (String questionText : request.getQuestions()) {
+            if (questionText == null || questionText.trim().isEmpty()) {
+                continue;
+            }
+            try {
+                questionService.save(topicEntity, questionText);
+            }catch(Exception e){
+                System.out.println(questionText + " " + e.getMessage());
+            }
+        }
 
         return ResponseEntity.ok(ResponseDto.success());
     }
