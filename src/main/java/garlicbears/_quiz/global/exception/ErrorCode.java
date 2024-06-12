@@ -12,8 +12,12 @@ public enum ErrorCode {
     MISSING_REQUIRED_FIELDS(HttpStatus.BAD_REQUEST, "필수 입력값이 누락되었습니다."),
     EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다."),
     NICKNAME_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 닉네임입니다."),
+    TOPIC_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 주제입니다."),
+    QUESTION_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 문제입니다."),
     UNKNOWN_LOCATION(HttpStatus.NOT_FOUND, "주소가 틀렸습니다."),
     UNKNOWN_GENDER(HttpStatus.NOT_FOUND,"성별이 틀렸습니다."),
+    UNKNOWN_TOPIC(HttpStatus.NOT_FOUND,"주제를 찾을 수 없습니다."),
+    DELETED_TOPIC(HttpStatus.GONE,"삭제된 주제입니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"서버 오류입니다.");
 
     private final HttpStatus status;

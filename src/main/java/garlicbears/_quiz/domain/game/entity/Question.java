@@ -12,7 +12,8 @@ import org.hibernate.annotations.ColumnDefault;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class Questions extends BaseTimeEntity {
+@Table(name = "questions")
+public class Question extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +22,7 @@ public class Questions extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_seq")
-    private Topics topics;
+    private Topic topic;
 
     @Column(name = "question_text", nullable = false, length = 100)
     private String questionText;
@@ -31,7 +32,13 @@ public class Questions extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "question_active", nullable = false)
-    @ColumnDefault("'active'")
-    private Active questionActive;
+    private Active questionActive = Active.active;
+
+    @Builder
+    public Question(Topic topic, String questionText, String questionAnswerText) {
+        this.questionText = questionText;
+        this.topic = topic;
+        this.questionAnswerText = questionAnswerText;
+    }
 
 }

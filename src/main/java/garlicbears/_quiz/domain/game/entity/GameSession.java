@@ -2,13 +2,19 @@ package garlicbears._quiz.domain.game.entity;
 
 import garlicbears._quiz.domain.user.entity.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "game_sessions")
-public class GameSessions {
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+public class GameSession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "game_session_seq")
@@ -20,7 +26,7 @@ public class GameSessions {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_seq")
-    Topics  topic;
+    Topic topic;
 
     @Column(name = "game_started_at", nullable = false)
     @ColumnDefault("CURRENT_TIMESTAMP")

@@ -15,7 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class Topics extends BaseTimeEntity {
+@Table(name = "topics")
+public class Topic extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "topic_seq")
@@ -26,13 +27,17 @@ public class Topics extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "topic_active", nullable = false)
-    @ColumnDefault("'active'")
-    private Active topicActive;
+    private Active topicActive = Active.active;
 
     @Column(name = "topic_usage_count", nullable = false)
     @ColumnDefault("0")
     private int topicUsageCount;
 
-    @OneToMany(mappedBy = "topics")
-    private List<Questions> questions = new ArrayList<>();
+    @OneToMany(mappedBy = "topic")
+    private List<Question> questions = new ArrayList<>();
+
+    @Builder
+    public Topic(String topicTitle) {
+        this.topicTitle = topicTitle;
+    }
 }
