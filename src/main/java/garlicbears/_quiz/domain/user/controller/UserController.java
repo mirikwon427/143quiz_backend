@@ -12,6 +12,7 @@ import garlicbears._quiz.global.exception.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
@@ -32,6 +33,24 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/checkEmail")
+    @Operation(summary = "email 중복 확인", description = "입력된 이메일이 이미 가입된 유저인지 확인합니다.",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                content = @Content(
+                        schemaProperties = {
+                                @SchemaProperty(name = "email", schema = @Schema(type="string", format = "json"))
+                        }
+                )
+        ))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved",
+                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid Input",
+                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+            @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
+                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+            @ApiResponse(responseCode = "409", description = "Email Already Exist",
+                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+    })
     public ResponseEntity<?> checkEmail(@Valid @RequestBody Map<String, String> request) {
         String email = request.get("email");
         if(email == null || email.trim().isEmpty()) {
@@ -42,6 +61,24 @@ public class UserController {
     }
 
     @PostMapping("/checkNickname")
+    @Operation(summary = "nickname 중복 확인", description = "입력된 닉네임이 이미 가입된 유저인지 확인합니다.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(
+                            schemaProperties = {
+                                    @SchemaProperty(name = "nickname", schema = @Schema(type="string", format = "json"))
+                            }
+                    )
+            ))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved",
+                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid Input",
+                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+            @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
+                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+            @ApiResponse(responseCode = "409", description = "Nickname Already Exist",
+                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+    })
     public ResponseEntity<?> checkNickname(@Valid @RequestBody Map<String, String> request) {
         String nickname = request.get("nickname");
         if(nickname == null || nickname.trim().isEmpty()) {
@@ -52,6 +89,13 @@ public class UserController {
     }
 
     @PostMapping("/signup")
+    @Operation(summary = "회원가입", description = "입력받은 정보를 바탕으로 회원을 생성합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved",
+                    content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad Request",
+                    content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))})
+    })
     public ResponseEntity<?> signUp(@Valid @RequestBody SignUpDto signUpDto, BindingResult bindingResult){
         if(bindingResult.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder();
@@ -65,13 +109,13 @@ public class UserController {
         return ResponseEntity.ok(ResponseDto.success());
     }
 
+    @GetMapping("/")
     @Operation(summary = "유저 정보(내 정보) 조회", description = "jwt token을 받아 유저 정보를 반환합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved",
-                content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+                    content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
             @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)")
     })
-    @GetMapping("/")
     public ResponseEntity<?> searchUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         // 현재 인증된 사용자의 정보를 userDetails로부터 가져올 수 있습니다.
         User user = principalDetails.getUser();
@@ -82,6 +126,15 @@ public class UserController {
     }
 
     @PatchMapping("/")
+    @Operation(summary = "유저 정보(내 정보) 수정", description = "jwt token을 받아 유저 정보를 확인. resquest body로 전달받은 정보로 수정합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved",
+                    content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad Request (Invalid Input)",
+                    content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+            @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
+                    content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))})
+    })
     public ResponseEntity<?> updateUser(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody UpdateUserDto updateUserDto) {
         // 현재 인증된 사용자의 정보를 userDetails로부터 가져올 수 있습니다.
         User user = principalDetails.getUser();
@@ -94,6 +147,13 @@ public class UserController {
     }
 
     @DeleteMapping("/")
+    @Operation(summary = "계정 탈퇴", description = "jwt token을 받아 유저 정보를 확인. status 를 inactive로 변환합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved",
+                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+            @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
+                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))})
+    })
     public ResponseEntity<?> deleteUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         User user = principalDetails.getUser();
 

@@ -51,10 +51,14 @@ public class UserService {
     }
 
     @Transactional
-    public void update(User user, UpdateUserDto updateUserDto) {
+    public void update(User user, UpdateUserDto updateUserDto){
         if (updateUserDto.getBirthYear() != null) {
-            user.setUserBirthYear(updateUserDto.getBirthYear());
-            user.setUserAge(Year.now().getValue() - updateUserDto.getBirthYear());
+            int birthYear = updateUserDto.getBirthYear();
+            if (birthYear > Year.now().getValue()) {
+                throw new CustomException(ErrorCode.INVALID_INPUT);
+            }
+            user.setUserBirthYear(birthYear);
+            user.setUserAge(Year.now().getValue() - birthYear + 1);
         }
         if (updateUserDto.getGender() != null) user.setUserGender(Gender.fromKoreanName(updateUserDto.getGender()));
         if (updateUserDto.getLocation() != null) user.setUserLocation(Location.fromKoreanName(updateUserDto.getLocation()));
