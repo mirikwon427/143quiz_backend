@@ -1,7 +1,6 @@
 package garlicbears._quiz.domain.admin.controller;
 
 import garlicbears._quiz.domain.admin.dto.CreateQuestionsDto;
-import garlicbears._quiz.domain.admin.dto.CreateTopicsDto;
 import garlicbears._quiz.domain.game.entity.Topic;
 import garlicbears._quiz.domain.game.service.QuestionService;
 import garlicbears._quiz.domain.game.service.TopicService;
@@ -26,60 +25,9 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
-public class AdminController {
+public class AdminQuestionController {
     private final TopicService topicService;
     private final QuestionService questionService;
-
-    @PostMapping("/topic")
-    @Operation(summary = "주제 생성", description = "입력된 주제를 생성합니다.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @Content(
-                            schemaProperties = {
-                                    @SchemaProperty(name = "title", schema = @Schema(type="string", format = "json"))
-                            }
-                    )
-            ))
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved",
-                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid Input",
-                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
-            @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
-                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
-            @ApiResponse(responseCode = "409", description = "Nickname Already Exist",
-                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error",
-                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
-    })
-    public ResponseEntity<?> createTopic(@Valid @RequestBody Map<String, String> request) {
-        String topicTitle = request.get("title");
-
-        if (topicTitle == null || topicTitle.trim().isEmpty()) {
-            throw new CustomException(ErrorCode.INVALID_INPUT);
-        }
-
-        topicService.save(topicTitle);
-
-        return ResponseEntity.ok(ResponseDto.success());
-    }
-
-    @PostMapping("/topics")
-    public ResponseEntity<?> createTopics(@Valid @RequestBody CreateTopicsDto request) {
-        for (String topicTitle : request.getTopics()) {
-            if (topicTitle == null || topicTitle.trim().isEmpty()) {
-                continue;
-            }
-
-            try {
-                topicService.save(topicTitle);
-            } catch (CustomException e) {
-                System.err.println(e.getMessage());
-            }
-        }
-
-
-        return ResponseEntity.ok(ResponseDto.success());
-    }
 
     @PostMapping("/topics/{topicId}/question")
     @Operation(summary = "문제 생성", description = "입력된 문제를 생성합니다.",
