@@ -2,18 +2,12 @@ package garlicbears._quiz.domain.game.entity;
 
 import garlicbears._quiz.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "game_sessions")
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
 public class GameSession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

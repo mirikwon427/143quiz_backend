@@ -1,16 +1,7 @@
 package garlicbears._quiz.domain.game.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class ResponseTopicListDto {
     private String sort;
     private int pageNumber;
@@ -19,15 +10,41 @@ public class ResponseTopicListDto {
     private long totalCount;
     private List<ResponseTopicDto> topics;
 
+    public ResponseTopicListDto(String sort, int pageNumber, int pageSize, int totalPage, long totalCount, List<ResponseTopicDto> topics) {
+        this.sort = sort;
+        this.pageNumber = pageNumber;
+        this.pageSize = pageSize;
+        this.totalPage = totalPage;
+        this.totalCount = totalCount;
+        this.topics = topics;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public int getPageNumber() {
+        return pageNumber;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public int getTotalPage() {
+        return totalPage;
+    }
+
+    public long getTotalCount() {
+        return totalCount;
+    }
+
+    public List<ResponseTopicDto> getTopics() {
+        return topics;
+    }
+
     public static ResponseTopicListDto fromTopics(List<ResponseTopicDto> topics, String sort
             , int pageNumber, int pageSize, int totalPage, long totalCount) {
-        return ResponseTopicListDto.builder()
-                .sort(sort)
-                .pageNumber(pageNumber)
-                .pageSize(pageSize)
-                .totalPage(totalPage)
-                .totalCount(totalCount)
-                .topics(topics)
-                .build();
+        return new ResponseTopicListDto(sort, pageNumber, pageSize, totalPage, totalCount, topics);
     }
 }
