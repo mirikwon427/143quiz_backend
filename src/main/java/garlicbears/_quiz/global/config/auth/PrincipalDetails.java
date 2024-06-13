@@ -1,20 +1,22 @@
 package garlicbears._quiz.global.config.auth;
 
 import garlicbears._quiz.domain.user.entity.User;
-import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 
-@Data
 public class PrincipalDetails implements UserDetails {
 
     private User user;
 
     public PrincipalDetails(User user) {
         this.user = user;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     @Override

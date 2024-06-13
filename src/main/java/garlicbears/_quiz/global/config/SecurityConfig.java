@@ -3,7 +3,6 @@ package garlicbears._quiz.global.config;
 import garlicbears._quiz.domain.user.repository.UserRepository;
 import garlicbears._quiz.global.config.jwt.JwtAuthenticationFilter;
 import garlicbears._quiz.global.config.jwt.JwtAuthorizationFilter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,11 +16,15 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final CorsFilter corsFilter;
     private final UserRepository userRepository;
+
+    public SecurityConfig(CorsFilter corsFilter, UserRepository userRepository) {
+        this.corsFilter = corsFilter;
+        this.userRepository = userRepository;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
