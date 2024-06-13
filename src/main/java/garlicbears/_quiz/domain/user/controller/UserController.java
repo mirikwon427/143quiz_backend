@@ -44,10 +44,6 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved",
                     content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid Input",
-                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
-            @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
-                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
             @ApiResponse(responseCode = "409", description = "Email Already Exist",
                     content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
     })
@@ -71,10 +67,6 @@ public class UserController {
             ))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved",
-                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid Input",
-                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
-            @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
                     content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
             @ApiResponse(responseCode = "409", description = "Nickname Already Exist",
                     content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
