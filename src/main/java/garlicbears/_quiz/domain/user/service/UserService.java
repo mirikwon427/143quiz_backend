@@ -21,8 +21,6 @@ public class UserService {
         Optional<User> user = userRepository.findByUserEmail(email);
         if(user.isPresent()) {
             throw new CustomException(ErrorCode.EMAIL_ALREADY_EXISTS);
-        } else {
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -30,8 +28,6 @@ public class UserService {
         Optional<User> user = userRepository.findByUserNickname(nickname);
         if(user.isPresent()) {
             throw new CustomException(ErrorCode.NICKNAME_ALREADY_EXISTS);
-        } else {
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 
