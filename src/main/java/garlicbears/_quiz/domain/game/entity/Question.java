@@ -10,7 +10,7 @@ public class Question extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_seq")
-    private Long questionsId;
+    private Long questionId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_seq")
@@ -24,7 +24,7 @@ public class Question extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "question_active", nullable = false)
-    private Active questionActive;
+    private Active questionActive = Active.active;
 
     Question(){}
 
@@ -35,8 +35,8 @@ public class Question extends BaseTimeEntity {
         this.questionActive = questionActive;
     }
 
-    public Long getQuestionsId(){
-        return questionsId;
+    public Long getQuestionId(){
+        return questionId;
     }
 
     public Topic getTopic(){

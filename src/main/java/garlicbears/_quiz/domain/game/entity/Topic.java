@@ -4,6 +4,7 @@ import garlicbears._quiz.global.entity.Active;
 import garlicbears._quiz.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,23 +13,23 @@ public class Topic extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "topic_seq")
-    private Long topicsId;
+    private Long topicId;
 
     @Column(name = "topic_title", nullable = false, length = 100)
     private String topicTitle;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "topic_active", nullable = false)
-    private Active topicActive;
+    private Active topicActive = Active.active;
 
     @Column(name = "topic_usage_count", nullable = false)
     private int topicUsageCount;
 
     @OneToMany(mappedBy = "topic")
-    private List<Question> question;
+    private List<Question> question = new ArrayList<>();
 
     @OneToMany(mappedBy = "topic")
-    private List<Reward> reward;
+    private List<Reward> reward = new ArrayList<>();
 
     Topic(){}
 
@@ -38,8 +39,8 @@ public class Topic extends BaseTimeEntity {
         this.topicUsageCount = topicUsageCount;
     }
 
-    public Long getTopicsId(){
-        return topicsId;
+    public Long getTopicId(){
+        return topicId;
     }
 
     public String getTopicTitle() {
