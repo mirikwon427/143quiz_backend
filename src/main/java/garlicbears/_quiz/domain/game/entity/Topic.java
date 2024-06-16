@@ -30,9 +30,9 @@ public class Topic extends BaseTimeEntity {
     @OneToMany(mappedBy = "topic")
     private List<Reward> reward;
 
-    protected Topic(){}
+    Topic(){}
 
-    public Topic(String topicTitle, Active topicActive, int topicUsageCount){
+    Topic(String topicTitle, Active topicActive, int topicUsageCount){
         this.topicTitle = topicTitle;
         this.topicActive = topicActive;
         this.topicUsageCount = topicUsageCount;
