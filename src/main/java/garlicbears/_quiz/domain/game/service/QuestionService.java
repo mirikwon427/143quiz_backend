@@ -6,14 +6,18 @@ import garlicbears._quiz.domain.game.repository.QuestionRepository;
 import garlicbears._quiz.global.entity.Active;
 import garlicbears._quiz.global.exception.CustomException;
 import garlicbears._quiz.global.exception.ErrorCode;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@AllArgsConstructor
 public class QuestionService {
     private final QuestionRepository questionRepository;
+
+    @Autowired
+    public QuestionService(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     // 초성 19자
     private final String[] initialChs = {
@@ -42,11 +46,7 @@ public class QuestionService {
             questionAnswer.append(initialChs[initial]);
         }
 
-        Question question = Question.builder()
-                        .topic(topic)
-                        .questionText(questionText)
-                        .questionAnswerText(questionAnswer.toString())
-                        .build();
+        Question question = new Question(topic, questionText, questionAnswer.toString());
 
         questionRepository.save(question);
     }

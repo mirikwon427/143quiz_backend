@@ -10,7 +10,7 @@ public class Reward extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rewards_seq")
-    private Long rewardsId;
+    private Long rewardId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_seq")
     private User user;
@@ -22,17 +22,17 @@ public class Reward extends BaseTimeEntity {
     @Column(name = "reward_badge_status")
     private boolean rewardBadgeStatus;
 
-    Reward(){}
+    public Reward(){}
 
-    Reward(Long rewardsId, User user, Topic topic, int rewardNumberHearts, boolean rewardBadgeStatus) {
-        this.rewardsId = rewardsId;
+    public Reward(Long rewardsId, User user, Topic topic, int rewardNumberHearts, boolean rewardBadgeStatus) {
+        this.rewardId = rewardsId;
         this.user = user;
         this.topic = topic;
         this.rewardNumberHearts = rewardNumberHearts;
         this.rewardBadgeStatus = rewardBadgeStatus;
     }
-    public Long getRewardsId() {
-        return rewardsId;
+    public Long getRewardId() {
+        return rewardId;
     }
 
     public User getUser() {

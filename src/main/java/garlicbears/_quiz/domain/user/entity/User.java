@@ -51,8 +51,9 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user")
     private List<Reward> reward = new ArrayList<>();;
 
-    User(){}
-    User(String userEmail, String userPassword, String userNickname, int userBirthYear,
+    public User(){}
+
+    public User(String userEmail, String userPassword, String userNickname, int userBirthYear,
          int userAge, Gender userGender, Location userLocation) {
         this.userEmail = userEmail;
         this.userPassword = userPassword;

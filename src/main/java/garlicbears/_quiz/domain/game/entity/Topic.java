@@ -12,7 +12,7 @@ public class Topic extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "topic_seq")
-    private Long topicsId;
+    private Long topicId;
 
     @Column(name = "topic_title", nullable = false, length = 100)
     private String topicTitle;
@@ -30,16 +30,22 @@ public class Topic extends BaseTimeEntity {
     @OneToMany(mappedBy = "topic")
     private List<Reward> reward;
 
-    Topic(){}
+    public Topic(){}
 
-    Topic(String topicTitle, Active topicActive, int topicUsageCount){
+    public Topic(String topicTitle){
+        this.topicTitle = topicTitle;
+        this.topicActive = Active.active;
+        this.topicUsageCount = 0;
+    }
+
+    public Topic(String topicTitle, Active topicActive, int topicUsageCount){
         this.topicTitle = topicTitle;
         this.topicActive = topicActive;
         this.topicUsageCount = topicUsageCount;
     }
 
-    public Long getTopicsId(){
-        return topicsId;
+    public Long getTopicId(){
+        return topicId;
     }
 
     public String getTopicTitle() {

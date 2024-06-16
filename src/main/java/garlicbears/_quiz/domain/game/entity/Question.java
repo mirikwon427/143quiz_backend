@@ -10,7 +10,7 @@ public class Question extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_seq")
-    private Long questionsId;
+    private Long questionId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_seq")
@@ -26,25 +26,21 @@ public class Question extends BaseTimeEntity {
     @Column(name = "question_active", nullable = false)
     private Active questionActive;
 
-    Question(){}
+    public Question(){}
 
-    Question(Topic topic, String questionText, String questionAnswerText, Active questionActive) {
+    public Question(Topic topic, String questionText, String questionAnswerText) {
         this.topic = topic;
         this.questionText = questionText;
         this.questionAnswerText = questionAnswerText;
-        this.questionActive = questionActive;
+        this.questionActive = Active.active;
     }
 
-    public Long getQuestionsId(){
-        return questionsId;
+    public Long getQuestionId(){
+        return questionId;
     }
 
     public Topic getTopic(){
         return topic;
-    }
-
-    public String getQuestion_text(){
-        return questionText;
     }
 
     public String getQuestionText(){

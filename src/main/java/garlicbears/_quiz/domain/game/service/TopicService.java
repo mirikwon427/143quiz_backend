@@ -8,7 +8,7 @@ import garlicbears._quiz.global.entity.Active;
 import garlicbears._quiz.global.exception.CustomException;
 import garlicbears._quiz.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,9 +19,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class TopicService {
     private final TopicRepository topicRepository;
+
+    @Autowired
+    public TopicService(TopicRepository topicRepository) {
+        this.topicRepository = topicRepository;
+    }
 
     @Transactional
     public ResponseTopicListDto getTopicList(int pageNumber, int pageSize, String sort) {
@@ -47,9 +51,7 @@ public class TopicService {
                 throw new CustomException(ErrorCode.INVALID_INPUT);
         }
 
-        Topic topic = Topic.builder()
-                        .topicTitle(topicTitle)
-                        .build();
+        Topic topic = new Topic(topicTitle);
 
         topicRepository.save(topic);
     }

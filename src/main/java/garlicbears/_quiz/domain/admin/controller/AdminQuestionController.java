@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,12 +24,17 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/admin")
 @Tag(name = "문제 관리")
 public class AdminQuestionController {
     private final TopicService topicService;
     private final QuestionService questionService;
+
+    @Autowired
+    public AdminQuestionController(TopicService topicService, QuestionService questionService) {
+        this.topicService = topicService;
+        this.questionService = questionService;
+    }
 
     @PostMapping("/topics/{topicId}/question")
     @Operation(summary = "문제 생성", description = "입력된 문제를 생성합니다.",

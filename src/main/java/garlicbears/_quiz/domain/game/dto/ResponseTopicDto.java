@@ -48,7 +48,7 @@ public class ResponseTopicDto {
 
     public static ResponseTopicDto fromTopic(Topic topic) {
         return new ResponseTopicDto(
-                topic.getTopicSeq(),
+                topic.getTopicId(),
                 topic.getTopicTitle(),
                 topic.getTopicActive(),
                 topic.getCreatedAt(),
