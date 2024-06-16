@@ -5,8 +5,8 @@ import garlicbears._quiz.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 
 @Entity
-public class Questions extends BaseTimeEntity {
-
+@Table(name = "questions")
+public class Question extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_seq")
@@ -14,7 +14,7 @@ public class Questions extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_seq")
-    private Topics topics;
+    private Topic topic;
 
     @Column(name = "question_text", nullable = false, length = 100)
     private String questionText;
@@ -26,10 +26,10 @@ public class Questions extends BaseTimeEntity {
     @Column(name = "question_active", nullable = false)
     private Active questionActive;
 
-    Questions(){}
+    Question(){}
 
-    Questions(Topics topics, String questionText, String questionAnswerText, Active questionActive) {
-        this.topics = topics;
+    Question(Topic topic, String questionText, String questionAnswerText, Active questionActive) {
+        this.topic = topic;
         this.questionText = questionText;
         this.questionAnswerText = questionAnswerText;
         this.questionActive = questionActive;
@@ -39,8 +39,8 @@ public class Questions extends BaseTimeEntity {
         return questionsId;
     }
 
-    public Topics getTopics(){
-        return topics;
+    public Topic getTopic(){
+        return topic;
     }
 
     public String getQuestion_text(){

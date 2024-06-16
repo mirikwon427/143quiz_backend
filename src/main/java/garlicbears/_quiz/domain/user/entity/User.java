@@ -1,6 +1,6 @@
 package garlicbears._quiz.domain.user.entity;
 
-import garlicbears._quiz.domain.game.entity.Rewards;
+import garlicbears._quiz.domain.game.entity.Reward;
 import garlicbears._quiz.domain.user.dto.SignUpDto;
 import garlicbears._quiz.global.entity.Active;
 import garlicbears._quiz.global.entity.BaseTimeEntity;
@@ -13,6 +13,7 @@ import java.util.List;
 import static garlicbears._quiz.global.entity.Active.active;
 
 @Entity
+@Table(name = "user")
 public class User extends BaseTimeEntity {
 
     @Id
@@ -48,7 +49,7 @@ public class User extends BaseTimeEntity {
     private Active userActive = active;
 
     @OneToMany(mappedBy = "user")
-    private List<Rewards> rewards = new ArrayList<>();;
+    private List<Reward> reward = new ArrayList<>();;
 
     User(){}
     User(String userEmail, String userPassword, String userNickname, int userBirthYear,
@@ -98,8 +99,8 @@ public class User extends BaseTimeEntity {
         return userActive;
     }
 
-    public List<Rewards> getRewards() {
-        return rewards;
+    public List<Reward> getRewards() {
+        return reward;
     }
 
     public void setUserBirthYear(int userBirthYear){

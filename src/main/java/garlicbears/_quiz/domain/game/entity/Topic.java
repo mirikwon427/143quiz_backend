@@ -7,7 +7,8 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class Topics extends BaseTimeEntity {
+@Table(name = "topics")
+public class Topic extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "topic_seq")
@@ -23,15 +24,15 @@ public class Topics extends BaseTimeEntity {
     @Column(name = "topic_usage_count", nullable = false)
     private int topicUsageCount;
 
-    @OneToMany(mappedBy = "topics")
-    private List<Questions> questions;
+    @OneToMany(mappedBy = "topic")
+    private List<Question> question;
 
-    @OneToMany(mappedBy = "topics")
-    private List<Rewards> rewards;
+    @OneToMany(mappedBy = "topic")
+    private List<Reward> reward;
 
-    protected Topics(){}
+    protected Topic(){}
 
-    public Topics(String topicTitle, Active topicActive, int topicUsageCount){
+    public Topic(String topicTitle, Active topicActive, int topicUsageCount){
         this.topicTitle = topicTitle;
         this.topicActive = topicActive;
         this.topicUsageCount = topicUsageCount;
@@ -53,11 +54,11 @@ public class Topics extends BaseTimeEntity {
         return topicUsageCount;
     }
 
-    public List<Questions> getQuestions() {
-        return questions;
+    public List<Question> getQuestion() {
+        return question;
     }
 
-    public List<Rewards> getRewards() {
-        return rewards;
+    public List<Reward> getReward() {
+        return reward;
     }
 }

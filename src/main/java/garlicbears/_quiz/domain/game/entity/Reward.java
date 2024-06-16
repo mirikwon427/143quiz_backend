@@ -5,7 +5,8 @@ import garlicbears._quiz.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 
 @Entity
-public class Rewards extends BaseTimeEntity {
+@Table(name = "rewards")
+public class Reward extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rewards_seq")
@@ -15,18 +16,18 @@ public class Rewards extends BaseTimeEntity {
     private User user;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_seq")
-    private Topics topics;
+    private Topic topic;
     @Column(name = "reward_number_hearts", nullable = false)
     private int rewardNumberHearts;
     @Column(name = "reward_badge_status")
     private boolean rewardBadgeStatus;
 
-    Rewards(){}
+    Reward(){}
 
-    Rewards(Long rewardsId, User user, Topics topics, int rewardNumberHearts, boolean rewardBadgeStatus) {
+    Reward(Long rewardsId, User user, Topic topic, int rewardNumberHearts, boolean rewardBadgeStatus) {
         this.rewardsId = rewardsId;
         this.user = user;
-        this.topics = topics;
+        this.topic = topic;
         this.rewardNumberHearts = rewardNumberHearts;
         this.rewardBadgeStatus = rewardBadgeStatus;
     }
@@ -38,8 +39,8 @@ public class Rewards extends BaseTimeEntity {
         return user;
     }
 
-    public Topics getTopics() {
-        return topics;
+    public Topic getTopic() {
+        return topic;
     }
 
     public int getRewardNumberHearts() {
