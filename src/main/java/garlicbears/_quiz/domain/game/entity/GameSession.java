@@ -20,7 +20,7 @@ public class GameSession {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_seq")
-    Topic topic;
+    Topic  topic;
 
     @Column(name = "game_started_at", nullable = false)
     @ColumnDefault("CURRENT_TIMESTAMP")

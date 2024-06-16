@@ -1,7 +1,15 @@
 package garlicbears._quiz.domain.user.dto;
 
 import garlicbears._quiz.domain.user.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ResponseUserDto {
     private long userId;
     private String email;
@@ -11,52 +19,15 @@ public class ResponseUserDto {
     private String gender;
     private String location;
 
-    public ResponseUserDto(long userId, String email, String nickname, int birthYear, int age, String gender, String location) {
-        this.userId = userId;
-        this.email = email;
-        this.nickname = nickname;
-        this.birthYear = birthYear;
-        this.age = age;
-        this.gender = gender;
-        this.location = location;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public int getBirthYear() {
-        return birthYear;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
     public static ResponseUserDto fromUser(User user) {
-        return new ResponseUserDto(
-                user.getUserSeq(),
-                user.getUserEmail(),
-                user.getUserNickname(),
-                user.getUserBirthYear(),
-                user.getUserAge(),
-                user.getUserGender().getKoreanName(),
-                user.getUserLocation().getKoreanName());
+        return ResponseUserDto.builder()
+                .userId(user.getUserId())
+                .email(user.getUserEmail())
+                .nickname(user.getUserNickname())
+                .birthYear(user.getUserBirthYear())
+                .age(user.getUserAge())
+                .gender(user.getUserGender().getKoreanName())
+                .location(user.getUserLocation().getKoreanName())
+                .build();
     }
 }
