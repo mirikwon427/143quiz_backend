@@ -9,7 +9,7 @@ import garlicbears._quiz.domain.user.repository.UserRepository;
 import garlicbears._quiz.global.entity.Active;
 import garlicbears._quiz.global.exception.CustomException;
 import garlicbears._quiz.global.exception.ErrorCode;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +18,16 @@ import java.time.Year;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
     public void checkDuplicatedEmail(String email) {
         Optional<User> user = userRepository.findByUserEmail(email);
         if(user.isPresent()) {
@@ -39,9 +45,7 @@ public class UserService {
     @Transactional
     public void signUp(SignUpDto signUpDto) {
         User user = User.builder()
-                .signUpDto(signUpDto)
-                .passwordEncoder(passwordEncoder)
-                .build();
+                        .build(signUpDto,passwordEncoder);
 
         userRepository.save(user);
     }

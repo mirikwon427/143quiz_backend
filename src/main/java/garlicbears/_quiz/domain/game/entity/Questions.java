@@ -3,21 +3,14 @@ package garlicbears._quiz.domain.game.entity;
 import garlicbears._quiz.global.entity.Active;
 import garlicbears._quiz.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
 public class Questions extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_seq")
-    private Long questionSeq;
+    private Long questionsId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_seq")
@@ -31,7 +24,39 @@ public class Questions extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "question_active", nullable = false)
-    @ColumnDefault("'active'")
     private Active questionActive;
+
+    Questions(){}
+
+    Questions(Topics topics, String questionText, String questionAnswerText, Active questionActive) {
+        this.topics = topics;
+        this.questionText = questionText;
+        this.questionAnswerText = questionAnswerText;
+        this.questionActive = questionActive;
+    }
+
+    public Long getQuestionsId(){
+        return questionsId;
+    }
+
+    public Topics getTopics(){
+        return topics;
+    }
+
+    public String getQuestion_text(){
+        return questionText;
+    }
+
+    public String getQuestionText(){
+        return questionText;
+    }
+
+    public String getQuestionAnswerText(){
+        return questionAnswerText;
+    }
+
+    public Active getQuestionActive(){
+        return questionActive;
+    }
 
 }

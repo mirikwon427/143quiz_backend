@@ -1,26 +1,24 @@
 package garlicbears._quiz.domain.user.entity;
 
+import garlicbears._quiz.domain.game.entity.Rewards;
 import garlicbears._quiz.domain.user.dto.SignUpDto;
 import garlicbears._quiz.global.entity.Active;
 import garlicbears._quiz.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static garlicbears._quiz.global.entity.Active.active;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
 public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_seq")
-    private Long userSeq;
+    private Long userId;
 
     @Column(name = "user_email", nullable = false, unique = true, length = 200)
     private String userEmail;
@@ -49,14 +47,92 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_active", nullable = false)
     private Active userActive = active;
 
-    @Builder
-    public User(SignUpDto signUpDto, PasswordEncoder passwordEncoder) {
-        this.userEmail = signUpDto.getEmail();
-        this.userPassword = passwordEncoder.encode(signUpDto.getPassword());
-        this.userNickname = signUpDto.getNickname();
-        this.userBirthYear = signUpDto.getBirthYear();
-        this.userAge = signUpDto.getAge();
-        this.userGender = Gender.fromKoreanName(signUpDto.getGender());
-        this.userLocation = Location.fromKoreanName(signUpDto.getLocation());
+    @OneToMany(mappedBy = "user")
+    private List<Rewards> rewards = new ArrayList<>();;
+
+    User(){}
+    User(String userEmail, String userPassword, String userNickname, int userBirthYear,
+         int userAge, Gender userGender, Location userLocation) {
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+        this.userNickname = userNickname;
+        this.userBirthYear = userBirthYear;
+        this.userAge = userAge;
+        this.userGender = userGender;
+        this.userLocation = userLocation;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public String getUserNickname() {
+        return userNickname;
+    }
+
+    public int getUserBirthYear() {
+        return userBirthYear;
+    }
+
+    public int getUserAge() {
+        return userAge;
+    }
+
+    public Gender getUserGender() {
+        return userGender;
+    }
+
+    public Location getUserLocation() {
+        return userLocation;
+    }
+
+    public Active getUserActive() {
+        return userActive;
+    }
+
+    public List<Rewards> getRewards() {
+        return rewards;
+    }
+
+    public void setUserBirthYear(int userBirthYear){
+        this.userBirthYear = userBirthYear;
+    }
+
+    public void setUserAge(int userAge) {
+        this.userAge = userAge;
+    }
+    public void setUserGender(Gender userGender) {
+        this.userGender = userGender;
+    }
+
+    public void setUserLocation(Location userLocation) {
+        this.userLocation = userLocation;
+    }
+
+    public void setUserActive(Active userActive) {
+        this.userActive = userActive;
+    }
+    public static class UserBuilder {
+        public User build(SignUpDto signUpDto, PasswordEncoder passwordEncoder) {
+            String userEmail = signUpDto.getEmail();
+            String userPassword = passwordEncoder.encode(signUpDto.getPassword());
+            String userNickname = signUpDto.getNickname();
+            int userBirthYear = signUpDto.getBirthYear();
+            int userAge = signUpDto.getAge();
+            Gender userGender = Gender.fromKoreanName(signUpDto.getGender());
+            Location userLocation = Location.fromKoreanName(signUpDto.getLocation());
+            return new User(userEmail, userPassword, userNickname, userBirthYear, userAge, userGender, userLocation);
+        }
+    }
+    public static UserBuilder builder() {
+        return new UserBuilder();
     }
 }
