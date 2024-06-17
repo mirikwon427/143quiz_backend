@@ -42,11 +42,6 @@ public class TopicService {
             }
         });
 
-        for (char c : topicTitle.toCharArray()) {
-            if (c < '가' || c > '힣')
-                throw new CustomException(ErrorCode.INVALID_INPUT);
-        }
-
         Topic topic = Topic.builder()
                         .topicTitle(topicTitle)
                         .build();
