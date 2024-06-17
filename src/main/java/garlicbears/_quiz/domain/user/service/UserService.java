@@ -58,7 +58,7 @@ public class UserService {
                 throw new CustomException(ErrorCode.INVALID_INPUT);
             }
             user.setUserBirthYear(birthYear);
-            user.setUserAge(Year.now().getValue() - birthYear + 1);
+            user.setUserAge(Year.now().getValue() - birthYear);
         }
         if (updateUserDto.getGender() != null) user.setUserGender(Gender.fromKoreanName(updateUserDto.getGender()));
         if (updateUserDto.getLocation() != null) user.setUserLocation(Location.fromKoreanName(updateUserDto.getLocation()));
