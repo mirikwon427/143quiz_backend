@@ -22,7 +22,7 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_seq")
     private Long userId;
 
-    @Column(name = "user_email", nullable = false, unique = true, length = 200)
+    @Column(name = "user_email", nullable = false, length = 200)
     private String userEmail;
 
     @Column(name = "user_password", nullable = false, length = 300)
