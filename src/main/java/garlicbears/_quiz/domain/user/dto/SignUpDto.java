@@ -4,8 +4,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class SignUpDto {
-
-    private Long id;
     @NotNull
     @Size(max = 100)
     private String email;
@@ -29,10 +27,6 @@ public class SignUpDto {
 
     @NotNull
     private String location;
-
-    public Long getId() {
-        return id;
-    }
 
     public String getEmail(){
         return email;
