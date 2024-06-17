@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/user")
+@Tag(name="회원관리")
 public class UserController {
     private static final Logger logger = Logger.getLogger(UserController.class.getName());
     private final UserService userService;
