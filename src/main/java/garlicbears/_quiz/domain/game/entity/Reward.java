@@ -32,9 +32,9 @@ public class Reward{
     @Column(name = "reward_badge_created_at", nullable = false)
     private LocalDateTime rewardBadgeCreatedAt;
 
-    Reward(){}
+    public Reward(){}
 
-    Reward(User user, Topic topic, int rewardNumberHearts, boolean rewardBadgeStatus, LocalDateTime rewardBadgeCreatedAt) {
+    public Reward(User user, Topic topic, int rewardNumberHearts, boolean rewardBadgeStatus, LocalDateTime rewardBadgeCreatedAt) {
         this.user = user;
         this.topic = topic;
         this.rewardNumberHearts = rewardNumberHearts;
