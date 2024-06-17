@@ -3,24 +3,17 @@ package garlicbears._quiz.domain.game.entity;
 import garlicbears._quiz.global.entity.Active;
 import garlicbears._quiz.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
 @Table(name = "topics")
 public class Topic extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "topic_seq")
-    private Long topicSeq;
+    private Long topicId;
 
     @Column(name = "topic_title", nullable = false, length = 100)
     private String topicTitle;
@@ -30,14 +23,43 @@ public class Topic extends BaseTimeEntity {
     private Active topicActive = Active.active;
 
     @Column(name = "topic_usage_count", nullable = false)
-    @ColumnDefault("0")
     private int topicUsageCount;
 
     @OneToMany(mappedBy = "topic")
-    private List<Question> questions = new ArrayList<>();
+    private List<Question> question = new ArrayList<>();
 
-    @Builder
-    public Topic(String topicTitle) {
+    @OneToMany(mappedBy = "topic")
+    private List<Reward> reward = new ArrayList<>();
+
+    Topic(){}
+
+    Topic(String topicTitle, Active topicActive, int topicUsageCount){
         this.topicTitle = topicTitle;
+        this.topicActive = topicActive;
+        this.topicUsageCount = topicUsageCount;
+    }
+
+    public Long getTopicId(){
+        return topicId;
+    }
+
+    public String getTopicTitle() {
+        return topicTitle;
+    }
+
+    public Active getTopicActive() {
+        return topicActive;
+    }
+
+    public int getTopicUsageCount() {
+        return topicUsageCount;
+    }
+
+    public List<Question> getQuestion() {
+        return question;
+    }
+
+    public List<Reward> getReward() {
+        return reward;
     }
 }

@@ -1,11 +1,8 @@
 package garlicbears._quiz.global.exception;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-@Getter
-@RequiredArgsConstructor
+
 public enum ErrorCode {
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "입력 값이 유효하지 않습니다."),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
@@ -22,4 +19,17 @@ public enum ErrorCode {
 
     private final HttpStatus status;
     private final String message;
+
+    ErrorCode(HttpStatus status, String message) {
+        this.status = status;
+        this.message = message;
+    }
+
+    public HttpStatus getStatus(){
+        return status;
+    }
+
+    public String getMessage(){
+        return message;
+    }
 }
