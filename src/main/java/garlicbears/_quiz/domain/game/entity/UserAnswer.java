@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_answers")
-public class UserAnswers {
+public class UserAnswer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_answer_seq")
@@ -16,7 +16,7 @@ public class UserAnswers {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_session_seq")
-    private GameSessions gameSession;
+    private GameSession gameSession;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_seq")

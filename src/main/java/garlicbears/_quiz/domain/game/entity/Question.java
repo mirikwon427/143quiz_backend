@@ -24,15 +24,15 @@ public class Question extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "question_active", nullable = false)
-    private Active questionActive = Active.active;
+    private Active questionActive;
 
-    Question(){}
+    public Question(){}
 
-    Question(Topic topic, String questionText, String questionAnswerText, Active questionActive) {
+    public Question(Topic topic, String questionText, String questionAnswerText) {
         this.topic = topic;
         this.questionText = questionText;
         this.questionAnswerText = questionAnswerText;
-        this.questionActive = questionActive;
+        this.questionActive = Active.active;
     }
 
     public Long getQuestionId(){
@@ -41,10 +41,6 @@ public class Question extends BaseTimeEntity {
 
     public Topic getTopic(){
         return topic;
-    }
-
-    public String getQuestion_text(){
-        return questionText;
     }
 
     public String getQuestionText(){

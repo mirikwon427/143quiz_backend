@@ -2,16 +2,18 @@ package garlicbears._quiz.global.config.auth;
 
 import garlicbears._quiz.domain.user.entity.User;
 import garlicbears._quiz.domain.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class PrincipalDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
+
+    public PrincipalDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
