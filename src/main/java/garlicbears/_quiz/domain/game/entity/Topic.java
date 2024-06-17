@@ -68,4 +68,16 @@ public class Topic extends BaseTimeEntity {
     public List<Reward> getReward() {
         return reward;
     }
+
+    public void setTopicTitle(String topicTitle) {
+        this.topicTitle = topicTitle;
+    }
+
+    public void setTopicActive(Active topicActive) {
+        this.topicActive = topicActive;
+    }
+
+    public void setTopicUsageCount(int topicUsageCount) {
+        this.topicUsageCount = topicUsageCount;
+    }
 }

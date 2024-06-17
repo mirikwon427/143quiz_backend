@@ -51,6 +51,26 @@ public class TopicService {
         topicRepository.save(topic);
     }
 
+    @Transactional
+    public void update(long topicId, String topicTitle) {
+        Topic topic = topicRepository.findById(topicId)
+                .orElseThrow(() -> new CustomException(ErrorCode.TOPIC_NOT_FOUND));
+
+        topic.setTopicTitle(topicTitle);
+
+        topicRepository.save(topic);
+    }
+
+    @Transactional
+    public void delete(long topicId) {
+        Topic topic = topicRepository.findById(topicId)
+                .orElseThrow(() -> new CustomException(ErrorCode.TOPIC_NOT_FOUND));
+
+        topic.setTopicActive(Active.inactive);
+
+        topicRepository.save(topic);
+    }
+
     public Optional<Topic> findByTopicId(long topicId) {
         return topicRepository.findById(topicId);
     }
