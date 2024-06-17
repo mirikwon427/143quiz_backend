@@ -1,9 +1,6 @@
 package garlicbears._quiz.domain.game.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -11,9 +8,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_answers")
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
 public class UserAnswer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

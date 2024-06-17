@@ -14,18 +14,22 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/admin")
 @Tag(name = "주제 관리")
 public class AdminTopicController {
     private final TopicService topicService;
+
+    @Autowired
+    public AdminTopicController(TopicService topicService) {
+        this.topicService = topicService;
+    }
 
     @GetMapping("/topics")
     @Operation(summary = "주제 목록 조회", description = "정렬 기준에 따라 주제 목록을 반환합니다.")
