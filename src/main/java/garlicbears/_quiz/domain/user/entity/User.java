@@ -7,6 +7,7 @@ import garlicbears._quiz.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_seq")
     private Long userId;
 
-    @Column(name = "user_email", nullable = false, unique = true, length = 200)
+    @Column(name = "user_email", nullable = false, length = 200)
     private String userEmail;
 
     @Column(name = "user_password", nullable = false, length = 300)
@@ -128,7 +129,7 @@ public class User extends BaseTimeEntity {
             String userPassword = passwordEncoder.encode(signUpDto.getPassword());
             String userNickname = signUpDto.getNickname();
             int userBirthYear = signUpDto.getBirthYear();
-            int userAge = signUpDto.getAge();
+            int userAge = Year.now().getValue() - signUpDto.getBirthYear();
             Gender userGender = Gender.fromKoreanName(signUpDto.getGender());
             Location userLocation = Location.fromKoreanName(signUpDto.getLocation());
             return new User(userEmail, userPassword, userNickname, userBirthYear, userAge, userGender, userLocation);

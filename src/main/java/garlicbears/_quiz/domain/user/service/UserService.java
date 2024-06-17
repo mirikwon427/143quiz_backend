@@ -30,14 +30,14 @@ public class UserService {
 
     public void checkDuplicatedEmail(String email) {
         Optional<User> user = userRepository.findByUserEmail(email);
-        if(user.isPresent()) {
+        if(user.isPresent() && user.get().getUserActive() == Active.active){
             throw new CustomException(ErrorCode.EMAIL_ALREADY_EXISTS);
         }
     }
 
     public void checkDuplicatedNickname(String nickname) {
         Optional<User> user = userRepository.findByUserNickname(nickname);
-        if(user.isPresent()) {
+        if(user.isPresent() && user.get().getUserActive() == Active.active) {
             throw new CustomException(ErrorCode.NICKNAME_ALREADY_EXISTS);
         }
     }
@@ -58,7 +58,7 @@ public class UserService {
                 throw new CustomException(ErrorCode.INVALID_INPUT);
             }
             user.setUserBirthYear(birthYear);
-            user.setUserAge(Year.now().getValue() - birthYear + 1);
+            user.setUserAge(Year.now().getValue() - birthYear);
         }
         if (updateUserDto.getGender() != null) user.setUserGender(Gender.fromKoreanName(updateUserDto.getGender()));
         if (updateUserDto.getLocation() != null) user.setUserLocation(Location.fromKoreanName(updateUserDto.getLocation()));

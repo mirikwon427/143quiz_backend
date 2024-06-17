@@ -103,6 +103,8 @@ public class UserController {
             logger.warning("errorMessage : " + errorMessage.toString());
             throw new CustomException(ErrorCode.BAD_REQUEST);
         }
+        userService.checkDuplicatedEmail(signUpDto.getEmail());
+        userService.checkDuplicatedNickname(signUpDto.getNickname());
         userService.signUp(signUpDto);
         return ResponseEntity.ok(ResponseDto.success());
     }

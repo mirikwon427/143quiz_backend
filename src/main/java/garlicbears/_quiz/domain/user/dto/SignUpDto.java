@@ -19,8 +19,6 @@ public class SignUpDto {
     @NotNull
     private int birthYear;
 
-    @NotNull
-    private int age;
 
     @NotNull
     private String gender;
@@ -40,9 +38,6 @@ public class SignUpDto {
 
     public int getBirthYear(){ return birthYear; }
 
-    public int getAge(){
-        return age;
-    }
 
     public String getGender(){
         return gender;
