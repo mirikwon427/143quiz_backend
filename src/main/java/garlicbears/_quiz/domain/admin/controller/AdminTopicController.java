@@ -8,6 +8,7 @@ import garlicbears._quiz.global.dto.ResponseDto;
 import garlicbears._quiz.global.exception.CustomException;
 import garlicbears._quiz.global.exception.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.SchemaProperty;
@@ -39,8 +40,9 @@ public class AdminTopicController {
                     content = {@Content(schema = @Schema(implementation = ResponseTopicListDto.class))}),
             @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)")
     })
-    public ResponseEntity<?> listTopics(@RequestParam(name = "sort", defaultValue = "updatedAt") String sort
-            , @RequestParam(defaultValue = "1") int pageNumber
+    public ResponseEntity<?> listTopics(@RequestParam(defaultValue = "createdAtDesc") @Parameter(schema =
+    @Schema(allowableValues = {"titleDesc", "titleAsc", "createdAtDesc", "createdAtAsc", "updatedAtDesc", "updatedAtAsc", "usageCountDesc", "usageCountAsc"})) String sort
+            , @RequestParam(defaultValue = "0") int pageNumber
             , @RequestParam(defaultValue = "10") int pageSize) {
         return ResponseEntity.ok(topicService.getTopicList(pageNumber, pageSize, sort));
     }

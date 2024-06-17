@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,8 +28,8 @@ public class TopicService {
 
     @Transactional
     public ResponseTopicListDto getTopicList(int pageNumber, int pageSize, String sort) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, sort));
-        Page<ResponseTopicDto> page = topicRepository.findAll(pageable).map(ResponseTopicDto::fromTopic);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<ResponseTopicDto> page = topicRepository.findTopics(pageNumber, pageSize, sort, pageable);
 
         return ResponseTopicListDto.fromTopics(
                 page.getContent(), sort, pageNumber, pageSize, page.getTotalPages(),
