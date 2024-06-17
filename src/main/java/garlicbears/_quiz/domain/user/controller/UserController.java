@@ -16,21 +16,25 @@ import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.logging.Logger;
 
-@Slf4j
 @RestController
 @RequestMapping("/user")
-@RequiredArgsConstructor
 public class UserController {
+    private static final Logger logger = Logger.getLogger(UserController.class.getName());
     private final UserService userService;
+
+    @Autowired
+    UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping("/checkEmail")
     @Operation(summary = "email 중복 확인", description = "입력된 이메일이 이미 가입된 유저인지 확인합니다.",
@@ -94,7 +98,7 @@ public class UserController {
             bindingResult.getFieldErrors().forEach(error -> errorMessage.append(
                     error.getField()).append(": ").append(error.getDefaultMessage())
                     .append("."));
-            log.error("{}", errorMessage);
+            logger.warning("errorMessage : " + errorMessage.toString());
             throw new CustomException(ErrorCode.BAD_REQUEST);
         }
         userService.signUp(signUpDto);

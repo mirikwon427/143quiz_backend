@@ -21,7 +21,7 @@ public class ResponseUserDto {
 
     public static ResponseUserDto fromUser(User user) {
         return ResponseUserDto.builder()
-                .userId(user.getUserSeq())
+                .userId(user.getUserId())
                 .email(user.getUserEmail())
                 .nickname(user.getUserNickname())
                 .birthYear(user.getUserBirthYear())

@@ -20,7 +20,7 @@ public class UserAnswers {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_seq")
-    private Questions question;
+    private Question question;
 
     @Column(name = "user_answer_text", nullable = false, length = 100)
     private String userAnswerText;
