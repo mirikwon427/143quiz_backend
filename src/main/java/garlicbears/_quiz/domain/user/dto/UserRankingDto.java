@@ -3,18 +3,24 @@ package garlicbears._quiz.domain.user.dto;
 public class UserRankingDto {
     private long userId;
     private String nickname;
-    private int badgeCount;
-    private int heartCount;
+    private int totalBadges;
+    private int totalHearts;
+    private long rank;
 
     public UserRankingDto() {
 
     }
 
-    public UserRankingDto(long userId, String nickname, int badgeCount, int heartCount) {
+    public UserRankingDto(long userId, String nickname, int totalBadges, int totalHearts, long rank) {
         this.userId = userId;
         this.nickname = nickname;
-        this.badgeCount = badgeCount;
-        this.heartCount = heartCount;
+        this.totalBadges = totalBadges;
+        this.totalHearts = totalHearts;
+        this.rank = rank;
+    }
+
+    public long getRank() {
+        return rank;
     }
 
     public long getUserId() {
@@ -25,11 +31,11 @@ public class UserRankingDto {
         return nickname;
     }
 
-    public int getBadgeCount() {
-        return badgeCount;
+    public int getTotalBadges() {
+        return totalBadges;
     }
 
-    public int getHeartCount() {
-        return heartCount;
+    public int getTotalHearts() {
+        return totalHearts;
     }
 }

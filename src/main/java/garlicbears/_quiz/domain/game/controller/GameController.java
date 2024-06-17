@@ -38,7 +38,7 @@ public class GameController {
     }
 
     @GetMapping("/rankings/{topicId}")
-    @Operation(summary = "주제별 게임 랭킹 조회", description = "주제별 전체 뱃지 수, 하트 수를 기준으로 랭킹 정보 조회")
+    @Operation(summary = "주제별 게임 랭킹 조회", description = "주제별 하트 수를 기준으로 랭킹 정보 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved",
                     content = {@Content(schema = @Schema(implementation = UserRankingDto.class))}),
