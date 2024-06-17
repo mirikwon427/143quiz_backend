@@ -24,7 +24,7 @@ public class Question extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "question_active", nullable = false)
-    private Active questionActive;
+    private Active questionActive = Active.active;
 
     public Question(){}
 
