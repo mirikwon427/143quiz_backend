@@ -24,8 +24,8 @@ public class QuestionQueryRepositoryImpl implements QuestionQueryRepository {
 
     private OrderSpecifier<?> getOrderSpecifier(QQuestion question, String sort) {
         return switch (sort) {
-            case "titleAsc" -> question.questionText.asc();
-            case "titleDesc" -> question.questionText.desc();
+            case "questionTextAsc" -> question.questionText.asc();
+            case "questionTextDesc" -> question.questionText.desc();
             case "createdAtAsc" -> question.createdAt.asc();
             case "createdAtDesc" -> question.createdAt.desc();
             case "updatedAtAsc" -> question.updatedAt.asc();

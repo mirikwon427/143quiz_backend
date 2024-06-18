@@ -46,7 +46,7 @@ public class AdminQuestionController {
             @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)")
     })
     public ResponseEntity<?> listQuestions(@RequestParam(defaultValue = "createdAtDesc") @Parameter(schema =
-    @Schema(allowableValues = {"titleDesc", "titleAsc", "createdAtDesc", "createdAtAsc", "updatedAtDesc", "updatedAtAsc"})) String sort
+    @Schema(allowableValues = {"questionTextDesc", "questionTextAsc", "createdAtDesc", "createdAtAsc", "updatedAtDesc", "updatedAtAsc"})) String sort
             , @RequestParam(defaultValue = "0") int pageNumber
             , @RequestParam(defaultValue = "10") int pageSize) {
         return ResponseEntity.ok(questionService.getQuestionList(pageNumber, pageSize, sort));
@@ -63,7 +63,7 @@ public class AdminQuestionController {
     })
     public ResponseEntity<?> listQuestionsByTopic(@PathVariable(value="topicId") long topicId,
                                                   @RequestParam(defaultValue = "createdAtDesc") @Parameter(schema =
-                                                  @Schema(allowableValues = {"titleDesc", "titleAsc", "createdAtDesc", "createdAtAsc", "updatedAtDesc", "updatedAtAsc"})) String sort
+                                                  @Schema(allowableValues = {"questionTextDesc", "questionTextAsc", "createdAtDesc", "createdAtAsc", "updatedAtDesc", "updatedAtAsc"})) String sort
             , @RequestParam(defaultValue = "0") int pageNumber
             , @RequestParam(defaultValue = "10") int pageSize) {
         Optional<Topic> topic = topicService.findByTopicId(topicId);
