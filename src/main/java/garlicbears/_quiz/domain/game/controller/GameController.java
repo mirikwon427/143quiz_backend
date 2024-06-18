@@ -48,7 +48,7 @@ public class GameController {
                                                   @RequestParam(defaultValue = "10") int pageSize) {
 
         topicService.findByTopicId(topicId)
-                .orElseThrow(() -> new CustomException(ErrorCode.UNKNOWN_TOPIC));
+                .orElseThrow(() -> new CustomException(ErrorCode.TOPIC_NOT_FOUND));
 
         return ResponseEntity.ok(gameService.getRankingsByTopicId(topicId, pageNumber, pageSize));
     }

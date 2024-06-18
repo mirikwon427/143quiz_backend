@@ -71,7 +71,7 @@ public class AdminQuestionController {
 
         Optional<Topic> topic = topicService.findByTopicId(topicId);
         if (topic.isEmpty()) {
-            throw new CustomException(ErrorCode.UNKNOWN_TOPIC);
+            throw new CustomException(ErrorCode.TOPIC_NOT_FOUND);
         }
         if (topic.get().getTopicActive() == Active.inactive) {
             throw new CustomException(ErrorCode.DELETED_TOPIC);
@@ -93,7 +93,7 @@ public class AdminQuestionController {
             }
         }
         if (topicEntity == null) {
-            throw new CustomException(ErrorCode.UNKNOWN_TOPIC);
+            throw new CustomException(ErrorCode.TOPIC_NOT_FOUND);
         }
 
         for (String questionText : request.getQuestions()) {
