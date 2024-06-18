@@ -63,7 +63,7 @@ public class AdminQuestionController {
     })
     public ResponseEntity<?> listQuestionsByTopic(@PathVariable(value="topicId") long topicId,
                                                   @RequestParam(defaultValue = "createdAtDesc") @Parameter(schema =
-                                                  @Schema(allowableValues = {"questionTextDesc", "questionTextAsc", "createdAtDesc", "createdAtAsc", "updatedAtDesc", "updatedAtAsc"})) String sort
+                                                  @Schema(allowableValues = {"titleDesc", "titleAsc", "createdAtDesc", "createdAtAsc", "updatedAtDesc", "updatedAtAsc"})) String sort
             , @RequestParam(defaultValue = "0") int pageNumber
             , @RequestParam(defaultValue = "10") int pageSize) {
         Optional<Topic> topic = topicService.findByTopicId(topicId);
