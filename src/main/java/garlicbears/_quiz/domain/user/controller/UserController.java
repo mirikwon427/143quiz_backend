@@ -4,6 +4,7 @@ import garlicbears._quiz.domain.user.dto.ResponseUserDto;
 import garlicbears._quiz.domain.user.dto.SignUpDto;
 import garlicbears._quiz.domain.user.dto.UpdateUserDto;
 import garlicbears._quiz.domain.user.entity.User;
+import garlicbears._quiz.domain.user.service.RatingService;
 import garlicbears._quiz.domain.user.service.UserService;
 import garlicbears._quiz.global.config.auth.PrincipalDetails;
 import garlicbears._quiz.global.dto.ResponseDto;
@@ -32,21 +33,23 @@ import java.util.logging.Logger;
 public class UserController {
     private static final Logger logger = Logger.getLogger(UserController.class.getName());
     private final UserService userService;
+    private final RatingService ratingService;
 
     @Autowired
-    UserController(UserService userService) {
+    UserController(UserService userService, RatingService ratingService) {
         this.userService = userService;
+        this.ratingService = ratingService;
     }
 
     @PostMapping("/checkEmail")
     @Operation(summary = "email 중복 확인", description = "입력된 이메일이 이미 가입된 유저인지 확인합니다.",
-        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                content = @Content(
-                        schemaProperties = {
-                                @SchemaProperty(name = "email", schema = @Schema(type="string", format = "json"))
-                        }
-                )
-        ))
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(
+                            schemaProperties = {
+                                    @SchemaProperty(name = "email", schema = @Schema(type = "string", format = "json"))
+                            }
+                    )
+            ))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved",
                     content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
@@ -55,7 +58,7 @@ public class UserController {
     })
     public ResponseEntity<?> checkEmail(@Valid @RequestBody Map<String, String> request) {
         String email = request.get("email");
-        if(email == null || email.trim().isEmpty()) {
+        if (email == null || email.trim().isEmpty()) {
             throw new CustomException(ErrorCode.INVALID_INPUT);
         }
         userService.checkDuplicatedEmail(email);
@@ -67,7 +70,7 @@ public class UserController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
                             schemaProperties = {
-                                    @SchemaProperty(name = "nickname", schema = @Schema(type="string", format = "json"))
+                                    @SchemaProperty(name = "nickname", schema = @Schema(type = "string", format = "json"))
                             }
                     )
             ))
@@ -79,7 +82,7 @@ public class UserController {
     })
     public ResponseEntity<?> checkNickname(@Valid @RequestBody Map<String, String> request) {
         String nickname = request.get("nickname");
-        if(nickname == null || nickname.trim().isEmpty()) {
+        if (nickname == null || nickname.trim().isEmpty()) {
             throw new CustomException(ErrorCode.INVALID_INPUT);
         }
         userService.checkDuplicatedNickname(nickname);
@@ -94,11 +97,11 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Bad Request",
                     content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))})
     })
-    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpDto signUpDto, BindingResult bindingResult){
-        if(bindingResult.hasErrors()) {
+    public ResponseEntity<?> signUp(@Valid @RequestBody SignUpDto signUpDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder();
             bindingResult.getFieldErrors().forEach(error -> errorMessage.append(
-                    error.getField()).append(": ").append(error.getDefaultMessage())
+                            error.getField()).append(": ").append(error.getDefaultMessage())
                     .append("."));
             logger.warning("errorMessage : " + errorMessage.toString());
             throw new CustomException(ErrorCode.BAD_REQUEST);
@@ -162,4 +165,29 @@ public class UserController {
         return ResponseEntity.ok(ResponseDto.success());
     }
 
+    @PostMapping("/rating")
+    @Operation(summary = "평점 주기", description = "jwt token을 받아 유저 정보를 확인. request body로 평점을 전달받아 저장합니다.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(
+                            schemaProperties = {
+                                    @SchemaProperty(name = "ratingValue", schema = @Schema(type = "double", format = "json"))
+                            }
+                    )
+            ))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved",
+                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad Request (Invalid Input)",
+                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+            @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
+                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))})
+    })
+    public ResponseEntity<?> rating(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody Map<String, Double> request) {
+        User user = principalDetails.getUser();
+        Double ratingValue = request.get("ratingValue");
+
+        ratingService.saveRating(user, ratingValue);
+
+        return ResponseEntity.ok(ResponseDto.success());
+    }
 }

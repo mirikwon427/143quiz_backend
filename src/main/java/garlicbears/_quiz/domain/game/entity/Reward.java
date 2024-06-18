@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class Reward{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "rewards_seq")
+    @Column(name = "rewards_seq", nullable = false)
     private Long rewardId;
 
     @ManyToOne(fetch = FetchType.LAZY)

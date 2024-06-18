@@ -24,4 +24,11 @@ public class Rating {
     @ColumnDefault("CURRENT_TIMESTAMP")
     private LocalDateTime ratingDate;
 
+    public Rating() {}
+
+    public Rating(User user, double ratingValue) {
+        this.user = user;
+        this.ratingValue = ratingValue;
+        this.ratingDate = LocalDateTime.now();
+    }
 }
