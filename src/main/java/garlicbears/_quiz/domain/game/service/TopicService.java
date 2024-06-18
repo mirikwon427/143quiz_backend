@@ -1,29 +1,41 @@
 package garlicbears._quiz.domain.game.service;
 
+import garlicbears._quiz.domain.admin.dto.TopicExcelUploadedDto;
+import garlicbears._quiz.domain.game.dto.ResponseQuestionDto;
+import garlicbears._quiz.domain.game.dto.ResponseQuestionListDto;
 import garlicbears._quiz.domain.game.dto.ResponseTopicDto;
 import garlicbears._quiz.domain.game.dto.ResponseTopicListDto;
+import garlicbears._quiz.domain.game.entity.Question;
 import garlicbears._quiz.domain.game.entity.Topic;
 import garlicbears._quiz.domain.game.repository.TopicRepository;
 import garlicbears._quiz.global.entity.Active;
 import garlicbears._quiz.global.exception.CustomException;
 import garlicbears._quiz.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TopicService {
     private final TopicRepository topicRepository;
+    private final QuestionService questionService;
 
     @Autowired
-    public TopicService(TopicRepository topicRepository) {
+    public TopicService(TopicRepository topicRepository, QuestionService questionService) {
         this.topicRepository = topicRepository;
+        this.questionService = questionService;
     }
 
     @Transactional
@@ -36,8 +48,69 @@ public class TopicService {
                 page.getTotalElements());
     }
 
+    public TopicExcelUploadedDto saveTopicWithExcel(MultipartFile file)
+    {
+        String fileName = file.getOriginalFilename();
+        if (fileName == null || !fileName.endsWith(".xlsx"))
+        {
+            throw new CustomException(ErrorCode.INVALID_INPUT);
+        }
+        String topicTitle = fileName.substring(0, fileName.length() - 5);
+
+        Workbook workbook = null;
+        try {
+            workbook = new XSSFWorkbook(file.getInputStream());
+        } catch(Exception e) {
+            throw new CustomException(ErrorCode.FILE_IO_ERROR);
+        }
+
+        Topic topic = null;
+        try {
+            topic = save(topicTitle);
+        } catch (CustomException e) {
+            for (Topic t : topicRepository.findByTopicTitle(topicTitle)) {
+                if (t.getTopicActive() == Active.active) {
+                    topic = t;
+                    break;
+                }
+            }
+        }
+
+        if (topic == null)
+        {
+            throw new CustomException(ErrorCode.TOPIC_NOT_FOUND);
+        }
+
+        List<ResponseQuestionDto> questions = new ArrayList<>();
+        Sheet sheet = workbook.getSheetAt(0);
+        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            Row row = sheet.getRow(i);
+            if (row != null) {
+                String questionText = row.getCell(0).getStringCellValue();
+                if (questionText == null || questionText.trim().isEmpty())
+                {
+                    continue;
+                }
+                try {
+                    Question question = questionService.save(topic, questionText); // QuestionService의 save 메서드 호출
+                    questions.add(new ResponseQuestionDto(topic, question));
+                }catch (CustomException e) {
+                    continue;
+                }
+            }
+        }
+
+        try {
+            workbook.close();
+        } catch(Exception e) {
+            throw new CustomException(ErrorCode.FILE_IO_ERROR);
+        }
+
+        return new TopicExcelUploadedDto(topic, questions);
+    }
+
     @Transactional
-    public void save(String topicTitle) {
+    public Topic save(String topicTitle) {
         topicRepository.findByTopicTitle(topicTitle).forEach(topic -> {
             if (topic.getTopicActive() == Active.active)
             {
@@ -47,7 +120,7 @@ public class TopicService {
 
         Topic topic = new Topic(topicTitle);
 
-        topicRepository.save(topic);
+        return topicRepository.save(topic);
     }
 
     @Transactional
@@ -68,6 +141,8 @@ public class TopicService {
         topic.setTopicActive(Active.inactive);
 
         topicRepository.save(topic);
+
+        questionService.deleteByTopic(topic);
     }
 
     public Optional<Topic> findByTopicId(long topicId) {

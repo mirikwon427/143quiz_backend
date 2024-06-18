@@ -6,6 +6,8 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import garlicbears._quiz.domain.game.dto.ResponseQuestionDto;
 import garlicbears._quiz.domain.game.entity.QQuestion;
+import garlicbears._quiz.domain.game.entity.Topic;
+import garlicbears._quiz.global.entity.Active;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -86,6 +88,16 @@ public class QuestionQueryRepositoryImpl implements QuestionQueryRepository {
                 .fetchOne();
 
         return new PageImpl<>(results, pageable, total == null ? 0 : total);
+    }
+
+    @Override
+    public void deleteByTopic(Topic topic) {
+        QQuestion question = QQuestion.question;
+        queryFactory
+                .update(question)
+                .set(question.questionActive, Active.inactive)
+                .where(question.topic.eq(topic))
+                .execute();
     }
 
 
