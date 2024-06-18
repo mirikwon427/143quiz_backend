@@ -35,6 +35,14 @@ public class Question extends BaseTimeEntity {
         this.questionActive = Active.active;
     }
 
+    public Question(Long questionId, Topic topic, String questionText, String questionAnswerText, Active questionActive) {
+        this.questionId = questionId;
+        this.topic = topic;
+        this.questionText = questionText;
+        this.questionAnswerText = questionAnswerText;
+        this.questionActive = questionActive;
+    }
+
     public Long getQuestionId(){
         return questionId;
     }
@@ -55,4 +63,15 @@ public class Question extends BaseTimeEntity {
         return questionActive;
     }
 
+    public void setQuestionAnswerText(String questionAnswerText) {
+        this.questionAnswerText = questionAnswerText;
+    }
+
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
+    }
+
+    public void setQuestionActive(Active questionActive) {
+        this.questionActive = questionActive;
+    }
 }

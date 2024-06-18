@@ -63,7 +63,7 @@ public class AdminTopicController {
                     content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
             @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
                     content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
-            @ApiResponse(responseCode = "409", description = "Nickname Already Exist",
+            @ApiResponse(responseCode = "409", description = "Topic Already Exist",
                     content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
             @ApiResponse(responseCode = "500", description = "Internal Server Error",
                     content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
