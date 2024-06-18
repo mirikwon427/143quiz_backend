@@ -109,9 +109,9 @@ public class AdminTopicController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved",
                     content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
-            @ApiResponse(responseCode = "400", description = "Bad Request (Invalid Input)",
-                    content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
             @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
+                    content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+            @ApiResponse(responseCode = "404", description = "Topic Not Found",
                     content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))})
     })
     public ResponseEntity<?> updateTopic(@PathVariable Long topicId, @Valid @RequestBody Map<String, String> request) {
@@ -131,9 +131,9 @@ public class AdminTopicController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved",
                     content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
-            @ApiResponse(responseCode = "400", description = "Bad Request (Invalid Input)",
-                    content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
             @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
+                    content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+            @ApiResponse(responseCode = "404", description = "Topic Not Found",
                     content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))})
     })
     public ResponseEntity<?> deleteTopic(@PathVariable Long topicId) {
