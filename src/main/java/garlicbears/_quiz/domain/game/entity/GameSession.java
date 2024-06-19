@@ -3,11 +3,15 @@ package garlicbears._quiz.domain.game.entity;
 import garlicbears._quiz.domain.user.entity.User;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "game_sessions")
+@DynamicInsert
+@DynamicUpdate
 public class GameSession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,5 +40,52 @@ public class GameSession {
     @Column(name = "game_hearts_count", nullable = false)
     @ColumnDefault("0")
     private int heartsCount;
+
+    public long getGameSessionId() {
+        return gameSessionId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Topic getTopic() {
+        return topic;
+    }
+
+    public LocalDateTime getGameStartTime() {
+        return gameStartTime;
+    }
+
+    public LocalDateTime getGameEndTime() {
+        return gameEndTime;
+    }
+
+    public boolean getGameDropout() {
+        return gameDropout;
+    }
+
+    public int getHeartsCount() {
+        return heartsCount;
+    }
+
+    public void setGameEndTime(LocalDateTime gameEndTime) {
+        this.gameEndTime = gameEndTime;
+    }
+
+    public void setGameDropout(boolean gameDropout) {
+        this.gameDropout = gameDropout;
+    }
+
+    public void setHeartsCount(int heartsCount) {
+        this.heartsCount = heartsCount;
+    }
+
+    protected GameSession(){};
+
+    public GameSession(User user, Topic topic) {
+        this.user = user;
+        this.topic = topic;
+    }
 
 }

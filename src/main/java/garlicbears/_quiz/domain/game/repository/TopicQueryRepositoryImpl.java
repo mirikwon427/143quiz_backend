@@ -4,6 +4,8 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import garlicbears._quiz.domain.game.dto.ResponseTopicDto;
+import garlicbears._quiz.domain.game.dto.TopicsListDto;
+import garlicbears._quiz.domain.game.entity.QReward;
 import garlicbears._quiz.domain.game.entity.QTopic;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,4 +74,60 @@ public class TopicQueryRepositoryImpl implements TopicQueryRepository{
                 return topic.createdAt.desc();
         }
     }
+
+    @Override
+    public List<TopicsListDto> findByTopic(Long userId){
+        QTopic topic = QTopic.topic;
+        QReward reward = QReward.reward;
+
+        return queryFactory
+                .select(Projections.constructor(TopicsListDto.class,
+                        topic.topicId,
+                        topic.topicTitle
+                ))
+                .from(topic)
+                .leftJoin(reward)
+                .on(topic.topicId.eq(reward.topic.topicId)
+                        .and(reward.user.userId.eq(userId)))
+                .where(reward.topic.topicId.isNull()
+                        .or(reward.rewardBadgeStatus.eq(false)))
+                .fetch();
+
+    }
+
+    @Override
+    public List<TopicsListDto> findByBadge(Long userId){
+        QTopic topic = QTopic.topic;
+        QReward reward = QReward.reward;
+
+        return queryFactory
+                .select(Projections.constructor(TopicsListDto.class,
+                        topic.topicId,
+                        topic.topicTitle
+                ))
+                .from(topic)
+                .join(reward)
+                .on(topic.topicId.eq(reward.topic.topicId)
+                        .and(reward.user.userId.eq(userId)))
+                .where(reward.rewardBadgeStatus.eq(true))
+                .fetch();
+
+    }
+
+    @Override
+    public Long CountTopic(Long userId){
+        QTopic topic = QTopic.topic;
+        QReward reward = QReward.reward;
+
+        return queryFactory
+                .select(topic.count())
+                .from(topic)
+                .leftJoin(reward)
+                .on(topic.topicId.eq(reward.topic.topicId)
+                        .and(reward.user.userId.eq(userId)))
+                .where(reward.topic.topicId.isNull()
+                        .or(reward.rewardBadgeStatus.eq(false)))
+                .fetchOne();
+    }
+
 }

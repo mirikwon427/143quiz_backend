@@ -1,6 +1,7 @@
 package garlicbears._quiz.domain.user.entity;
 
 import garlicbears._quiz.domain.game.entity.Reward;
+import garlicbears._quiz.domain.game.entity.UserAnswer;
 import garlicbears._quiz.domain.user.dto.SignUpDto;
 import garlicbears._quiz.global.entity.Active;
 import garlicbears._quiz.global.entity.BaseTimeEntity;
@@ -50,19 +51,21 @@ public class User extends BaseTimeEntity {
     private Active userActive = active;
 
     @OneToMany(mappedBy = "user")
-    private List<Reward> reward = new ArrayList<>();;
+    private List<Reward> reward = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<UserAnswer> userAnswers = new ArrayList<>();
 
     public User(){}
 
-    public User(String userEmail, String userPassword, String userNickname, int userBirthYear,
-         int userAge, Gender userGender, Location userLocation) {
-        this.userEmail = userEmail;
-        this.userPassword = userPassword;
-        this.userNickname = userNickname;
-        this.userBirthYear = userBirthYear;
-        this.userAge = userAge;
-        this.userGender = userGender;
-        this.userLocation = userLocation;
+    public User(UserBuilder builder) {
+        this.userEmail = builder.userEmail;
+        this.userPassword = builder.userPassword;
+        this.userNickname = builder.userNickname;
+        this.userBirthYear = builder.userBirthYear;
+        this.userAge = builder.userAge;
+        this.userGender = builder.userGender;
+        this.userLocation = builder.userLocation;
     }
 
     public Long getUserId() {
@@ -105,6 +108,10 @@ public class User extends BaseTimeEntity {
         return reward;
     }
 
+    public List<UserAnswer> userAnswers() {
+        return userAnswers;
+    }
+
     public void setUserBirthYear(int userBirthYear){
         this.userBirthYear = userBirthYear;
     }
@@ -123,19 +130,44 @@ public class User extends BaseTimeEntity {
     public void setUserActive(Active userActive) {
         this.userActive = userActive;
     }
+
     public static class UserBuilder {
-        public User build(SignUpDto signUpDto, PasswordEncoder passwordEncoder) {
-            String userEmail = signUpDto.getEmail();
-            String userPassword = passwordEncoder.encode(signUpDto.getPassword());
-            String userNickname = signUpDto.getNickname();
-            int userBirthYear = signUpDto.getBirthYear();
-            int userAge = Year.now().getValue() - signUpDto.getBirthYear();
-            Gender userGender = Gender.fromKoreanName(signUpDto.getGender());
-            Location userLocation = Location.fromKoreanName(signUpDto.getLocation());
-            return new User(userEmail, userPassword, userNickname, userBirthYear, userAge, userGender, userLocation);
+        private final String userEmail;
+        private final String userPassword;
+        private final String userNickname;
+        private int userBirthYear;
+        private int userAge;
+        private Gender userGender;
+        private Location userLocation;
+
+        public UserBuilder(String userEmail, String userPassword, String userNickname) {
+            this.userEmail = userEmail;
+            this.userPassword = userPassword;
+            this.userNickname = userNickname;
         }
-    }
-    public static UserBuilder builder() {
-        return new UserBuilder();
+
+        public UserBuilder userBirthYear(int userBirthYear) {
+            this.userBirthYear = userBirthYear;
+            return this;
+        }
+
+        public UserBuilder userAge(int userAge) {
+            this.userAge = userAge;
+            return this;
+        }
+
+        public UserBuilder userGender(Gender userGender) {
+            this.userGender = userGender;
+            return this;
+        }
+
+        public UserBuilder userLocation(Location userLocation) {
+            this.userLocation = userLocation;
+            return this;
+        }
+
+        public User build() {
+            return new User(this);
+        }
     }
 }
