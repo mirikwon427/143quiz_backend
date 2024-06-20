@@ -1,72 +1,74 @@
 package garlicbears._quiz.domain.game.dto;
 
+import java.time.LocalDateTime;
+
 import garlicbears._quiz.domain.game.entity.Question;
 import garlicbears._quiz.domain.game.entity.Topic;
 import garlicbears._quiz.global.entity.Active;
 
-import java.time.LocalDateTime;
-
 public class ResponseQuestionDto {
-    private long topicId;
-    private String topicText;
-    private long questionId;
-    private String questionText;
-    private String questionAnswer;
-    private Active questionActive;
-    private LocalDateTime questionCreationDate;
-    private LocalDateTime questionUpdateDate;
+	private long topicId;
+	private String topicText;
+	private long questionId;
+	private String questionText;
+	private String questionAnswer;
+	private Active questionActive;
+	private LocalDateTime questionCreationDate;
+	private LocalDateTime questionUpdateDate;
 
-    public ResponseQuestionDto(long topicId, String topicText, long questionId, String questionText, String questionAnswer, Active questionActive, LocalDateTime questionCreationDate, LocalDateTime questionUpdateDate) {
-        this.topicId = topicId;
-        this.topicText = topicText;
-        this.questionId = questionId;
-        this.questionText = questionText;
-        this.questionAnswer = questionAnswer;
-        this.questionActive = questionActive;
-        this.questionCreationDate = questionCreationDate;
-        this.questionUpdateDate = questionUpdateDate;
-    }
+	public ResponseQuestionDto(long topicId, String topicText, long questionId, String questionText,
+		String questionAnswer, Active questionActive, LocalDateTime questionCreationDate,
+		LocalDateTime questionUpdateDate) {
+		this.topicId = topicId;
+		this.topicText = topicText;
+		this.questionId = questionId;
+		this.questionText = questionText;
+		this.questionAnswer = questionAnswer;
+		this.questionActive = questionActive;
+		this.questionCreationDate = questionCreationDate;
+		this.questionUpdateDate = questionUpdateDate;
+	}
 
-    public ResponseQuestionDto(Topic topic, Question question) {
-        this.topicId = topic.getTopicId();
-        this.topicText = topic.getTopicTitle();
-        this.questionId = question.getQuestionId();
-        this.questionText = question.getQuestionText();
-        this.questionAnswer = question.getQuestionAnswerText();
-        this.questionActive = question.getQuestionActive();
-        this.questionCreationDate = question.getCreatedAt();
-        this.questionUpdateDate = question.getUpdatedAt();
-    }
+	public ResponseQuestionDto(Topic topic, Question question) {
+		this.topicId = topic.getTopicId();
+		this.topicText = topic.getTopicTitle();
+		this.questionId = question.getQuestionId();
+		this.questionText = question.getQuestionText();
+		this.questionAnswer = question.getQuestionAnswerText();
+		this.questionActive = question.getQuestionActive();
+		this.questionCreationDate = question.getCreatedAt();
+		this.questionUpdateDate = question.getUpdatedAt();
+	}
 
-    public long getTopicId() {
-        return topicId;
-    }
+	public long getTopicId() {
+		return topicId;
+	}
 
-    public String getTopicText() {
-        return topicText;
-    }
+	public String getTopicText() {
+		return topicText;
+	}
 
-    public long getQuestionId() {
-        return questionId;
-    }
+	public long getQuestionId() {
+		return questionId;
+	}
 
-    public String getQuestionText() {
-        return questionText;
-    }
+	public String getQuestionText() {
+		return questionText;
+	}
 
-    public String getQuestionAnswer() {
-        return questionAnswer;
-    }
+	public String getQuestionAnswer() {
+		return questionAnswer;
+	}
 
-    public Active getQuestionActive() {
-        return questionActive;
-    }
+	public Active getQuestionActive() {
+		return questionActive;
+	}
 
-    public LocalDateTime getQuestionCreationDate() {
-        return questionCreationDate;
-    }
+	public LocalDateTime getQuestionCreationDate() {
+		return questionCreationDate;
+	}
 
-    public LocalDateTime getQuestionUpdateDate() {
-        return questionUpdateDate;
-    }
+	public LocalDateTime getQuestionUpdateDate() {
+		return questionUpdateDate;
+	}
 }

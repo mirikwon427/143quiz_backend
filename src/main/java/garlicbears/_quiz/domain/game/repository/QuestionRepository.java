@@ -1,10 +1,11 @@
 package garlicbears._quiz.domain.game.repository;
 
-import garlicbears._quiz.domain.game.entity.Question;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import garlicbears._quiz.domain.game.entity.Question;
+
 public interface QuestionRepository extends JpaRepository<Question, Long>, QuestionQueryRepository {
-    List<Question> findByQuestionText(String questionText);
+	List<Question> findByQuestionText(String questionText);
 }
