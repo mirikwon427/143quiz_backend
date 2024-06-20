@@ -77,7 +77,7 @@ public class GameController {
         User user = principalDetails.getUser();
         List<TopicsListDto> topics = gameService.topicList(user.getUserId());
 
-        return ResponseEntity.ok(new ResponseTopicBadgeDto(200, topics));
+        return ResponseEntity.ok(new ResponseTopicBadgeDto(topics));
     }
 
     @GetMapping("/badges")
@@ -94,7 +94,7 @@ public class GameController {
         User user = principalDetails.getUser();
         List<TopicsListDto> topics = gameService.badgeList(user.getUserId());
 
-        return ResponseEntity.ok(new ResponseTopicBadgeDto(200, topics));
+        return ResponseEntity.ok(new ResponseTopicBadgeDto(topics));
     }
 
     @GetMapping("/start/{topicId}")
@@ -109,7 +109,7 @@ public class GameController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error",
                     content = {@Content(schema = @Schema(implementation = ResponseDto.class))})
     })
-    public ResponseEntity<?> gameStart(@PathVariable(value = "topicId") Long topicId,
+    public ResponseEntity<?> gameStart(@PathVariable(value = "topicId") long topicId,
                                        @AuthenticationPrincipal PrincipalDetails principalDetails) {
         User user = principalDetails.getUser();
 

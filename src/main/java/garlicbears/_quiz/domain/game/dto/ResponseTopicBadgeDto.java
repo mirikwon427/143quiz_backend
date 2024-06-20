@@ -6,19 +6,12 @@ import java.util.List;
 
 public class ResponseTopicBadgeDto {
 
-    private int status;
-
     private List<TopicsListDto> topics;
 
     public ResponseTopicBadgeDto(){}
 
-    public ResponseTopicBadgeDto(int status, List<TopicsListDto> topics) {
-        this.status = status;
+    public ResponseTopicBadgeDto(List<TopicsListDto> topics) {
         this.topics = topics;
-    }
-
-    public int getStatus() {
-        return status;
     }
 
     public List<TopicsListDto> getTopics() {

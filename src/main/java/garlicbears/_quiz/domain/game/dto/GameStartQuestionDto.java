@@ -2,13 +2,13 @@ package garlicbears._quiz.domain.game.dto;
 
 public class GameStartQuestionDto {
 
-    private Long questionId;
+    private long questionId;
 
     private String questionText;
 
     private String answerText;
 
-    public Long getQuestionId(){
+    public long getQuestionId(){
         return questionId;
     }
 
@@ -22,7 +22,7 @@ public class GameStartQuestionDto {
 
     public GameStartQuestionDto(){}
 
-    public GameStartQuestionDto(Long questionId, String questionText, String answerText) {
+    public GameStartQuestionDto(long questionId, String questionText, String answerText) {
         this.questionId = questionId;
         this.questionText = questionText;
         this.answerText = answerText;

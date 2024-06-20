@@ -2,18 +2,18 @@ package garlicbears._quiz.domain.game.dto;
 
 public class TopicsListDto{
 
-    Long topicId;
+    long topicId;
 
     String title;
 
     public TopicsListDto(){}
 
-    public TopicsListDto(Long topicId, String title){
+    public TopicsListDto(long topicId, String title){
         this.topicId = topicId;
         this.title = title;
     }
 
-    public Long getTopicId(){
+    public long getTopicId(){
         return topicId;
     }
 

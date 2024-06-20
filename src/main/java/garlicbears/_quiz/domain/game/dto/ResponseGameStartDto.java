@@ -4,32 +4,25 @@ import java.util.List;
 
 public class ResponseGameStartDto {
 
-    private int status;
+    private long topicId;
 
-    private Long topicId;
-
-    private Long sessionId;
+    private long sessionId;
 
     private List<GameStartQuestionDto> game;
 
     public ResponseGameStartDto() {}
 
     public ResponseGameStartDto(ResponseGameStartBuilder builder) {
-        this.status = builder.status;
         this.topicId = builder.topicId;
         this.sessionId = builder.sessionId;
         this.game = builder.game;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public Long getTopicId() {
+    public long getTopicId() {
         return topicId;
     }
 
-    public Long getSessionId() {
+    public long getSessionId() {
         return sessionId;
     }
 
@@ -39,25 +32,18 @@ public class ResponseGameStartDto {
 
     public static class ResponseGameStartBuilder{
 
-        private int status;
+        private long topicId;
 
-        private Long topicId;
-
-        private Long sessionId;
+        private long sessionId;
 
         private List<GameStartQuestionDto> game;
 
-        public ResponseGameStartBuilder status (int status) {
-            this.status = status;
-            return this;
-        }
-
-        public ResponseGameStartBuilder topicId (Long topicId) {
+        public ResponseGameStartBuilder topicId (long topicId) {
             this.topicId = topicId;
             return this;
         }
 
-        public ResponseGameStartBuilder sessionId (Long sessionId) {
+        public ResponseGameStartBuilder sessionId (long sessionId) {
             this.sessionId = sessionId;
             return this;
         }

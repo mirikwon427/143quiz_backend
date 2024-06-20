@@ -60,7 +60,7 @@ public class UserAnswerService {
         Reward reward = repositoryReward.orElseGet(() ->
                 new Reward(user, topic, requestUserAnswerDto.getHeartsCount()));
 
-        Long totalQuestions = questionRepository.countAllByTopicAndQuestionActive(topic, Active.active);
+        long totalQuestions = questionRepository.countAllByTopicAndQuestionActive(topic, Active.active);
         int updatedHeartsCount = reward.getRewardNumberHearts() + requestUserAnswerDto.getHeartsCount();
 
         validateHeartsCount(updatedHeartsCount, totalQuestions);
@@ -73,12 +73,12 @@ public class UserAnswerService {
             reward.setRewardBadgeStatus(true);
             reward.setRewardBadgeCreatedAt(LocalDateTime.now());
             rewardRepository.save(reward);
-            return new ResponseUserAnswerDto(200, totalQuestions, reward.getRewardNumberHearts(), true);
+            return new ResponseUserAnswerDto(totalQuestions, reward.getRewardNumberHearts(), true);
         }
 
-        return new ResponseUserAnswerDto(200,totalQuestions, reward.getRewardNumberHearts(), false);
+        return new ResponseUserAnswerDto(totalQuestions, reward.getRewardNumberHearts(), false);
     }
-    private void validateHeartsCount(int updatedHeartsCount, Long totalQuestions) {
+    private void validateHeartsCount(int updatedHeartsCount, long totalQuestions) {
         if (updatedHeartsCount > totalQuestions) {
             logger.warning("updatedHeartsCount : " + updatedHeartsCount);
             logger.warning("totalQuestions : " + totalQuestions);
@@ -132,7 +132,7 @@ public class UserAnswerService {
         }
     }
 
-    public void dropGameSession(Long sessionId, User user) {
+    public void dropGameSession(long sessionId, User user) {
         GameSession gameSession = gameSessionRepository.findByGameSessionIdAndUser(sessionId, user)
                 .orElseThrow(() -> new CustomException(ErrorCode.UNKNOWN_GAMESESSION));
 

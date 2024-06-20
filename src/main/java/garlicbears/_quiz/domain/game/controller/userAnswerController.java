@@ -83,7 +83,7 @@ public class userAnswerController {
                     content = {@Content(schema = @Schema(implementation = ResponseDto.class))})
 
     })
-    public ResponseEntity<?> userAnswerDrop(@PathVariable(value = "sessionId") Long sessionId,
+    public ResponseEntity<?> userAnswerDrop(@PathVariable(value = "sessionId") long sessionId,
                                             @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         User user  = principalDetails.getUser();

@@ -56,17 +56,17 @@ public class GameService {
     }
 
     @Transactional
-    public List<TopicsListDto> topicList(Long userId) {
+    public List<TopicsListDto> topicList(long userId) {
         return topicRepository.findUnacquiredBadgeTopicsByUser(userId);
     }
 
     @Transactional
-    public List<TopicsListDto> badgeList(Long userId) {
+    public List<TopicsListDto> badgeList(long userId) {
         return topicRepository.findBadgeTopicsbyUser(userId);
     }
 
     @Transactional
-    public ResponseGameStartDto gameStart(Long topicId, User user) {
+    public ResponseGameStartDto gameStart(long topicId, User user) {
         Random random = new Random();
         long newTopicId = topicId;
         if(topicId == 0) {
@@ -99,7 +99,6 @@ public class GameService {
         return new ResponseGameStartDto.ResponseGameStartBuilder()
                 .topicId(newTopicId)
                 .sessionId(gameSession.getGameSessionId())
-                .status(200)
                 .game(questionRepository.findGameQuestion(newTopicId, user.getUserId()))
                 .build();
     }
