@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "rating_seq")
     private long ratingId;
 
     @ManyToOne(fetch = FetchType.LAZY)
