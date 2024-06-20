@@ -51,25 +51,16 @@ public class TopicQueryRepositoryImpl implements TopicQueryRepository{
     }
 
     private OrderSpecifier<?> getOrderSpecifier(QTopic topic, String sortBy) {
-        switch (sortBy) {
-            case "titleAsc":
-                return topic.topicTitle.asc();
-            case "titleDesc":
-                return topic.topicTitle.desc();
-            case "createdAtAsc":
-                return topic.createdAt.asc();
-            case "createdAtDesc":
-                return topic.createdAt.desc();
-            case "updatedAtAsc":
-                return topic.updatedAt.asc();
-            case "updatedAtDesc":
-                return topic.updatedAt.desc();
-            case "usageCountAsc":
-                return topic.topicUsageCount.asc();
-            case "usageCountDesc":
-                return topic.topicUsageCount.desc();
-            default:
-                return topic.createdAt.desc();
-        }
+        return switch (sortBy) {
+            case "titleAsc" -> topic.topicTitle.asc();
+            case "titleDesc" -> topic.topicTitle.desc();
+            case "createdAtAsc" -> topic.createdAt.asc();
+            case "createdAtDesc" -> topic.createdAt.desc();
+            case "updatedAtAsc" -> topic.updatedAt.asc();
+            case "updatedAtDesc" -> topic.updatedAt.desc();
+            case "usageCountAsc" -> topic.topicUsageCount.asc();
+            case "usageCountDesc" -> topic.topicUsageCount.desc();
+            default -> topic.topicId.desc();
+        };
     }
 }
