@@ -1,23 +1,23 @@
 package garlicbears._quiz.global.dto;
 
 public class ResponseDto<T> {
-    private int status;
-    private String code;
+	private int status;
+	private String code;
 
-    public ResponseDto(int status, String code) {
-        this.status = status;
-        this.code = code;
-    }
+	public ResponseDto(int status, String code) {
+		this.status = status;
+		this.code = code;
+	}
 
-    public int getStatus(){
-        return status;
-    }
+	public int getStatus() {
+		return status;
+	}
 
-    public String getCode(){
-        return code;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public static <T> ResponseDto<T> success(){
-        return new ResponseDto<>(200, "SUCCESS");
-    }
+	public static <T> ResponseDto<T> success() {
+		return new ResponseDto<>(200, "SUCCESS");
+	}
 }
