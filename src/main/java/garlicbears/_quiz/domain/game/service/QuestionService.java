@@ -68,7 +68,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public void save(Topic topic, String questionText) {
+    public Question save(Topic topic, String questionText) {
         questionRepository.findByQuestionText(questionText).forEach(question -> {
             if (question.getQuestionActive() == Active.active){
                 throw new CustomException(ErrorCode.QUESTION_ALREADY_EXISTS);
@@ -79,7 +79,7 @@ public class QuestionService {
 
         Question question = new Question(topic, questionText, questionAnswer);
 
-        questionRepository.save(question);
+        return questionRepository.save(question);
     }
 
     @Transactional
@@ -101,5 +101,10 @@ public class QuestionService {
         question.setQuestionActive(Active.inactive);
 
         questionRepository.save(question);
+    }
+
+    @Transactional
+    public void deleteByTopic(Topic topic) {
+        questionRepository.deleteByTopic(topic);
     }
 }

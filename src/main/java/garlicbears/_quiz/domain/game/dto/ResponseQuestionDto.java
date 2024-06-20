@@ -27,6 +27,17 @@ public class ResponseQuestionDto {
         this.questionUpdateDate = questionUpdateDate;
     }
 
+    public ResponseQuestionDto(Topic topic, Question question) {
+        this.topicId = topic.getTopicId();
+        this.topicText = topic.getTopicTitle();
+        this.questionId = question.getQuestionId();
+        this.questionText = question.getQuestionText();
+        this.questionAnswer = question.getQuestionAnswerText();
+        this.questionActive = question.getQuestionActive();
+        this.questionCreationDate = question.getCreatedAt();
+        this.questionUpdateDate = question.getUpdatedAt();
+    }
+
     public long getTopicId() {
         return topicId;
     }
