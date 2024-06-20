@@ -68,7 +68,7 @@ public class TopicQueryRepositoryImpl implements TopicQueryRepository{
     }
 
     @Override
-    public List<TopicsListDto> findUnacquiredBadgeTopicsByUser(Long userId){
+    public List<TopicsListDto> findUnacquaintedBadgeTopicsByUser(long userId){
         QTopic topic = QTopic.topic;
         QReward reward = QReward.reward;
 
@@ -89,7 +89,7 @@ public class TopicQueryRepositoryImpl implements TopicQueryRepository{
     }
 
     @Override
-    public List<TopicsListDto> findBadgeTopicsbyUser(Long userId){
+    public List<TopicsListDto> findTopicsWithBadgeByUser(long userId){
         QTopic topic = QTopic.topic;
         QReward reward = QReward.reward;
 
@@ -106,23 +106,6 @@ public class TopicQueryRepositoryImpl implements TopicQueryRepository{
                         .and(topic.topicActive.eq(Active.active)))
                 .fetch();
 
-    }
-
-    @Override
-    public Long CountTopic(Long userId){
-        QTopic topic = QTopic.topic;
-        QReward reward = QReward.reward;
-
-        return queryFactory
-                .select(topic.count())
-                .from(topic)
-                .leftJoin(reward)
-                .on(topic.topicId.eq(reward.topic.topicId)
-                        .and(reward.user.userId.eq(userId)))
-                .where(topic.topicActive.eq(Active.active)
-                        .and((reward.topic.topicId.isNull()
-                        .or(reward.rewardBadgeStatus.eq(false)))))
-                .fetchOne();
     }
 
 }

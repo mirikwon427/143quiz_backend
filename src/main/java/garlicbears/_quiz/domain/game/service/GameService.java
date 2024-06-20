@@ -57,12 +57,12 @@ public class GameService {
 
     @Transactional
     public List<TopicsListDto> topicList(long userId) {
-        return topicRepository.findUnacquiredBadgeTopicsByUser(userId);
+        return topicRepository.findUnacquaintedBadgeTopicsByUser(userId);
     }
 
     @Transactional
     public List<TopicsListDto> badgeList(long userId) {
-        return topicRepository.findBadgeTopicsbyUser(userId);
+        return topicRepository.findTopicsWithBadgeByUser(userId);
     }
 
     @Transactional
@@ -70,16 +70,15 @@ public class GameService {
         Random random = new Random();
         long newTopicId = topicId;
         if(topicId == 0) {
-            Long totalCountTopics = topicRepository.CountTopic(user.getUserId());
-            List<Long> userBadgeList = rewardRepository.findTopicIdsWithBadgeByUser(user);
+            List<TopicsListDto> userTopicList = topicRepository.findUnacquaintedBadgeTopicsByUser(user.getUserId());
 
-            for(int i = 0; i < totalCountTopics; i++) {
-                newTopicId = random.nextLong(totalCountTopics);
-                if(userBadgeList.contains(newTopicId)){
-                    userBadgeList.add(newTopicId);
-                } else{
-                    break;
-                }
+            if (userTopicList.isEmpty()) {
+                throw new CustomException(ErrorCode.UNKNOWN_TOPIC);
+            } else {
+                int size = userTopicList.size();
+                int index = random.nextInt(size);
+                TopicsListDto topicsListDto = userTopicList.get(index);
+                newTopicId = topicsListDto.getTopicId();
             }
         }
 
