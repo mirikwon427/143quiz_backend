@@ -16,14 +16,17 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User extends BaseTimeEntity {
 
 	@Id
@@ -57,6 +60,10 @@ public class User extends BaseTimeEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "user_active", nullable = false)
 	private Active userActive = active;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_image_seq")
+	private Image image;
 
 	@OneToMany(mappedBy = "user")
 	private List<Reward> reward = new ArrayList<>();
@@ -109,6 +116,10 @@ public class User extends BaseTimeEntity {
 
 	public Active getUserActive() {
 		return userActive;
+	}
+
+	public Image getImage() {
+		return image;
 	}
 
 	public List<Reward> getRewards() {
