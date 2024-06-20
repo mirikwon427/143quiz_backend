@@ -1,23 +1,21 @@
 package garlicbears._quiz.domain.user.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import garlicbears._quiz.domain.user.entity.QRating;
 import jakarta.persistence.EntityManager;
 
-public class RatingQueryRepositoryImpl implements RatingQueryRepository{
-    private final JPAQueryFactory jpaQueryFactory;
+public class RatingQueryRepositoryImpl implements RatingQueryRepository {
+	private final JPAQueryFactory jpaQueryFactory;
 
-    public RatingQueryRepositoryImpl(EntityManager em) {
-        this.jpaQueryFactory = new JPAQueryFactory(em);
-    }
+	public RatingQueryRepositoryImpl(EntityManager em) {
+		this.jpaQueryFactory = new JPAQueryFactory(em);
+	}
 
-    @Override
-    public Double getAverageRating() {
-        QRating rating = QRating.rating;
+	@Override
+	public Double getAverageRating() {
+		QRating rating = QRating.rating;
 
-        return jpaQueryFactory
-                .select(rating.ratingValue.avg().as("averageRating"))
-                .from(rating)
-                .fetchOne();
-    }
+		return jpaQueryFactory.select(rating.ratingValue.avg().as("averageRating")).from(rating).fetchOne();
+	}
 }
