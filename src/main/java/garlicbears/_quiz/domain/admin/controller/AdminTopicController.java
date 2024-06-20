@@ -1,6 +1,7 @@
 package garlicbears._quiz.domain.admin.controller;
 
 import garlicbears._quiz.domain.admin.dto.CreateTopicsDto;
+import garlicbears._quiz.domain.game.dto.ResponseQuestionListDto;
 import garlicbears._quiz.domain.game.dto.ResponseTopicListDto;
 import garlicbears._quiz.domain.game.service.TopicService;
 import garlicbears._quiz.domain.user.dto.ResponseUserDto;
@@ -17,8 +18,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -47,6 +50,17 @@ public class AdminTopicController {
         return ResponseEntity.ok(topicService.getTopicList(pageNumber, pageSize, sort));
     }
 
+    @PostMapping(value = "/topic/upload-excel",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "엑셀 파일로 주제 생성", description = "엑셀 파일을 통해 주제를 생성합니다. 파일명 = 주제명, A열에 작성된 문제들을 등록합니다.")
+    public ResponseEntity<?> createTopicsByExcel(@Parameter(
+            description = "multipart/form-data 형식의 엑셀 파일을 받습니다.",
+            content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ) @RequestPart("multipartFile") MultipartFile file) {
+
+        return ResponseEntity.ok(topicService.saveTopicWithExcel(file));
+    }
+
     @PostMapping("/topic")
     @Operation(summary = "주제 생성", description = "입력된 주제를 생성합니다.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -63,7 +77,7 @@ public class AdminTopicController {
                     content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
             @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
                     content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
-            @ApiResponse(responseCode = "409", description = "Nickname Already Exist",
+            @ApiResponse(responseCode = "409", description = "Topic Already Exist",
                     content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
             @ApiResponse(responseCode = "500", description = "Internal Server Error",
                     content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),

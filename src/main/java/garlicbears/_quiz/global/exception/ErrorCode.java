@@ -22,8 +22,10 @@ public enum ErrorCode {
     UNKNOWN_QUESTION(HttpStatus.NOT_FOUND,"문제를 찾을 수 없습니다."),
     UNKNOWN_GAMESESSION(HttpStatus.NOT_FOUND,"게임세션을 찾을 수 없습니다."),
     TOPIC_NOT_FOUND(HttpStatus.NOT_FOUND,"주제를 찾을 수 없습니다."),
+    QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND,"문제를 찾을 수 없습니다."),
     DELETED_TOPIC(HttpStatus.GONE,"삭제된 주제입니다."),
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"서버 오류입니다.");
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"서버 오류입니다."),
+    FILE_IO_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 처리중 발생한 오류입니다.");
 
     private final HttpStatus status;
     private final String message;
