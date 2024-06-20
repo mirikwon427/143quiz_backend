@@ -1,159 +1,95 @@
 package garlicbears._quiz.domain.admin.controller;
 
-import garlicbears._quiz.domain.admin.dto.CreateTopicsDto;
-import garlicbears._quiz.domain.game.dto.ResponseQuestionListDto;
-import garlicbears._quiz.domain.game.dto.ResponseTopicListDto;
-import garlicbears._quiz.domain.game.service.TopicService;
-import garlicbears._quiz.domain.user.dto.ResponseUserDto;
-import garlicbears._quiz.global.dto.ResponseDto;
-import garlicbears._quiz.global.exception.CustomException;
-import garlicbears._quiz.global.exception.ErrorCode;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.SchemaProperty;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Map;
+import garlicbears._quiz.domain.game.service.TopicService;
+import garlicbears._quiz.global.dto.ResponseDto;
+import garlicbears._quiz.global.exception.CustomException;
+import garlicbears._quiz.global.exception.ErrorCode;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/admin")
 @Tag(name = "주제 관리")
-public class AdminTopicController {
-    private final TopicService topicService;
+public class AdminTopicController implements SwaggerAdminTopicController {
+	private final TopicService topicService;
 
-    @Autowired
-    public AdminTopicController(TopicService topicService) {
-        this.topicService = topicService;
-    }
+	@Autowired
+	public AdminTopicController(TopicService topicService) {
+		this.topicService = topicService;
+	}
 
-    @GetMapping("/topics")
-    @Operation(summary = "주제 목록 조회", description = "정렬 기준에 따라 주제 목록을 반환합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved",
-                    content = {@Content(schema = @Schema(implementation = ResponseTopicListDto.class))}),
-            @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)")
-    })
-    public ResponseEntity<?> listTopics(@RequestParam(defaultValue = "createdAtDesc") @Parameter(schema =
-    @Schema(allowableValues = {"titleDesc", "titleAsc", "createdAtDesc", "createdAtAsc", "updatedAtDesc", "updatedAtAsc", "usageCountDesc", "usageCountAsc"})) String sort
-            , @RequestParam(defaultValue = "0") int pageNumber
-            , @RequestParam(defaultValue = "10") int pageSize) {
-        return ResponseEntity.ok(topicService.getTopicList(pageNumber, pageSize, sort));
-    }
+	@GetMapping("/topics")
+	public ResponseEntity<?> listTopics(
+		@RequestParam(defaultValue = "createdAtDesc") @Parameter(schema = @Schema(allowableValues = {"titleDesc",
+			"titleAsc", "createdAtDesc", "createdAtAsc", "updatedAtDesc", "updatedAtAsc", "usageCountDesc",
+			"usageCountAsc"})) String sort, @RequestParam(defaultValue = "0") int pageNumber,
+		@RequestParam(defaultValue = "10") int pageSize) {
+		// 정렬 조건에 따른 전체 주제 목록 조회
+		return ResponseEntity.ok(topicService.getTopicList(pageNumber, pageSize, sort));
+	}
 
-    @PostMapping(value = "/topic/upload-excel",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "엑셀 파일로 주제 생성", description = "엑셀 파일을 통해 주제를 생성합니다. 파일명 = 주제명, A열에 작성된 문제들을 등록합니다.")
-    public ResponseEntity<?> createTopicsByExcel(@Parameter(
-            description = "multipart/form-data 형식의 엑셀 파일을 받습니다.",
-            content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ) @RequestPart("multipartFile") MultipartFile file) {
+	@PostMapping(value = "/topic/upload-excel", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> createTopicsByExcel(
+		@Parameter(description = "multipart/form-data 형식의 엑셀 파일을 받습니다.", content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE)) @RequestPart("multipartFile") MultipartFile file) {
+		// 엑셀 파일을 통해 주제 생성
+		// 파일명 = 주제명, 첫 번째 시트만 사용, 첫 번째 열 = 주제명
+		return ResponseEntity.ok(topicService.saveTopicWithExcel(file));
+	}
 
-        return ResponseEntity.ok(topicService.saveTopicWithExcel(file));
-    }
+	@PostMapping("/topic")
+	public ResponseEntity<?> createTopic(@Valid @RequestBody Map<String, String> request) {
+		// 주제 생성
+		String topicTitle = request.get("title");
 
-    @PostMapping("/topic")
-    @Operation(summary = "주제 생성", description = "입력된 주제를 생성합니다.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @Content(
-                            schemaProperties = {
-                                    @SchemaProperty(name = "title", schema = @Schema(type="string", format = "json"))
-                            }
-                    )
-            ))
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved",
-                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid Input",
-                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
-            @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
-                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
-            @ApiResponse(responseCode = "409", description = "Topic Already Exist",
-                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error",
-                    content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
-    })
-    public ResponseEntity<?> createTopic(@Valid @RequestBody Map<String, String> request) {
-        String topicTitle = request.get("title");
+		if (topicTitle == null || topicTitle.trim().isEmpty()) {
+			throw new CustomException(ErrorCode.INVALID_INPUT);
+		}
 
-        if (topicTitle == null || topicTitle.trim().isEmpty()) {
-            throw new CustomException(ErrorCode.INVALID_INPUT);
-        }
+		topicService.save(topicTitle);
 
-        topicService.save(topicTitle);
+		return ResponseEntity.ok(ResponseDto.success());
+	}
 
-        return ResponseEntity.ok(ResponseDto.success());
-    }
+	@PatchMapping("/topic/{topicId}")
+	public ResponseEntity<?> updateTopic(@PathVariable Long topicId, @Valid @RequestBody Map<String, String> request) {
+		// 주제 수정
+		String topicTitle = request.get("title");
 
-    @PostMapping("/topics")
-    public ResponseEntity<?> createTopics(@Valid @RequestBody CreateTopicsDto request) {
-        for (String topicTitle : request.getTopics()) {
-            if (topicTitle == null || topicTitle.trim().isEmpty()) {
-                continue;
-            }
+		if (topicTitle == null || topicTitle.trim().isEmpty()) {
+			throw new CustomException(ErrorCode.INVALID_INPUT);
+		}
 
-            try {
-                topicService.save(topicTitle);
-            } catch (CustomException e) {
-                System.err.println(e.getMessage());
-            }
-        }
+		topicService.update(topicId, topicTitle);
 
-        return ResponseEntity.ok(ResponseDto.success());
-    }
+		return ResponseEntity.ok(ResponseDto.success());
+	}
 
-    @PatchMapping("/topic/{topicId}")
-    @Operation(summary = "주제 수정", description = "입력된 주제를 수정합니다.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @Content(
-                            schemaProperties = {
-                                    @SchemaProperty(name = "title", schema = @Schema(type="string", format = "json"))
-                            }
-                    )
-            ))
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved",
-                    content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
-            @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
-                    content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
-            @ApiResponse(responseCode = "404", description = "Topic Not Found",
-                    content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))})
-    })
-    public ResponseEntity<?> updateTopic(@PathVariable Long topicId, @Valid @RequestBody Map<String, String> request) {
-        String topicTitle = request.get("title");
+	@DeleteMapping("/topic/{topicId}")
+	public ResponseEntity<?> deleteTopic(@PathVariable Long topicId) {
+		// 주제 삭제
+		topicService.delete(topicId);
 
-        if (topicTitle == null || topicTitle.trim().isEmpty()) {
-            throw new CustomException(ErrorCode.INVALID_INPUT);
-        }
-
-        topicService.update(topicId, topicTitle);
-
-        return ResponseEntity.ok(ResponseDto.success());
-    }
-
-    @DeleteMapping("/topic/{topicId}")
-    @Operation(summary = "주제 삭제", description = "입력된 주제를 삭제합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved",
-                    content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
-            @ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
-                    content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
-            @ApiResponse(responseCode = "404", description = "Topic Not Found",
-                    content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))})
-    })
-    public ResponseEntity<?> deleteTopic(@PathVariable Long topicId) {
-        topicService.delete(topicId);
-
-        return ResponseEntity.ok(ResponseDto.success());
-    }
+		return ResponseEntity.ok(ResponseDto.success());
+	}
 
 }
