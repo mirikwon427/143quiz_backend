@@ -1,25 +1,25 @@
 package garlicbears._quiz.domain.user.dto;
 
 public class UpdateUserDto {
-    private Integer birthYear;
-    private String gender;
-    private String location;
+	private Integer birthYear;
+	private String gender;
+	private String location;
 
-    public UpdateUserDto(Integer birthYear, String gender, String location) {
-        this.birthYear = birthYear;
-        this.gender = gender;
-        this.location = location;
-    }
+	public UpdateUserDto(Integer birthYear, String gender, String location) {
+		this.birthYear = birthYear;
+		this.gender = gender;
+		this.location = location;
+	}
 
-    public Integer getBirthYear() {
-        return birthYear;
-    }
+	public Integer getBirthYear() {
+		return birthYear;
+	}
 
-    public String getGender() {
-        return gender;
-    }
+	public String getGender() {
+		return gender;
+	}
 
-    public String getLocation() {
-        return location;
-    }
+	public String getLocation() {
+		return location;
+	}
 }
