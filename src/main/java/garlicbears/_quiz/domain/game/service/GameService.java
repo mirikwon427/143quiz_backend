@@ -57,12 +57,12 @@ public class GameService {
 
     @Transactional
     public List<TopicsListDto> topicList(Long userId) {
-        return topicRepository.findByTopic(userId);
+        return topicRepository.findUnacquiredBadgeTopicsByUser(userId);
     }
 
     @Transactional
     public List<TopicsListDto> badgeList(Long userId) {
-        return topicRepository.findByBadge(userId);
+        return topicRepository.findBadgeTopicsbyUser(userId);
     }
 
     @Transactional
@@ -82,6 +82,7 @@ public class GameService {
                 }
             }
         }
+
         logger.info(" newTopic Id : " + newTopicId );
         Topic topic = Optional.of(topicRepository.findByTopicId(newTopicId))
                 .orElseThrow(() -> {
@@ -92,10 +93,9 @@ public class GameService {
                     }
                 });
 
-
         GameSession gameSession = new GameSession(user, topic);
         gameSessionRepository.save(gameSession);
-        questionRepository.findGameQuestion(newTopicId, user.getUserId());
+
         return new ResponseGameStartDto.ResponseGameStartBuilder()
                 .topicId(newTopicId)
                 .sessionId(gameSession.getGameSessionId())

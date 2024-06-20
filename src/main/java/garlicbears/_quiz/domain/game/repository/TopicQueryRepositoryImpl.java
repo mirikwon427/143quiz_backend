@@ -7,6 +7,7 @@ import garlicbears._quiz.domain.game.dto.ResponseTopicDto;
 import garlicbears._quiz.domain.game.dto.TopicsListDto;
 import garlicbears._quiz.domain.game.entity.QReward;
 import garlicbears._quiz.domain.game.entity.QTopic;
+import garlicbears._quiz.global.entity.Active;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -76,7 +77,7 @@ public class TopicQueryRepositoryImpl implements TopicQueryRepository{
     }
 
     @Override
-    public List<TopicsListDto> findByTopic(Long userId){
+    public List<TopicsListDto> findUnacquiredBadgeTopicsByUser(Long userId){
         QTopic topic = QTopic.topic;
         QReward reward = QReward.reward;
 
@@ -89,14 +90,15 @@ public class TopicQueryRepositoryImpl implements TopicQueryRepository{
                 .leftJoin(reward)
                 .on(topic.topicId.eq(reward.topic.topicId)
                         .and(reward.user.userId.eq(userId)))
-                .where(reward.topic.topicId.isNull()
-                        .or(reward.rewardBadgeStatus.eq(false)))
+                .where(topic.topicActive.eq(Active.active)
+                        .and((reward.topic.topicId.isNull()
+                                .or(reward.rewardBadgeStatus.eq(false)))))
                 .fetch();
 
     }
 
     @Override
-    public List<TopicsListDto> findByBadge(Long userId){
+    public List<TopicsListDto> findBadgeTopicsbyUser(Long userId){
         QTopic topic = QTopic.topic;
         QReward reward = QReward.reward;
 
@@ -109,7 +111,8 @@ public class TopicQueryRepositoryImpl implements TopicQueryRepository{
                 .join(reward)
                 .on(topic.topicId.eq(reward.topic.topicId)
                         .and(reward.user.userId.eq(userId)))
-                .where(reward.rewardBadgeStatus.eq(true))
+                .where(reward.rewardBadgeStatus.eq(true)
+                        .and(topic.topicActive.eq(Active.active)))
                 .fetch();
 
     }
@@ -125,8 +128,9 @@ public class TopicQueryRepositoryImpl implements TopicQueryRepository{
                 .leftJoin(reward)
                 .on(topic.topicId.eq(reward.topic.topicId)
                         .and(reward.user.userId.eq(userId)))
-                .where(reward.topic.topicId.isNull()
-                        .or(reward.rewardBadgeStatus.eq(false)))
+                .where(topic.topicActive.eq(Active.active)
+                        .and((reward.topic.topicId.isNull()
+                        .or(reward.rewardBadgeStatus.eq(false)))))
                 .fetchOne();
     }
 

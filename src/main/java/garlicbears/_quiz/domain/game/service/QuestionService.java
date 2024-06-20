@@ -46,7 +46,7 @@ public class QuestionService {
             questionAnswer.append(initialChs[initial]);
         }
 
-        Question question = new Question(topic, questionText, questionAnswer.toString());
+        Question question = new Question(topic, questionAnswer.toString(), questionText);
 
         questionRepository.save(question);
     }
