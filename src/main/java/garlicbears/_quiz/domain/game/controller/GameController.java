@@ -9,18 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import garlicbears._quiz.domain.game.service.GameService;
 import garlicbears._quiz.domain.game.service.TopicService;
-import garlicbears._quiz.domain.user.dto.UserRankingDto;
 import garlicbears._quiz.global.exception.CustomException;
 import garlicbears._quiz.global.exception.ErrorCode;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping("/game")
-public class GameController {
+public class GameController implements SwaggerGameController {
 
 	private final GameService gameService;
 	private final TopicService topicService;
@@ -31,9 +25,6 @@ public class GameController {
 	}
 
 	@GetMapping("/rankings")
-	@Operation(summary = "게임 랭킹 조회", description = "전체 뱃지 수, 하트 수를 기준으로 랭킹 정보 조회")
-	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
-		@Content(schema = @Schema(implementation = UserRankingDto.class))}),})
 	public ResponseEntity<?> getRankings(@RequestParam(defaultValue = "0") int pageNumber,
 		@RequestParam(defaultValue = "10") int pageSize) {
 
@@ -41,9 +32,6 @@ public class GameController {
 	}
 
 	@GetMapping("/rankings/{topicId}")
-	@Operation(summary = "주제별 게임 랭킹 조회", description = "주제별 하트 수를 기준으로 랭킹 정보 조회")
-	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
-		@Content(schema = @Schema(implementation = UserRankingDto.class))}),})
 	public ResponseEntity<?> getRankingsByTopicId(@PathVariable(value = "topicId") long topicId,
 		@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize) {
 
