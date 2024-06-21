@@ -1,5 +1,6 @@
 package garlicbears._quiz.domain.game.dto;
 
+import garlicbears._quiz.domain.game.entity.AnswerStatus;
 import jakarta.validation.constraints.NotNull;
 
 public class UserAnswerDto {
@@ -10,7 +11,7 @@ public class UserAnswerDto {
     private String answerText;
 
     @NotNull
-    private char answerStatus;
+    private AnswerStatus answerStatus;
 
     @NotNull
     private Integer hintUsageCount;
@@ -23,7 +24,7 @@ public class UserAnswerDto {
 
     public UserAnswerDto(){}
 
-    public UserAnswerDto(Long questionId, String answerText, char answerStatus, int hintUsageCount, int answerTimeTaken, String answerAt) {
+    public UserAnswerDto(Long questionId, String answerText, AnswerStatus answerStatus, int hintUsageCount, int answerTimeTaken, String answerAt) {
         this.questionId = questionId;
         this.answerText = answerText;
         this.answerStatus = answerStatus;
@@ -40,7 +41,7 @@ public class UserAnswerDto {
         return answerText;
     }
 
-    public char getAnswerStatus() {
+    public AnswerStatus getAnswerStatus() {
         return answerStatus;
     }
 

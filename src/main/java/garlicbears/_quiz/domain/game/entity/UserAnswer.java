@@ -37,13 +37,13 @@ public class UserAnswer {
     private String userAnswerText;
 
     @Column(name = "user_answer_status", nullable = false)
-    private char userAnswerStatus;
+    private AnswerStatus userAnswerStatus;
 
     @Column(name = "hint_usage_count", nullable = false)
     @ColumnDefault("0")
     private int hintUsageCount;
 
-    @Column(name = "user_answer_time_taken", nullable = false)
+    @Column(name = "answer_time_taken_sec", nullable = false)
     @ColumnDefault("0")
     private int timeTaken;
 
@@ -76,7 +76,7 @@ public class UserAnswer {
         return userAnswerText;
     }
 
-    public char getUserAnswerStatus() {
+    public AnswerStatus getUserAnswerStatus() {
         return userAnswerStatus;
     }
 
@@ -117,7 +117,7 @@ public class UserAnswer {
 
         private String userAnswerText;
 
-        private char userAnswerStatus;
+        private AnswerStatus userAnswerStatus;
 
         private int hintUsageCount;
 
@@ -141,7 +141,7 @@ public class UserAnswer {
             return this;
         }
 
-        public UserAnswerBuilder userAnswerStatus(char userAnswerStatus) {
+        public UserAnswerBuilder userAnswerStatus(AnswerStatus userAnswerStatus) {
             this.userAnswerStatus = userAnswerStatus;
             return this;
         }
