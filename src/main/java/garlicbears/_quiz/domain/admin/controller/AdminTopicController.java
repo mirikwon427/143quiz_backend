@@ -48,9 +48,12 @@ public class AdminTopicController implements SwaggerAdminTopicController {
 		return ResponseEntity.ok(topicService.getTopicList(pageNumber, pageSize, sort));
 	}
 
-	@PostMapping(value = "/topic/upload-excel", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/topic/upload-excel", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+		produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createTopicsByExcel(
-		@Parameter(description = "multipart/form-data 형식의 엑셀 파일을 받습니다.", content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE)) @RequestPart("multipartFile") MultipartFile file) {
+		@Parameter(description = "multipart/form-data 형식의 엑셀 파일을 받습니다.",
+			content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
+		@RequestPart("multipartFile") MultipartFile file) {
 		// 엑셀 파일을 통해 주제 생성
 		// 파일명 = 주제명, 첫 번째 시트만 사용, 첫 번째 열 = 주제명
 		return ResponseEntity.ok(topicService.saveTopicWithExcel(file));

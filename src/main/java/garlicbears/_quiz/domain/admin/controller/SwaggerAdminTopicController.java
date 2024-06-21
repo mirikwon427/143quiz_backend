@@ -36,10 +36,13 @@ public interface SwaggerAdminTopicController {
 
 	@Operation(summary = "엑셀 파일로 주제 생성", description = "엑셀 파일을 통해 주제를 생성합니다. 파일명 = 주제명, A열에 작성된 문제들을 등록합니다.")
 	public ResponseEntity<?> createTopicsByExcel(
-		@Parameter(description = "multipart/form-data 형식의 엑셀 파일을 받습니다.", content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE)) @RequestPart("multipartFile") MultipartFile file);
+		@Parameter(description = "multipart/form-data 형식의 엑셀 파일을 받습니다.",
+			content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
+		@RequestPart("multipartFile") MultipartFile file);
 
-	@Operation(summary = "주제 생성", description = "입력된 주제를 생성합니다.", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schemaProperties = {
-		@SchemaProperty(name = "title", schema = @Schema(type = "string", format = "json"))})))
+	@Operation(summary = "주제 생성", description = "입력된 주제를 생성합니다.",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schemaProperties = {
+			@SchemaProperty(name = "title", schema = @Schema(type = "string", format = "json"))})))
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
 		@Content(schema = @Schema(implementation = ResponseDto.class))}),
 		@ApiResponse(responseCode = "400", description = "Invalid Input", content = {
@@ -52,8 +55,9 @@ public interface SwaggerAdminTopicController {
 			@Content(schema = @Schema(implementation = ResponseDto.class))}),})
 	public ResponseEntity<?> createTopic(@Valid @RequestBody Map<String, String> request);
 
-	@Operation(summary = "주제 수정", description = "입력된 주제를 수정합니다.", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schemaProperties = {
-		@SchemaProperty(name = "title", schema = @Schema(type = "string", format = "json"))})))
+	@Operation(summary = "주제 수정", description = "입력된 주제를 수정합니다.",
+		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schemaProperties = {
+			@SchemaProperty(name = "title", schema = @Schema(type = "string", format = "json"))})))
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
 		@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
 		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)", content = {
