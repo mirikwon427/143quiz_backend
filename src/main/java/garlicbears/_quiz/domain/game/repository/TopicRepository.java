@@ -8,4 +8,7 @@ import garlicbears._quiz.domain.game.entity.Topic;
 
 public interface TopicRepository extends JpaRepository<Topic, Long>, TopicQueryRepository {
 	List<Topic> findByTopicTitle(String topicTitle);
+
+	Topic findByTopicId(Long topicId);
+
 }

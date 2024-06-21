@@ -1,10 +1,14 @@
 package garlicbears._quiz.domain.game.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import garlicbears._quiz.domain.game.dto.ResponseTopicBadgeDto;
 import garlicbears._quiz.domain.user.dto.UserRankingDto;
+import garlicbears._quiz.global.config.auth.PrincipalDetails;
+import garlicbears._quiz.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,4 +27,40 @@ public interface SwaggerGameController {
 		@Content(schema = @Schema(implementation = UserRankingDto.class))}),})
 	public ResponseEntity<?> getRankingsByTopicId(@PathVariable(value = "topicId") long topicId,
 		@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize);
+
+	@Operation(summary = "주제 조회", description = "게임 시작 전 뱃지 미획득 주제 조회.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Successfully retrieved",
+			content = {@Content(schema = @Schema(implementation = ResponseTopicBadgeDto.class))}),
+		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+		@ApiResponse(responseCode = "500", description = "Internal Server Error",
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+	})
+	public ResponseEntity<?> topics(@AuthenticationPrincipal PrincipalDetails principalDetails);
+
+	@Operation(summary = "뱃지 조회", description = "획득한 뱃지 조회.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Successfully retrieved",
+			content = {@Content(schema = @Schema(implementation = ResponseTopicBadgeDto.class))}),
+		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+		@ApiResponse(responseCode = "500", description = "Internal Server Error",
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))})
+	})
+	public ResponseEntity<?> badges(@AuthenticationPrincipal PrincipalDetails principalDetails);
+
+	@Operation(summary = "게임 시작", description = "주제를 선택한 후 게임 시작.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Successfully retrieved",
+			content = {@Content(schema = @Schema(implementation = ResponseTopicBadgeDto.class))}),
+		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+		@ApiResponse(responseCode = "404", description = "UNKNOWN_TOPIC",
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+		@ApiResponse(responseCode = "500", description = "Internal Server Error",
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))})
+	})
+	public ResponseEntity<?> gameStart(@PathVariable(value = "topicId") long topicId,
+		@AuthenticationPrincipal PrincipalDetails principalDetails);
 }

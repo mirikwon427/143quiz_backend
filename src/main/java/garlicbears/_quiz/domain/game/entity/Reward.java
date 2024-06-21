@@ -1,5 +1,12 @@
 package garlicbears._quiz.domain.game.entity;
 
+import garlicbears._quiz.domain.user.entity.User;
+import jakarta.persistence.*;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.ColumnDefault;
@@ -17,10 +24,12 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "rewards")
+@DynamicInsert
+@DynamicUpdate
 public class Reward {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "reward_seq", nullable = false)
+	@Column(name = "rewards_seq", nullable = false)
 	private Long rewardId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -36,21 +45,20 @@ public class Reward {
 	private int rewardNumberHearts;
 
 	@Column(name = "reward_badge_status", nullable = false)
-	private boolean rewardBadgeStatus;
+	@ColumnDefault("FALSE")
+	private boolean rewardBadgeStatus = false;
 
-	@Column(name = "reward_badge_created_at", nullable = false)
+	@Column(name = "reward_badge_created_at")
 	private LocalDateTime rewardBadgeCreatedAt;
 
 	public Reward() {
 	}
 
-	public Reward(User user, Topic topic, int rewardNumberHearts, boolean rewardBadgeStatus,
-		LocalDateTime rewardBadgeCreatedAt) {
+	public Reward(User user, Topic topic, int rewardNumberHearts) {
 		this.user = user;
 		this.topic = topic;
 		this.rewardNumberHearts = rewardNumberHearts;
-		this.rewardBadgeStatus = rewardBadgeStatus;
-		this.rewardBadgeCreatedAt = rewardBadgeCreatedAt;
+		this.rewardBadgeCreatedAt = null;
 	}
 
 	public Long getRewardId() {
@@ -69,12 +77,24 @@ public class Reward {
 		return rewardNumberHearts;
 	}
 
+	public void setRewardNumberHearts(int rewardNumberHearts) {
+		this.rewardNumberHearts = rewardNumberHearts;
+	}
+
 	public boolean getRewardBadgeStatus() {
 		return rewardBadgeStatus;
 	}
 
+	public void setRewardBadgeStatus(boolean rewardBadgeStatus) {
+		this.rewardBadgeStatus = rewardBadgeStatus;
+	}
+
 	public LocalDateTime getRewardBadgeCreatedAt() {
 		return rewardBadgeCreatedAt;
+	}
+
+	public void setRewardBadgeCreatedAt(LocalDateTime rewardBadgeCreatedAt) {
+		this.rewardBadgeCreatedAt = rewardBadgeCreatedAt;
 	}
 }
 

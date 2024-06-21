@@ -1,22 +1,29 @@
 package garlicbears._quiz.domain.game.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import garlicbears._quiz.domain.game.dto.ResponseTopicBadgeDto;
+import garlicbears._quiz.domain.game.dto.TopicsListDto;
 import garlicbears._quiz.domain.game.service.GameService;
 import garlicbears._quiz.domain.game.service.TopicService;
+import garlicbears._quiz.domain.user.entity.User;
+import garlicbears._quiz.global.config.auth.PrincipalDetails;
 import garlicbears._quiz.global.exception.CustomException;
 import garlicbears._quiz.global.exception.ErrorCode;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/game")
-@Tag(name = "게임 관리")
-public class GameController implements SwaggerGameController {
+@Tag(name = "게임")
+public class GameController {
 
 	private final GameService gameService;
 	private final TopicService topicService;
@@ -40,5 +47,29 @@ public class GameController implements SwaggerGameController {
 		topicService.findByTopicId(topicId).orElseThrow(() -> new CustomException(ErrorCode.TOPIC_NOT_FOUND));
 
 		return ResponseEntity.ok(gameService.getRankingsByTopicId(topicId, pageNumber, pageSize));
+	}
+
+	@GetMapping("/topics")
+	public ResponseEntity<?> topics(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+		User user = principalDetails.getUser();
+		List<TopicsListDto> topics = gameService.topicList(user.getUserId());
+
+		return ResponseEntity.ok(new ResponseTopicBadgeDto(topics));
+	}
+
+	@GetMapping("/badges")
+	public ResponseEntity<?> badges(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+		User user = principalDetails.getUser();
+		List<TopicsListDto> topics = gameService.badgeList(user.getUserId());
+
+		return ResponseEntity.ok(new ResponseTopicBadgeDto(topics));
+	}
+
+	@GetMapping("/start/{topicId}")
+	public ResponseEntity<?> gameStart(@PathVariable(value = "topicId") long topicId,
+		@AuthenticationPrincipal PrincipalDetails principalDetails) {
+		User user = principalDetails.getUser();
+
+		return ResponseEntity.ok(gameService.gameStart(topicId, user));
 	}
 }

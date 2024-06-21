@@ -1,165 +1,173 @@
 package garlicbears._quiz.domain.user.entity;
 
-import static garlicbears._quiz.global.entity.Active.*;
+import garlicbears._quiz.domain.game.entity.Reward;
+import garlicbears._quiz.domain.game.entity.UserAnswer;
+import garlicbears._quiz.domain.user.dto.SignUpDto;
+import garlicbears._quiz.global.entity.Active;
+import garlicbears._quiz.global.entity.BaseTimeEntity;
+import jakarta.persistence.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import garlicbears._quiz.domain.game.entity.Reward;
-import garlicbears._quiz.domain.user.dto.SignUpDto;
-import garlicbears._quiz.global.entity.Active;
-import garlicbears._quiz.global.entity.BaseTimeEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import static garlicbears._quiz.global.entity.Active.active;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User extends BaseTimeEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_seq")
-	private Long userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_seq")
+    private Long userId;
 
-	@Column(name = "user_email", nullable = false, length = 200)
-	private String userEmail;
+    @Column(name = "user_email", nullable = false, length = 200)
+    private String userEmail;
 
-	@Column(name = "user_password", nullable = false, length = 300)
-	private String userPassword;
+    @Column(name = "user_password", nullable = false, length = 300)
+    private String userPassword;
 
-	@Column(name = "user_nickname", nullable = false, length = 100)
-	private String userNickname;
+    @Column(name = "user_nickname", nullable = false, length = 100)
+    private String userNickname;
 
-	@Column(name = "user_birth_year", nullable = false)
-	private int userBirthYear;
+    @Column(name = "user_birth_year", nullable = false)
+    private int userBirthYear;
 
-	@Column(name = "user_age", nullable = false)
-	private int userAge;
+    @Column(name = "user_age", nullable = false)
+    private int userAge;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "user_gender", nullable = false)
-	private Gender userGender;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_gender", nullable = false)
+    private Gender userGender;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "user_location", nullable = false)
-	private Location userLocation;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_location", nullable = false)
+    private Location userLocation;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "user_active", nullable = false)
-	private Active userActive = active;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_active", nullable = false)
+    private Active userActive = active;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_image_seq")
-	private Image image;
+    @OneToMany(mappedBy = "user")
+    private List<Reward> reward = new ArrayList<>();
 
-	@OneToMany(mappedBy = "user")
-	private List<Reward> reward = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<UserAnswer> userAnswers = new ArrayList<>();
 
-	public User() {
-	}
+    public User(){}
 
-	public User(String userEmail, String userPassword, String userNickname, int userBirthYear, int userAge,
-		Gender userGender, Location userLocation) {
-		this.userEmail = userEmail;
-		this.userPassword = userPassword;
-		this.userNickname = userNickname;
-		this.userBirthYear = userBirthYear;
-		this.userAge = userAge;
-		this.userGender = userGender;
-		this.userLocation = userLocation;
-	}
+    public User(UserBuilder builder) {
+        this.userEmail = builder.userEmail;
+        this.userPassword = builder.userPassword;
+        this.userNickname = builder.userNickname;
+        this.userBirthYear = builder.userBirthYear;
+        this.userAge = builder.userAge;
+        this.userGender = builder.userGender;
+        this.userLocation = builder.userLocation;
+    }
 
-	public Long getUserId() {
-		return userId;
-	}
+    public Long getUserId() {
+        return userId;
+    }
 
-	public String getUserEmail() {
-		return userEmail;
-	}
+    public String getUserEmail() {
+        return userEmail;
+    }
 
-	public String getUserPassword() {
-		return userPassword;
-	}
+    public String getUserPassword() {
+        return userPassword;
+    }
 
-	public String getUserNickname() {
-		return userNickname;
-	}
+    public String getUserNickname() {
+        return userNickname;
+    }
 
-	public int getUserBirthYear() {
-		return userBirthYear;
-	}
+    public int getUserBirthYear() {
+        return userBirthYear;
+    }
 
-	public int getUserAge() {
-		return userAge;
-	}
+    public int getUserAge() {
+        return userAge;
+    }
 
-	public Gender getUserGender() {
-		return userGender;
-	}
+    public Gender getUserGender() {
+        return userGender;
+    }
 
-	public Location getUserLocation() {
-		return userLocation;
-	}
+    public Location getUserLocation() {
+        return userLocation;
+    }
 
-	public Active getUserActive() {
-		return userActive;
-	}
+    public Active getUserActive() {
+        return userActive;
+    }
 
-	public Image getImage() {
-		return image;
-	}
+    public List<Reward> getRewards() {
+        return reward;
+    }
 
-	public List<Reward> getRewards() {
-		return reward;
-	}
+    public List<UserAnswer> userAnswers() {
+        return userAnswers;
+    }
 
-	public void setUserBirthYear(int userBirthYear) {
-		this.userBirthYear = userBirthYear;
-	}
+    public void setUserBirthYear(int userBirthYear){
+        this.userBirthYear = userBirthYear;
+    }
 
-	public void setUserAge(int userAge) {
-		this.userAge = userAge;
-	}
+    public void setUserAge(int userAge) {
+        this.userAge = userAge;
+    }
+    public void setUserGender(Gender userGender) {
+        this.userGender = userGender;
+    }
 
-	public void setUserGender(Gender userGender) {
-		this.userGender = userGender;
-	}
+    public void setUserLocation(Location userLocation) {
+        this.userLocation = userLocation;
+    }
 
-	public void setUserLocation(Location userLocation) {
-		this.userLocation = userLocation;
-	}
+    public void setUserActive(Active userActive) {
+        this.userActive = userActive;
+    }
 
-	public void setUserActive(Active userActive) {
-		this.userActive = userActive;
-	}
+    public static class UserBuilder {
+        private final String userEmail;
+        private final String userPassword;
+        private final String userNickname;
+        private int userBirthYear;
+        private int userAge;
+        private Gender userGender;
+        private Location userLocation;
 
-	public static class UserBuilder {
-		public User build(SignUpDto signUpDto, PasswordEncoder passwordEncoder) {
-			String userEmail = signUpDto.getEmail();
-			String userPassword = passwordEncoder.encode(signUpDto.getPassword());
-			String userNickname = signUpDto.getNickname();
-			int userBirthYear = signUpDto.getBirthYear();
-			int userAge = Year.now().getValue() - signUpDto.getBirthYear();
-			Gender userGender = Gender.fromKoreanName(signUpDto.getGender());
-			Location userLocation = Location.fromKoreanName(signUpDto.getLocation());
-			return new User(userEmail, userPassword, userNickname, userBirthYear, userAge, userGender, userLocation);
-		}
-	}
+        public UserBuilder(String userEmail, String userPassword, String userNickname) {
+            this.userEmail = userEmail;
+            this.userPassword = userPassword;
+            this.userNickname = userNickname;
+        }
 
-	public static UserBuilder builder() {
-		return new UserBuilder();
-	}
+        public UserBuilder userBirthYear(int userBirthYear) {
+            this.userBirthYear = userBirthYear;
+            return this;
+        }
+
+        public UserBuilder userAge(int userAge) {
+            this.userAge = userAge;
+            return this;
+        }
+
+        public UserBuilder userGender(Gender userGender) {
+            this.userGender = userGender;
+            return this;
+        }
+
+        public UserBuilder userLocation(Location userLocation) {
+            this.userLocation = userLocation;
+            return this;
+        }
+
+        public User build() {
+            return new User(this);
+        }
+    }
 }
