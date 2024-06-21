@@ -77,7 +77,7 @@ public class QuestionService {
 
         String questionAnswer = createInitialAnswer(questionText);
 
-        Question question = new Question(topic, questionText, questionAnswer);
+        Question question = new Question(topic, questionAnswer, questionText);
 
         return questionRepository.save(question);
     }

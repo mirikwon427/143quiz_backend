@@ -17,4 +17,11 @@ public class GlobalExceptionHandler {
                 errorCode.toString());
         return new ResponseEntity<>(response,errorCode.getStatus());
     }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ResponseDto<String>> handleNullPointerException(NullPointerException e) {
+        ErrorCode errorCode = ErrorCode.MISSING_REQUEST_BODY_VARIABLE;
+        ResponseDto<String> response = new ResponseDto<>(errorCode.getStatus().value(), errorCode.toString());
+        return new ResponseEntity<>(response, errorCode.getStatus());
+    }
 }

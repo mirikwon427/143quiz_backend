@@ -4,7 +4,10 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import garlicbears._quiz.domain.game.dto.ResponseTopicDto;
+import garlicbears._quiz.domain.game.dto.TopicsListDto;
+import garlicbears._quiz.domain.game.entity.QReward;
 import garlicbears._quiz.domain.game.entity.QTopic;
+import garlicbears._quiz.global.entity.Active;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -63,4 +66,46 @@ public class TopicQueryRepositoryImpl implements TopicQueryRepository{
             default -> topic.topicId.desc();
         };
     }
+
+    @Override
+    public List<TopicsListDto> findUnacquaintedBadgeTopicsByUser(long userId){
+        QTopic topic = QTopic.topic;
+        QReward reward = QReward.reward;
+
+        return queryFactory
+                .select(Projections.constructor(TopicsListDto.class,
+                        topic.topicId,
+                        topic.topicTitle
+                ))
+                .from(topic)
+                .leftJoin(reward)
+                .on(topic.topicId.eq(reward.topic.topicId)
+                        .and(reward.user.userId.eq(userId)))
+                .where(topic.topicActive.eq(Active.active)
+                        .and((reward.topic.topicId.isNull()
+                                .or(reward.rewardBadgeStatus.eq(false)))))
+                .fetch();
+
+    }
+
+    @Override
+    public List<TopicsListDto> findTopicsWithBadgeByUser(long userId){
+        QTopic topic = QTopic.topic;
+        QReward reward = QReward.reward;
+
+        return queryFactory
+                .select(Projections.constructor(TopicsListDto.class,
+                        topic.topicId,
+                        topic.topicTitle
+                ))
+                .from(topic)
+                .join(reward)
+                .on(topic.topicId.eq(reward.topic.topicId)
+                        .and(reward.user.userId.eq(userId)))
+                .where(reward.rewardBadgeStatus.eq(true)
+                        .and(topic.topicActive.eq(Active.active)))
+                .fetch();
+
+    }
+
 }

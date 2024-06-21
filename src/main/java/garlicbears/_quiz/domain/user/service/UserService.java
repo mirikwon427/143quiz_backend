@@ -44,8 +44,14 @@ public class UserService {
 
     @Transactional
     public void signUp(SignUpDto signUpDto) {
-        User user = User.builder()
-                        .build(signUpDto,passwordEncoder);
+
+        User user = new User.UserBuilder(signUpDto.getEmail(),passwordEncoder.encode(signUpDto.getPassword()),
+                signUpDto.getNickname())
+                .userBirthYear(signUpDto.getBirthYear())
+                .userAge(Year.now().getValue()-signUpDto.getBirthYear())
+                .userLocation(Location.fromKoreanName(signUpDto.getLocation()))
+                .userGender(Gender.fromKoreanName(signUpDto.getGender()))
+                .build();
 
         userRepository.save(user);
     }
