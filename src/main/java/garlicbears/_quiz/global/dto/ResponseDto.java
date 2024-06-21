@@ -9,6 +9,10 @@ public class ResponseDto<T> {
         this.code = code;
     }
 
+    public ResponseDto(String code) {
+        this.code = code;
+    }
+
     public int getStatus(){
         return status;
     }
@@ -18,6 +22,6 @@ public class ResponseDto<T> {
     }
 
     public static <T> ResponseDto<T> success(){
-        return new ResponseDto<>(200, "SUCCESS");
+        return new ResponseDto<>("SUCCESS");
     }
 }
