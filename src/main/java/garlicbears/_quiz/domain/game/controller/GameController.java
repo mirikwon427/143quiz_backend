@@ -11,9 +11,11 @@ import garlicbears._quiz.domain.game.service.GameService;
 import garlicbears._quiz.domain.game.service.TopicService;
 import garlicbears._quiz.global.exception.CustomException;
 import garlicbears._quiz.global.exception.ErrorCode;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/game")
+@Tag(name = "게임 관리")
 public class GameController implements SwaggerGameController {
 
 	private final GameService gameService;

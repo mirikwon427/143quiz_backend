@@ -30,7 +30,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/user")
-@Tag(name = "회원관리")
+@Tag(name = "회원 관리")
 public class UserController implements SwaggerUserController {
 	private static final Logger logger = Logger.getLogger(UserController.class.getName());
 	private final UserService userService;
