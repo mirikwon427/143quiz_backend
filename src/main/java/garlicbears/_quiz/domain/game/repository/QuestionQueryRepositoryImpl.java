@@ -10,6 +10,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import garlicbears._quiz.domain.game.dto.GameStartQuestionDto;
 import garlicbears._quiz.domain.game.dto.ResponseQuestionDto;
+import garlicbears._quiz.domain.game.entity.AnswerStatus;
 import garlicbears._quiz.domain.game.entity.QQuestion;
 import garlicbears._quiz.domain.game.entity.QUserAnswer;
 import garlicbears._quiz.domain.game.entity.Topic;
@@ -119,15 +120,15 @@ public class QuestionQueryRepositoryImpl implements QuestionQueryRepository {
                     .and(userAnswer2.question.questionId.eq(
                         question.questionId))
                     .and(userAnswer2.topic.topicId.eq(question.topic.topicId))
-                    .and(userAnswer2.userAnswerStatus.eq('Y')))
+                    .and(userAnswer2.userAnswerStatus.eq(AnswerStatus.Y)))
                 .notExists()
         );
 
         BooleanExpression conditions = question.topic.topicId.eq(topicId)
             .and(question.questionActive.eq(Active.active))
             .and(userAnswer.question.questionId.isNull()
-                .or(userAnswer.userAnswerStatus.eq('N').or(
-                    userAnswer.userAnswerStatus.eq('P')
+                .or(userAnswer.userAnswerStatus.eq(AnswerStatus.N).or(
+                    userAnswer.userAnswerStatus.eq(AnswerStatus.P)
                 )))
             .and(notExistsSubQuery);
 
