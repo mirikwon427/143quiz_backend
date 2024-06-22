@@ -9,15 +9,19 @@ public class ResponseDto<T> {
 		this.code = code;
 	}
 
-	public int getStatus() {
-		return status;
-	}
+  public ResponseDto(String code) {
+      this.code = code;
+  }
+
+  public int getStatus(){
+      return status;
+  }
 
 	public String getCode() {
 		return code;
 	}
-
-	public static <T> ResponseDto<T> success() {
-		return new ResponseDto<>(200, "SUCCESS");
-	}
+  
+  public static <T> ResponseDto<T> success(){
+      return new ResponseDto<>("SUCCESS");
+  }
 }
