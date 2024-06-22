@@ -2,30 +2,31 @@ package garlicbears._quiz.domain.game.dto;
 
 public class ResponseUserAnswerDto {
 
-    private long totalQuestions;
+	private long totalQuestions;
 
-    private int userHeartsCount;
+	private int userHeartsCount;
 
-    private boolean getBadge;
+	private boolean getBadge;
 
-    public ResponseUserAnswerDto(){}
+	public ResponseUserAnswerDto() {
+	}
 
-    public ResponseUserAnswerDto(long totalQuestions,
-                                 int userHeartsCount, boolean getBadge) {
-        this.totalQuestions = totalQuestions;
-        this.userHeartsCount = userHeartsCount;
-        this.getBadge = getBadge;
-    }
+	public ResponseUserAnswerDto(long totalQuestions,
+		int userHeartsCount, boolean getBadge) {
+		this.totalQuestions = totalQuestions;
+		this.userHeartsCount = userHeartsCount;
+		this.getBadge = getBadge;
+	}
 
-    public long getTotalQuestions() {
-        return totalQuestions;
-    }
+	public long getTotalQuestions() {
+		return totalQuestions;
+	}
 
-    public int getUserHeartsCount() {
-        return userHeartsCount;
-    }
+	public int getUserHeartsCount() {
+		return userHeartsCount;
+	}
 
-    public boolean isGetBadge() {
-        return getBadge;
-    }
+	public boolean isGetBadge() {
+		return getBadge;
+	}
 }

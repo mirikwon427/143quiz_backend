@@ -2,30 +2,31 @@ package garlicbears._quiz.domain.game.dto;
 
 public class GameStartQuestionDto {
 
-    private long questionId;
+	private long questionId;
 
-    private String questionText;
+	private String questionText;
 
-    private String answerText;
+	private String answerText;
 
-    public long getQuestionId(){
-        return questionId;
-    }
+	public long getQuestionId() {
+		return questionId;
+	}
 
-    public String getQuestionText(){
-        return questionText;
-    }
+	public String getQuestionText() {
+		return questionText;
+	}
 
-    public String getAnswerText(){
-        return answerText;
-    }
+	public String getAnswerText() {
+		return answerText;
+	}
 
-    public GameStartQuestionDto(){}
+	public GameStartQuestionDto() {
+	}
 
-    public GameStartQuestionDto(long questionId, String questionText, String answerText) {
-        this.questionId = questionId;
-        this.questionText = questionText;
-        this.answerText = answerText;
-    }
+	public GameStartQuestionDto(long questionId, String questionText, String answerText) {
+		this.questionId = questionId;
+		this.questionText = questionText;
+		this.answerText = answerText;
+	}
 
 }

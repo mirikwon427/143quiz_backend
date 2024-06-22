@@ -1,13 +1,15 @@
 package garlicbears._quiz.domain.user.repository;
 
-import garlicbears._quiz.domain.user.entity.User;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import garlicbears._quiz.domain.user.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>, UserQueryRepository {
-    Optional<User> findByUserEmail(String email);
-    Optional<User> findByUserNickname(String nickname);
+	List<User> findByUserEmail(String email);
+
+	List<User> findByUserNickname(String nickname);
 }

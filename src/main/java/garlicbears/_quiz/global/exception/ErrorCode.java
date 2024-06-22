@@ -2,7 +2,6 @@ package garlicbears._quiz.global.exception;
 
 import org.springframework.http.HttpStatus;
 
-
 public enum ErrorCode {
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "입력 값이 유효하지 않습니다."),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
@@ -27,19 +26,19 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"서버 오류입니다."),
     FILE_IO_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 처리중 발생한 오류입니다.");
 
-    private final HttpStatus status;
-    private final String message;
+	private final HttpStatus status;
+	private final String message;
 
-    ErrorCode(HttpStatus status, String message) {
-        this.status = status;
-        this.message = message;
-    }
+	ErrorCode(HttpStatus status, String message) {
+		this.status = status;
+		this.message = message;
+	}
 
-    public HttpStatus getStatus(){
-        return status;
-    }
+	public HttpStatus getStatus() {
+		return status;
+	}
 
-    public String getMessage(){
-        return message;
-    }
+	public String getMessage() {
+		return message;
+	}
 }

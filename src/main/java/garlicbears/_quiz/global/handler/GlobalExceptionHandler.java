@@ -1,11 +1,12 @@
 package garlicbears._quiz.global.handler;
 
-import garlicbears._quiz.global.dto.ResponseDto;
-import garlicbears._quiz.global.exception.CustomException;
-import garlicbears._quiz.global.exception.ErrorCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import garlicbears._quiz.global.dto.ResponseDto;
+import garlicbears._quiz.global.exception.CustomException;
+import garlicbears._quiz.global.exception.ErrorCode;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

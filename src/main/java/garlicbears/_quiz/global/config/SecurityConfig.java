@@ -1,8 +1,5 @@
 package garlicbears._quiz.global.config;
 
-import garlicbears._quiz.domain.user.repository.UserRepository;
-import garlicbears._quiz.global.config.jwt.JwtAuthenticationFilter;
-import garlicbears._quiz.global.config.jwt.JwtAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,46 +11,48 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.filter.CorsFilter;
 
+import garlicbears._quiz.domain.user.repository.UserRepository;
+import garlicbears._quiz.global.config.jwt.JwtAuthenticationFilter;
+import garlicbears._quiz.global.config.jwt.JwtAuthorizationFilter;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final CorsFilter corsFilter;
-    private final UserRepository userRepository;
+	private final CorsFilter corsFilter;
+	private final UserRepository userRepository;
 
-    public SecurityConfig(CorsFilter corsFilter, UserRepository userRepository) {
-        this.corsFilter = corsFilter;
-        this.userRepository = userRepository;
-    }
+	public SecurityConfig(CorsFilter corsFilter, UserRepository userRepository) {
+		this.corsFilter = corsFilter;
+		this.userRepository = userRepository;
+	}
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder sharedObject = http.getSharedObject(AuthenticationManagerBuilder.class);
-        AuthenticationManager authenticationManager = sharedObject.build();
-        http.authenticationManager(authenticationManager);
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		AuthenticationManagerBuilder sharedObject = http.getSharedObject(AuthenticationManagerBuilder.class);
+		AuthenticationManager authenticationManager = sharedObject.build();
+		http.authenticationManager(authenticationManager);
 
-        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager);
-        jwtAuthenticationFilter.setFilterProcessesUrl("/user/login");
+		JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager);
+		jwtAuthenticationFilter.setFilterProcessesUrl("/user/login");
 
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .addFilter(corsFilter)
-                .addFilter(jwtAuthenticationFilter)
-                .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/signup", "/user/checkEmail", "/user/checkNickname").permitAll()
-                        .requestMatchers("/user/**").authenticated()
-//                        .requestMatchers("/api/v1/manager/**").hasAnyRole("ADMIN", "MANAGER")
-//                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                        .anyRequest().permitAll()
-                );
+		http.csrf(AbstractHttpConfigurer::disable)
+			.formLogin(AbstractHttpConfigurer::disable)
+			.httpBasic(AbstractHttpConfigurer::disable)
+			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.addFilter(corsFilter)
+			.addFilter(jwtAuthenticationFilter)
+			.addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository))
+			.authorizeHttpRequests(
+				auth -> auth.requestMatchers("/user/signup", "/user/checkEmail", "/user/checkNickname")
+					.permitAll()
+					.requestMatchers("/user/**")
+					.authenticated()
+					//                        .requestMatchers("/api/v1/manager/**").hasAnyRole("ADMIN", "MANAGER")
+					//                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+					.anyRequest()
+					.permitAll());
 
-
-        return http.build();
-    }
+		return http.build();
+	}
 }
