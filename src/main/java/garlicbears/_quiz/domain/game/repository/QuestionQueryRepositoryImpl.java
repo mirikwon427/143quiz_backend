@@ -108,11 +108,13 @@ public class QuestionQueryRepositoryImpl implements QuestionQueryRepository {
               .execute();
   }
 
+  //게임 시작 시 사용자에게 보여줄 문제 정보를 가져온다.
   @Override
   public List<GameStartQuestionDto> findGameQuestion(Long topicId, Long userId){
       QQuestion question = QQuestion.question;
       QUserAnswer userAnswer = QUserAnswer.userAnswer;
 
+      //서브쿼리를 사용하여 사용자가 이미 푼 문제는 제외한다.
       QUserAnswer userAnswer2 = new QUserAnswer("userAnswer2");
       BooleanExpression notExistsSubQuery = Expressions.asBoolean(
           JPAExpressions.selectOne()
@@ -125,6 +127,7 @@ public class QuestionQueryRepositoryImpl implements QuestionQueryRepository {
               .notExists()
       );
 
+      //해당 토픽의 문제 중 사용자가 풀지 않은 문제를 가져온다.
       BooleanExpression conditions = question.topic.topicId.eq(topicId)
           .and(question.questionActive.eq(Active.active))
           .and(userAnswer.question.questionId.isNull()

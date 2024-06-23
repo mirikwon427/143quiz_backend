@@ -1,5 +1,9 @@
 package garlicbears._quiz.domain.game.dto;
 
+/**
+ * 게임 주제 목록 DTO
+ */
+
 public class TopicsListDto {
 
 	long topicId;

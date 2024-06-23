@@ -3,6 +3,10 @@ package garlicbears._quiz.domain.game.dto;
 import garlicbears._quiz.domain.game.entity.AnswerStatus;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * 사용자가 문제를 푼 후 응답하는 DTO
+ */
+
 public class UserAnswerDto {
 	@NotNull
 	private Long questionId;
@@ -10,8 +14,8 @@ public class UserAnswerDto {
 	@NotNull
 	private String answerText;
 
-  @NotNull
-  private AnswerStatus answerStatus;
+	@NotNull
+	private AnswerStatus answerStatus;
 
 	@NotNull
 	private Integer hintUsageCount;
@@ -25,14 +29,15 @@ public class UserAnswerDto {
 	public UserAnswerDto() {
 	}
 
-  public UserAnswerDto(Long questionId, String answerText, AnswerStatus answerStatus, int hintUsageCount, int answerTimeTaken, String answerAt) {
-      this.questionId = questionId;
-      this.answerText = answerText;
-      this.answerStatus = answerStatus;
-      this.hintUsageCount = hintUsageCount;
-      this.answerTimeTaken = answerTimeTaken;
-      this.answerAt = answerAt;
-  }
+	public UserAnswerDto(Long questionId, String answerText, AnswerStatus answerStatus, int hintUsageCount,
+		int answerTimeTaken, String answerAt) {
+		this.questionId = questionId;
+		this.answerText = answerText;
+		this.answerStatus = answerStatus;
+		this.hintUsageCount = hintUsageCount;
+		this.answerTimeTaken = answerTimeTaken;
+		this.answerAt = answerAt;
+	}
 
 	public Long getQuestionId() {
 		return questionId;
@@ -42,9 +47,9 @@ public class UserAnswerDto {
 		return answerText;
 	}
 
-  public AnswerStatus getAnswerStatus() {
-      return answerStatus;
-  }
+	public AnswerStatus getAnswerStatus() {
+		return answerStatus;
+	}
 
 	public int getHintUsageCount() {
 		return hintUsageCount;

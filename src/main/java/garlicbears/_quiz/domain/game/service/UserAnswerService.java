@@ -54,6 +54,10 @@ public class UserAnswerService {
 		this.topicRepository = topicRepository;
 	}
 
+	/**
+	 * 사용자가 문제를 맞추었을 때 보상을 업데이트한다.
+	 */
+
 	@Transactional
 	public ResponseUserAnswerDto rewardUpdate(User user, RequestUserAnswerDto requestUserAnswerDto) {
 		Topic topic = Optional.of(topicRepository.findByTopicId(requestUserAnswerDto.getTopicId()))
@@ -61,18 +65,27 @@ public class UserAnswerService {
 
 		Optional<Reward> repositoryReward = rewardRepository.findByUserAndTopic(user, topic);
 
+		//사용자가 주제에 대한 보상을 받은 적이 없다면 새로운 보상을 생성한다.
 		Reward reward = repositoryReward.orElseGet(() ->
 			new Reward(user, topic, requestUserAnswerDto.getHeartsCount()));
 
+		//주제에 대한 모든 문제의 수를 가져온다.
 		long totalQuestions = questionRepository.countAllByTopicAndQuestionActive(topic, Active.active);
+
+		//기존 보상 테이블의 하트와 사용자가 받은 하트를 더한다.
 		int updatedHeartsCount = reward.getRewardNumberHearts() + requestUserAnswerDto.getHeartsCount();
 
+		//보상의 하트 개수가 문제의 수를 초과하는지 확인한다.
 		validateHeartsCount(updatedHeartsCount, totalQuestions);
+
+		//보상의 뱃지 상태가 이미 존재하는지 확인한다.
 		validateRewardBadgeStatus(reward.getRewardBadgeStatus());
 
+		//보상의 하트 개수를 업데이트한다.
 		reward.setRewardNumberHearts(updatedHeartsCount);
 		rewardRepository.save(reward);
 
+		//보상의 하트 개수가 주제의 모든 문제의 수와 같다면 뱃지를 부여한다.
 		if (reward.getRewardNumberHearts() == totalQuestions) {
 			reward.setRewardBadgeStatus(true);
 			reward.setRewardBadgeCreatedAt(LocalDateTime.now());
@@ -80,9 +93,13 @@ public class UserAnswerService {
 			return new ResponseUserAnswerDto(totalQuestions, reward.getRewardNumberHearts(), true);
 		}
 
+		//보상의 하트 개수가 주제의 모든 문제의 수와 같지 않다면 뱃지를 부여하지 않는다.
 		return new ResponseUserAnswerDto(totalQuestions, reward.getRewardNumberHearts(), false);
 	}
 
+	/**
+	 * 보상의 하트 개수가 문제의 수를 초과하는지 확인한다.
+	 */
 	private void validateHeartsCount(int updatedHeartsCount, long totalQuestions) {
 		if (updatedHeartsCount > totalQuestions) {
 			logger.warning("updatedHeartsCount : " + updatedHeartsCount);
@@ -91,30 +108,41 @@ public class UserAnswerService {
 		}
 	}
 
+	/**
+	 * 보상의 뱃지 상태가 이미 존재하는지 확인한다.
+	 */
 	private void validateRewardBadgeStatus(boolean rewardBadgeStatus) {
 		if (rewardBadgeStatus) {
 			throw new CustomException(ErrorCode.BADGE_ALREADY_EXISTS);
 		}
 	}
 
+	/**
+	 * 사용자가 문제를 맞추었을 때 사용자의 답변을 저장한다.
+	 */
 	@Transactional
 	public void userAnswerSave(User user, RequestUserAnswerDto requestUserAnswerDto) {
+		//날짜 형식을 지정한다.
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+		//게임 세션 테이블의 게임 세션 ID와 사용자 ID를 가져온다.
 		GameSession gameSession = gameSessionRepository.findByGameSessionIdAndUser(
 				requestUserAnswerDto.getSessionId(), user)
 			.orElseThrow(() -> new CustomException(ErrorCode.UNKNOWN_GAMESESSION));
 
+		//주제 ID를 가져온다.
 		Topic topic = Optional.of(topicRepository.findByTopicId(requestUserAnswerDto.getTopicId()))
 			.orElseThrow(() -> new CustomException(ErrorCode.UNKNOWN_TOPIC));
 
+		//사용자의 답변을 가져온다.
 		List<UserAnswerDto> answers = requestUserAnswerDto.getAnswers();
 		int length = answers.size();
 
 		for (int i = 0; i < length; i++) {
 			UserAnswerDto answerDto = answers.get(i);
-			boolean isLastAnswer = (i == length - 1);
+			boolean isLastAnswer = (i == length - 1);	//마지막 답변인지 확인한다.
 
+			//마지막 답변이라면 게임 세션 테이블의 하트 개수와 게임 종료 여부를 업데이트한다.
 			if (isLastAnswer) {
 				gameSession.setHeartsCount(requestUserAnswerDto.getHeartsCount());
 				gameSession.setGameDropout(false);
@@ -137,10 +165,15 @@ public class UserAnswerService {
 		}
 	}
 
+	/**
+	 * 사용자가 비정상적으로 게임을 종료했을 때 게임세션에 저장한다.
+	 */
 	public void dropGameSession(long sessionId, User user) {
 		GameSession gameSession = gameSessionRepository.findByGameSessionIdAndUser(sessionId, user)
 			.orElseThrow(() -> new CustomException(ErrorCode.UNKNOWN_GAMESESSION));
 
+		//비정상적으로 종료하면 게임 하트 개수가 저장되지 않으므로
+		// 하트 개수가 0을 체크한 후 게임 종료 여부를 업데이트한다.
 		if (gameSession.getHeartsCount() == 0) {
 			gameSession.setGameDropout(true);
 			gameSession.setGameEndTime(LocalDateTime.now());

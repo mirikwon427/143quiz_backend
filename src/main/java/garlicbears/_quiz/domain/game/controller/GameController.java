@@ -49,14 +49,20 @@ public class GameController {
 		return ResponseEntity.ok(gameService.getRankingsByTopicId(topicId, pageNumber, pageSize));
 	}
 
+	/**
+	 * 게임 주제 목록 ( 뱃지 미획득 )
+	 */
 	@GetMapping("/topics")
-	public ResponseEntity<?> topics(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+	public ResponseEntity<?> topicList(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 		User user = principalDetails.getUser();
 		List<TopicsListDto> topics = gameService.topicList(user.getUserId());
 
 		return ResponseEntity.ok(new ResponseTopicBadgeDto(topics));
 	}
 
+	/**
+	 * 뱃지 주제 목록
+	 */
 	@GetMapping("/badges")
 	public ResponseEntity<?> badges(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 		User user = principalDetails.getUser();
@@ -65,6 +71,9 @@ public class GameController {
 		return ResponseEntity.ok(new ResponseTopicBadgeDto(topics));
 	}
 
+	/**
+	 * 게임 주제 선택
+	 */
 	@GetMapping("/start/{topicId}")
 	public ResponseEntity<?> gameStart(@PathVariable(value = "topicId") long topicId,
 		@AuthenticationPrincipal PrincipalDetails principalDetails) {

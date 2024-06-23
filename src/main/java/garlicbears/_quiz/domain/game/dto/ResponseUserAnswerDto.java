@@ -1,5 +1,9 @@
 package garlicbears._quiz.domain.game.dto;
 
+/**
+ * 사용자가 문제를 푼 후 응답하는 DTO
+ */
+
 public class ResponseUserAnswerDto {
 
 	private long totalQuestions;

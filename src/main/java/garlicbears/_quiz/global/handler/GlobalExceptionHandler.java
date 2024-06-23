@@ -11,6 +11,9 @@ import garlicbears._quiz.global.exception.ErrorCode;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * CustomException을 처리하는 핸들러
+     */
     @ExceptionHandler
     public ResponseEntity<ResponseDto<String>> handleCustomException(CustomException e) {
         ErrorCode errorCode = e.getErrorCode();
@@ -19,6 +22,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response,errorCode.getStatus());
     }
 
+    /**
+     * NullPointerException을 처리하는 핸들러
+     */
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<ResponseDto<String>> handleNullPointerException(NullPointerException e) {
         ErrorCode errorCode = ErrorCode.MISSING_REQUEST_BODY_VARIABLE;
