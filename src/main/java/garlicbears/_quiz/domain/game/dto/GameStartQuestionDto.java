@@ -1,5 +1,9 @@
 package garlicbears._quiz.domain.game.dto;
 
+/**
+ * 게임 시작 시 사용자에게 보여줄 문제 정보를 담는 DTO
+ */
+
 public class GameStartQuestionDto {
 
 	private long questionId;

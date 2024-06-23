@@ -4,6 +4,10 @@ import java.util.List;
 
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * 사용자가 제출한 답안을 받는 DTO
+ */
+
 public class RequestUserAnswerDto {
 
 	@NotNull

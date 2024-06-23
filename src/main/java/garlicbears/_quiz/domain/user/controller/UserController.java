@@ -42,6 +42,9 @@ public class UserController implements SwaggerUserController {
 		this.ratingService = ratingService;
 	}
 
+	/**
+	 * 회원가입 시 이메일 중복 체크
+	 */
 	@PostMapping("/checkEmail")
 	public ResponseEntity<?> checkEmail(@Valid @RequestBody Map<String, String> request) {
 		String email = request.get("email");
@@ -52,6 +55,9 @@ public class UserController implements SwaggerUserController {
 		return ResponseEntity.ok(ResponseDto.success());
 	}
 
+	/**
+	 * 회원가입 시 닉네임 중복 체크
+	 */
 	@PostMapping("/checkNickname")
 	public ResponseEntity<?> checkNickname(@Valid @RequestBody Map<String, String> request) {
 		String nickname = request.get("nickname");
@@ -62,8 +68,13 @@ public class UserController implements SwaggerUserController {
 		return ResponseEntity.ok(ResponseDto.success());
 	}
 
+	/**
+	 * 회원가입
+	 */
 	@PostMapping("/signup")
-	public ResponseEntity<?> signUp(@Valid @RequestBody SignUpDto signUpDto, BindingResult bindingResult) {
+	public ResponseEntity<?> signUp(@Valid @RequestBody SignUpDto signUpDto,
+		BindingResult bindingResult) {
+		// 유효성 검사 에러가 있는 경우
 		if (bindingResult.hasErrors()) {
 			StringBuilder errorMessage = new StringBuilder();
 			bindingResult.getFieldErrors()

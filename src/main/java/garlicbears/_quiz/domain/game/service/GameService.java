@@ -31,16 +31,13 @@ public class GameService {
 	private final GameSessionRepository gameSessionRepository;
 	private final QuestionRepository questionRepository;
 	private final TopicRepository topicRepository;
-	private final RewardRepository rewardRepository;
 
 	public GameService(UserRepository userRepository, GameSessionRepository gameSessionRepository,
-		QuestionRepository questionRepository, TopicRepository topicRepository,
-		RewardRepository rewardRepository) {
+		QuestionRepository questionRepository, TopicRepository topicRepository) {
 		this.userRepository = userRepository;
 		this.gameSessionRepository = gameSessionRepository;
 		this.questionRepository = questionRepository;
 		this.topicRepository = topicRepository;
-		this.rewardRepository = rewardRepository;
 	}
 
 	public List<UserRankingDto> getRankings(int pageNumber, int pageSize) {
@@ -68,38 +65,41 @@ public class GameService {
 
 	@Transactional
 	public ResponseGameStartDto gameStart(long topicId, User user) {
-		Random random = new Random();
-		long newTopicId = topicId;
+		//랜덤 주제 할당
 		if (topicId == 0) {
-			List<TopicsListDto> userTopicList = topicRepository.findUnacquaintedBadgeTopicsByUser(user.getUserId());
-
-			if (userTopicList.isEmpty()) {
-				throw new CustomException(ErrorCode.UNKNOWN_TOPIC);
-			} else {
-				int size = userTopicList.size();
-				int index = random.nextInt(size);
-				TopicsListDto topicsListDto = userTopicList.get(index);
-				newTopicId = topicsListDto.getTopicId();
-			}
+			topicId = RandomTopicAssigner(user);
 		}
 
-		logger.info(" newTopic Id : " + newTopicId);
-		Topic topic = Optional.of(topicRepository.findByTopicId(newTopicId))
-			.orElseThrow(() -> {
-				if (topicId == 0) {
-					return new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
-				} else {
-					return new CustomException(ErrorCode.UNKNOWN_TOPIC);
-				}
-			});
+		logger.info(" topicId : " + topicId);
+		Topic topic = Optional.of(topicRepository.findByTopicId(topicId))
+			.orElseThrow(() -> new CustomException(ErrorCode.UNKNOWN_TOPIC));
 
 		GameSession gameSession = new GameSession(user, topic);
 		gameSessionRepository.save(gameSession);
 
 		return new ResponseGameStartDto.ResponseGameStartBuilder()
-			.topicId(newTopicId)
+			.topicId(topicId)
 			.sessionId(gameSession.getGameSessionId())
-			.game(questionRepository.findGameQuestion(newTopicId, user.getUserId()))
+			.game(questionRepository.findGameQuestion(topicId, user.getUserId()))
 			.build();
+	}
+
+	/**
+	 * 랜덤 주제 할당
+	 */
+	private long RandomTopicAssigner(User user) {
+		Random random = new Random();
+
+		List<TopicsListDto> userTopicList = topicRepository.
+			findUnacquaintedBadgeTopicsByUser(user.getUserId());
+
+		if (userTopicList.isEmpty()) {
+			throw new CustomException(ErrorCode.UNKNOWN_TOPIC);
+		} else {
+			int size = userTopicList.size();
+			int index = random.nextInt(size);
+			TopicsListDto topicsListDto = userTopicList.get(index);
+			return topicsListDto.getTopicId();
+		}
 	}
 }

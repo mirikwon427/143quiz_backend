@@ -3,6 +3,10 @@ package garlicbears._quiz.domain.user.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+/**
+ * 회원가입 DTO
+ */
+
 public class SignUpDto {
 	@NotNull
 	@Size(max = 100)

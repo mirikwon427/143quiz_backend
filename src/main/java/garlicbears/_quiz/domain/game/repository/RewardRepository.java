@@ -16,6 +16,4 @@ import garlicbears._quiz.domain.user.entity.User;
 public interface RewardRepository extends JpaRepository<Reward, Long> {
 	Optional<Reward> findByUserAndTopic(User user, Topic topic);
 
-	@Query("SELECT r.topic.topicId FROM Reward r WHERE r.user = :user AND r.rewardBadgeStatus = true")
-	List<Long> findTopicIdsWithBadgeByUser(@Param("user") User user);
 }
