@@ -12,6 +12,8 @@ public class TopicsListDto {
 
 	int heartsCount;
 
+	long totalQuestionsCount;
+
 	public TopicsListDto() {
 	}
 
@@ -36,5 +38,13 @@ public class TopicsListDto {
 
 	public int getHeartsCount() {
 		return heartsCount;
+	}
+
+	public long getTotalQuestionsCount() {
+		return totalQuestionsCount;
+	}
+
+	public void setTotalQuestionsCount(long totalQuestionsCount) {
+		this.totalQuestionsCount = totalQuestionsCount;
 	}
 }

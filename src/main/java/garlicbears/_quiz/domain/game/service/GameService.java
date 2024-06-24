@@ -21,6 +21,7 @@ import garlicbears._quiz.domain.game.repository.TopicRepository;
 import garlicbears._quiz.domain.user.dto.UserRankingDto;
 import garlicbears._quiz.domain.user.entity.User;
 import garlicbears._quiz.domain.user.repository.UserRepository;
+import garlicbears._quiz.global.entity.Active;
 import garlicbears._quiz.global.exception.CustomException;
 import garlicbears._quiz.global.exception.ErrorCode;
 
@@ -55,7 +56,15 @@ public class GameService {
 
 	@Transactional
 	public List<TopicsListDto> topicList(long userId) {
-		return topicRepository.findUnacquaintedBadgeTopicsByUser(userId);
+		List<TopicsListDto> topicsList = topicRepository.findUnacquaintedBadgeTopicsByUser(userId);
+		//주제별 총 문제 수 추가
+		for(TopicsListDto dto : topicsList){
+			Topic topicEntity = topicRepository.findByTopicId(dto.getTopicId());
+			long questionCount = questionRepository.countAllByTopicAndQuestionActive(
+				topicEntity, Active.active);
+			dto.setTotalQuestionsCount(questionCount);
+		}
+		return topicsList;
 	}
 
 	@Transactional
