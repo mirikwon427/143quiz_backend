@@ -37,7 +37,7 @@ public interface SwaggerGameController {
 		@ApiResponse(responseCode = "500", description = "Internal Server Error",
 			content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
 	})
-	public ResponseEntity<?> topics(@AuthenticationPrincipal PrincipalDetails principalDetails);
+	public ResponseEntity<?> topicList(@AuthenticationPrincipal PrincipalDetails principalDetails);
 
 	@Operation(summary = "뱃지 조회", description = "획득한 뱃지 조회.")
 	@ApiResponses(value = {
