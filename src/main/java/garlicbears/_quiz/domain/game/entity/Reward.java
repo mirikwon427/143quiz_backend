@@ -1,15 +1,10 @@
 package garlicbears._quiz.domain.game.entity;
 
-import garlicbears._quiz.domain.user.entity.User;
-import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.ColumnDefault;
 
 import garlicbears._quiz.domain.user.entity.User;
 import jakarta.persistence.Column;
@@ -29,7 +24,7 @@ import jakarta.persistence.Table;
 public class Reward {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "rewards_seq", nullable = false)
+	@Column(name = "reward_seq", nullable = false)
 	private Long rewardId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
