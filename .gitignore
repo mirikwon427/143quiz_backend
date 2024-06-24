@@ -41,3 +41,9 @@ application-aws.properties
 
 ### JWT Properties ###
 JwtProperties.java
+
+### DS_Store ###
+.DS_Store
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
