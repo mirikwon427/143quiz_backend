@@ -11,7 +11,7 @@ import garlicbears._quiz.global.entity.Active;
 
 public interface QuestionRepository extends JpaRepository<Question, Long>, QuestionQueryRepository {
 
-	List<Question> findByQuestionText(String questionText);
+	List<Question> findByQuestionAnswerText(String questionAnswerText);
 
 	Optional<Question> findByQuestionId(Long questionId);
 
