@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import garlicbears._quiz.domain.user.dto.ResponseUserListDto;
+import garlicbears._quiz.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,5 +22,18 @@ public interface SwaggerAdminUserController {
 		@RequestParam(defaultValue = "createdAtDesc") String sort,
 		@RequestParam(defaultValue = "0") int pageNumber,
 		@RequestParam(defaultValue = "10") int pageSize
+	);
+
+	@Operation(summary = "유저 삭제", description = "입력된 유저를 삭제합니다.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Successfully retrieved",
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+		@ApiResponse(responseCode = "404", description = "User Not Found",
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))})
+	})
+	public ResponseEntity<?> deleteUser(
+		@RequestParam(value = "userId") long userId
 	);
 }

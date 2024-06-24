@@ -94,6 +94,15 @@ public class UserService {
 	}
 
 	@Transactional
+	public void delete(long userId) {
+		User user = userRepository.findByUserId(userId)
+			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+		user.setUserActive(Active.inactive);
+		userRepository.save(user);
+	}
+
+	@Transactional
 	public void delete(User user) {
 		user.setUserActive(Active.inactive);
 		userRepository.save(user);
