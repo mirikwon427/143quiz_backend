@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import garlicbears._quiz.domain.user.dto.ResponseUserDto;
+import garlicbears._quiz.domain.game.dto.ResponseTopicListDto;
 import garlicbears._quiz.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,7 +22,7 @@ public interface SwaggerAdminQuestionController {
 	@Operation(summary = "문제 목록 조회", description = "정렬 기준에 따라 문제 목록을 반환합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "Successfully retrieved",
-			content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+			content = {@Content(schema = @Schema(implementation = ResponseTopicListDto.class))}),
 		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)")
 	})
 	public ResponseEntity<?> listQuestions(
@@ -33,10 +33,9 @@ public interface SwaggerAdminQuestionController {
 	@Operation(summary = "주제별 문제 목록 조회", description = "주제별 문제 목록을 반환합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "Successfully retrieved",
-			content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+			content = {@Content(schema = @Schema(implementation = ResponseTopicListDto.class))}),
 		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)"),
-		@ApiResponse(responseCode = "404", description = "Topic Not Found",
-			content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))})
+		@ApiResponse(responseCode = "404", description = "Topic Not Found")
 	})
 	public ResponseEntity<?> listQuestionsByTopic(@PathVariable(value = "topicId") long topicId,
 		@RequestParam(defaultValue = "createdAtDesc") @Parameter(schema =
@@ -81,11 +80,11 @@ public interface SwaggerAdminQuestionController {
 		))
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "Successfully retrieved",
-			content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
 		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
-			content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
 		@ApiResponse(responseCode = "404", description = "Question Not Found",
-			content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))})
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))})
 	})
 	public ResponseEntity<?> updateQuestion(@PathVariable(value = "questionId") long questionId,
 		@Valid @RequestBody Map<String, String> request);
@@ -93,11 +92,11 @@ public interface SwaggerAdminQuestionController {
 	@Operation(summary = "문제 삭제", description = "입력된 문제를 삭제합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "Successfully retrieved",
-			content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
 		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
-			content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
 		@ApiResponse(responseCode = "404", description = "Question Not Found",
-			content = {@Content(schema = @Schema(implementation = ResponseUserDto.class))})
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))})
 	})
 	public ResponseEntity<?> deleteQuestion(@PathVariable(value = "questionId") long questionId);
 }
