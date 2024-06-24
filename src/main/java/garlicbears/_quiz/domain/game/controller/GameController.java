@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/game")
 @Tag(name = "게임")
-public class GameController {
+public class GameController implements SwaggerGameController {
 
 	private final GameService gameService;
 	private final TopicService topicService;
