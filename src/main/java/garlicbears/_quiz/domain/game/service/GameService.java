@@ -16,7 +16,6 @@ import garlicbears._quiz.domain.game.entity.GameSession;
 import garlicbears._quiz.domain.game.entity.Topic;
 import garlicbears._quiz.domain.game.repository.GameSessionRepository;
 import garlicbears._quiz.domain.game.repository.QuestionRepository;
-import garlicbears._quiz.domain.game.repository.RewardRepository;
 import garlicbears._quiz.domain.game.repository.TopicRepository;
 import garlicbears._quiz.domain.user.dto.UserRankingDto;
 import garlicbears._quiz.domain.user.entity.User;
@@ -67,7 +66,7 @@ public class GameService {
 	public ResponseGameStartDto gameStart(long topicId, User user) {
 		//랜덤 주제 할당
 		if (topicId == 0) {
-			topicId = RandomTopicAssigner(user);
+			topicId = randomTopicAssigner(user);
 		}
 
 		logger.info(" topicId : " + topicId);
@@ -87,11 +86,11 @@ public class GameService {
 	/**
 	 * 랜덤 주제 할당
 	 */
-	private long RandomTopicAssigner(User user) {
+	private long randomTopicAssigner(User user) {
 		Random random = new Random();
 
-		List<TopicsListDto> userTopicList = topicRepository.
-			findUnacquaintedBadgeTopicsByUser(user.getUserId());
+		List<TopicsListDto> userTopicList = topicRepository
+			.findUnacquaintedBadgeTopicsByUser(user.getUserId());
 
 		if (userTopicList.isEmpty()) {
 			throw new CustomException(ErrorCode.UNKNOWN_TOPIC);

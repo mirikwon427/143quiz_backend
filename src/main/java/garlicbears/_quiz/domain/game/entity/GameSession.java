@@ -43,7 +43,6 @@ public class GameSession {
 	private LocalDateTime gameEndTime;
 
 	@Column(name = "game_dropout", nullable = false)
-	@ColumnDefault("TRUE")
 	private boolean gameDropout;
 
 	@Column(name = "game_hearts_count", nullable = false)
@@ -96,6 +95,7 @@ public class GameSession {
 	public GameSession(User user, Topic topic) {
 		this.user = user;
 		this.topic = topic;
+		this.gameDropout = true;
 	}
 
 }
