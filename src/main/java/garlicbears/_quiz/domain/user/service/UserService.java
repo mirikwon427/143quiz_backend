@@ -1,12 +1,15 @@
 package garlicbears._quiz.domain.user.service;
 
 import java.time.Year;
+import java.util.Optional;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import garlicbears._quiz.domain.user.controller.UserController;
 import garlicbears._quiz.domain.user.dto.SignUpDto;
 import garlicbears._quiz.domain.user.dto.UpdateUserDto;
 import garlicbears._quiz.domain.user.entity.Gender;
@@ -19,6 +22,8 @@ import garlicbears._quiz.global.exception.ErrorCode;
 
 @Service
 public class UserService {
+
+	private static final Logger logger = Logger.getLogger(UserService.class.getName());
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 
