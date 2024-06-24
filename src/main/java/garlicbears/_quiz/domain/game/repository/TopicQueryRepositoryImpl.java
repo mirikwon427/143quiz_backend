@@ -77,7 +77,8 @@ public class TopicQueryRepositoryImpl implements TopicQueryRepository {
 		return queryFactory
 			.select(Projections.constructor(TopicsListDto.class,
 				topic.topicId,
-				topic.topicTitle
+				topic.topicTitle,
+				reward.rewardNumberHearts
 			))
 			.from(topic)
 			.leftJoin(reward)

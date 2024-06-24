@@ -10,12 +10,20 @@ public class TopicsListDto {
 
 	String title;
 
+	int heartsCount;
+
 	public TopicsListDto() {
 	}
 
 	public TopicsListDto(long topicId, String title) {
 		this.topicId = topicId;
 		this.title = title;
+	}
+
+	public TopicsListDto(long topicId, String title, int heartsCount) {
+		this.topicId = topicId;
+		this.title = title;
+		this.heartsCount = heartsCount;
 	}
 
 	public long getTopicId() {
@@ -26,4 +34,7 @@ public class TopicsListDto {
 		return title;
 	}
 
+	public int getHeartsCount() {
+		return heartsCount;
+	}
 }
