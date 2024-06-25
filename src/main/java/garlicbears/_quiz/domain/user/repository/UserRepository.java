@@ -10,6 +10,8 @@ import garlicbears._quiz.domain.user.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>, UserQueryRepository {
+	Optional<User> findByUserId(long userId);
+
 	List<User> findByUserEmail(String email);
 
 	List<User> findByUserNickname(String nickname);

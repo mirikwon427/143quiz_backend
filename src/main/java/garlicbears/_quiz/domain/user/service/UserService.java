@@ -1,15 +1,17 @@
 package garlicbears._quiz.domain.user.service;
 
 import java.time.Year;
-import java.util.Optional;
-import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import garlicbears._quiz.domain.user.controller.UserController;
+import garlicbears._quiz.domain.user.dto.ResponseUserDto;
+import garlicbears._quiz.domain.user.dto.ResponseUserListDto;
 import garlicbears._quiz.domain.user.dto.SignUpDto;
 import garlicbears._quiz.domain.user.dto.UpdateUserDto;
 import garlicbears._quiz.domain.user.entity.Gender;
@@ -22,8 +24,6 @@ import garlicbears._quiz.global.exception.ErrorCode;
 
 @Service
 public class UserService {
-
-	private static final Logger logger = Logger.getLogger(UserService.class.getName());
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 
@@ -63,6 +63,14 @@ public class UserService {
 		userRepository.save(user);
 	}
 
+	public ResponseUserListDto getUserList(int pageNumber, int pageSize, String sort) {
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		Page<ResponseUserDto> page = userRepository.findUsers(pageNumber, pageSize, sort, pageable);
+
+		return new ResponseUserListDto(sort, pageNumber, pageSize, page.getTotalPages(), page.getTotalElements(),
+			page.getContent());
+	}
+
 	@Transactional
 	public void update(User user, UpdateUserDto updateUserDto) {
 		if (updateUserDto.getBirthYear() != null) {
@@ -82,6 +90,15 @@ public class UserService {
 			user.setUserLocation(Location.fromKoreanName(updateUserDto.getLocation()));
 		}
 
+		userRepository.save(user);
+	}
+
+	@Transactional
+	public void delete(long userId) {
+		User user = userRepository.findByUserId(userId)
+			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+		user.setUserActive(Active.inactive);
 		userRepository.save(user);
 	}
 
