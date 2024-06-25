@@ -85,6 +85,8 @@ public class GameService {
 		GameSession gameSession = new GameSession(user, topic);
 		gameSessionRepository.save(gameSession);
 
+		logger.info("New game session created with ID: " + gameSession.getGameSessionId());
+
 		return new ResponseGameStartDto.ResponseGameStartBuilder()
 			.topicId(topicId)
 			.sessionId(gameSession.getGameSessionId())

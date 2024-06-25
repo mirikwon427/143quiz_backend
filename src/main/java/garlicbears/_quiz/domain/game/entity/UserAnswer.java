@@ -45,20 +45,18 @@ public class UserAnswer {
 	@Column(name = "user_answer_text", nullable = false, length = 100)
 	private String userAnswerText;
 
-  @Column(name = "user_answer_status", nullable = false)
-  private AnswerStatus userAnswerStatus;
+	@Column(name = "user_answer_status", nullable = false)
+	private AnswerStatus userAnswerStatus;
 
 	@Column(name = "hint_usage_count", nullable = false)
 	@ColumnDefault("0")
 	private int hintUsageCount;
 
-  @Column(name = "answer_time_taken_sec", nullable = false)
-  @ColumnDefault("0")
-  private int timeTaken;
+	@Column(name = "answer_time_taken_sec", nullable = false)
+	@ColumnDefault("0")
+	private int timeTaken;
 
 	@Column(name = "user_answered_at", nullable = false)
-	@CreationTimestamp
-	@ColumnDefault("CURRENT_TIMESTAMP")
 	private LocalDateTime userAnsweredAt;
 
 	public long getUserAnswerId() {
@@ -85,9 +83,9 @@ public class UserAnswer {
 		return userAnswerText;
 	}
 
-  public AnswerStatus getUserAnswerStatus() {
-      return userAnswerStatus;
-  }
+	public AnswerStatus getUserAnswerStatus() {
+		return userAnswerStatus;
+	}
 
 	public int getHintUsageCount() {
 		return hintUsageCount;
@@ -127,7 +125,7 @@ public class UserAnswer {
 
 		private String userAnswerText;
 
-    private AnswerStatus userAnswerStatus;
+		private AnswerStatus userAnswerStatus;
 
 		private int hintUsageCount;
 
@@ -151,10 +149,10 @@ public class UserAnswer {
 			return this;
 		}
 
-    public UserAnswerBuilder userAnswerStatus(AnswerStatus userAnswerStatus) {
-        this.userAnswerStatus = userAnswerStatus;
-        return this;
-    }
+		public UserAnswerBuilder userAnswerStatus(AnswerStatus userAnswerStatus) {
+			this.userAnswerStatus = userAnswerStatus;
+			return this;
+		}
 
 		public UserAnswerBuilder hintUsageCount(int hintUsageCount) {
 			this.hintUsageCount = hintUsageCount;

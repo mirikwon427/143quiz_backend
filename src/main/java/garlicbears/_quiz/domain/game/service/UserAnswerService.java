@@ -147,10 +147,14 @@ public class UserAnswerService {
 				gameSession.setHeartsCount(requestUserAnswerDto.getHeartsCount());
 				gameSession.setGameDropout(false);
 				gameSession.setGameEndTime(LocalDateTime.parse(answerDto.getAnswerAt(), formatter));
+				gameSessionRepository.save(gameSession);
 			}
 
 			Question question = questionRepository.findByQuestionId(answers.get(i).getQuestionId())
 				.orElseThrow(() -> new CustomException(ErrorCode.UNKNOWN_QUESTION));
+
+			LocalDateTime parsedDate = LocalDateTime.parse(answerDto.getAnswerAt(), formatter);
+			System.out.println("Parsed Date for question " + question.getQuestionId() + ": " + parsedDate);
 
 			UserAnswer userAnswer = new UserAnswer.UserAnswerBuilder(user, gameSession, topic)
 				.question(question)
@@ -158,10 +162,11 @@ public class UserAnswerService {
 				.userAnswerStatus(answerDto.getAnswerStatus())
 				.hintUsageCount(answerDto.getHintUsageCount())
 				.timeTaken(answerDto.getAnswerTimeTaken())
-				.userAnsweredAt(LocalDateTime.parse(answerDto.getAnswerAt(), formatter))
+				.userAnsweredAt(parsedDate)
 				.build();
 
 			entityManager.persist(userAnswer);
+			entityManager.flush();
 		}
 	}
 
