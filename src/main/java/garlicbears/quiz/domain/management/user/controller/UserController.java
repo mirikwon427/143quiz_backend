@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import garlicbears.quiz.domain.common.dto.ResponseDto;
-import garlicbears.quiz.domain.common.dto.ResponseUserDto;
-import garlicbears.quiz.domain.common.dto.UpdateUserDto;
 import garlicbears.quiz.domain.common.entity.User;
-import garlicbears.quiz.domain.common.service.UserService;
+import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
+import garlicbears.quiz.domain.management.common.dto.UpdateUserDto;
+import garlicbears.quiz.domain.management.common.service.UserService;
 import garlicbears.quiz.domain.management.user.dto.SignUpDto;
 import garlicbears.quiz.domain.management.user.service.ManageUserService;
 import garlicbears.quiz.domain.management.user.service.UserRatingService;

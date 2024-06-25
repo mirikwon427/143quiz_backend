@@ -2,7 +2,7 @@ package garlicbears.quiz.domain.management.admin.dto;
 
 import java.util.List;
 
-import garlicbears.quiz.domain.common.dto.ResponseUserDto;
+import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
 
 public class ResponseUserListDto {
 	private String sort;

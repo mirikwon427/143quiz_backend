@@ -1,7 +1,7 @@
-package garlicbears.quiz.domain.common.dto;
+package garlicbears.quiz.domain.management.common.dto;
 
-import garlicbears.quiz.domain.common.entity.User;
 import garlicbears.quiz.domain.common.entity.Active;
+import garlicbears.quiz.domain.common.entity.User;
 
 public class ResponseUserDto {
 	private long userId;

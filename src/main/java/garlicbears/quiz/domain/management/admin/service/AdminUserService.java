@@ -5,11 +5,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import garlicbears.quiz.domain.common.dto.ResponseUserDto;
 import garlicbears.quiz.domain.common.entity.Active;
 import garlicbears.quiz.domain.common.entity.User;
 import garlicbears.quiz.domain.common.repository.UserRepository;
 import garlicbears.quiz.domain.management.admin.dto.ResponseUserListDto;
+import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
 import garlicbears.quiz.global.exception.CustomException;
 import garlicbears.quiz.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;

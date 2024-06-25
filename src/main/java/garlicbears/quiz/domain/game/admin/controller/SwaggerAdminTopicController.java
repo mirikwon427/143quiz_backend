@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import garlicbears.quiz.domain.common.dto.ResponseDto;
-import garlicbears.quiz.domain.common.dto.ResponseUserDto;
 import garlicbears.quiz.domain.game.admin.dto.ResponseTopicListDto;
+import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

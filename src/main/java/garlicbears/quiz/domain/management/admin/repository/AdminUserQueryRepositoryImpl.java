@@ -11,8 +11,8 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import garlicbears.quiz.domain.common.dto.ResponseUserDto;
 import garlicbears.quiz.domain.common.entity.QUser;
+import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
 import jakarta.persistence.EntityManager;
 
 @Repository

@@ -1,4 +1,4 @@
-package garlicbears.quiz.domain.common.service;
+package garlicbears.quiz.domain.management.common.service;
 
 import java.time.Year;
 
@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import garlicbears.quiz.domain.common.dto.UpdateUserDto;
 import garlicbears.quiz.domain.common.entity.User;
 import garlicbears.quiz.domain.common.repository.UserRepository;
+import garlicbears.quiz.domain.management.common.dto.UpdateUserDto;
 import garlicbears.quiz.global.exception.CustomException;
 import garlicbears.quiz.global.exception.ErrorCode;
 
