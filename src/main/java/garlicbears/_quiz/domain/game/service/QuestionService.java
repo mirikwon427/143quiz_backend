@@ -66,7 +66,7 @@ public class QuestionService {
 	@Transactional
 	public Question save(Topic topic, String questionAnswerText) {
 		// 이미 등록된 문제인 경우 에러(409) 반환
-		questionRepository.findByQuestionText(questionAnswerText).forEach(question -> {
+		questionRepository.findByQuestionAnswerText(questionAnswerText).forEach(question -> {
 			if (question.getQuestionActive() == Active.active) {
 				throw new CustomException(ErrorCode.QUESTION_ALREADY_EXISTS);
 			}

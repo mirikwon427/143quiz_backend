@@ -84,15 +84,15 @@ public class TopicService {
 		// 문제 생성 중 오류 발생 시 해당 문제는 생성하지 않음
 		List<ResponseQuestionDto> questions = new ArrayList<>();
 		Sheet sheet = workbook.getSheetAt(0);
-		for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+		for (int i = 0; i <= sheet.getLastRowNum(); i++) {
 			Row row = sheet.getRow(i);
 			if (row != null) {
-				String questionText = row.getCell(0).getStringCellValue();
-				if (questionText == null || questionText.trim().isEmpty()) {
+				String questionAnswerText = row.getCell(0).getStringCellValue();
+				if (questionAnswerText == null || questionAnswerText.trim().isEmpty()) {
 					continue;
 				}
 				try {
-					Question question = questionService.save(topic, questionText); // QuestionService의 save 메서드 호출
+					Question question = questionService.save(topic, questionAnswerText); // QuestionService의 save 메서드 호출
 					questions.add(new ResponseQuestionDto(topic, question));
 				} catch (CustomException e) {
 					continue;
