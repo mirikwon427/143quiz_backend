@@ -1,11 +1,11 @@
-package garlicbears.quiz.domain.management.user.repository;
+package garlicbears.quiz.domain.game.user.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import garlicbears.quiz.domain.common.dto.UserRankingDto;
+import garlicbears.quiz.domain.game.user.dto.UserRankingDto;
 
-public interface UserQueryRepository {
+public interface GameUserQueryRepository {
 	Page<UserRankingDto> findRankings(Pageable pageable);
 
 	Page<UserRankingDto> findRankingsByTopicId(long topicId, Pageable pageable);

@@ -5,11 +5,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.game.user.dto.ResponseGameStartDto;
 import garlicbears.quiz.domain.game.user.dto.ResponseTopicBadgeDto;
-import garlicbears.quiz.domain.common.dto.UserRankingDto;
+import garlicbears.quiz.domain.game.user.dto.UserRankingDto;
 import garlicbears.quiz.global.config.auth.PrincipalDetails;
-import garlicbears.quiz.domain.common.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

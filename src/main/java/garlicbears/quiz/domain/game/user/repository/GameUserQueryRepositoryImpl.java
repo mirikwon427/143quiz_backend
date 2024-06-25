@@ -1,4 +1,4 @@
-package garlicbears.quiz.domain.management.user.repository;
+package garlicbears.quiz.domain.game.user.repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,15 +12,15 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import garlicbears.quiz.domain.common.dto.UserRankingDto;
 import garlicbears.quiz.domain.common.entity.QUser;
 import garlicbears.quiz.domain.game.common.entity.QReward;
+import garlicbears.quiz.domain.game.user.dto.UserRankingDto;
 import jakarta.persistence.EntityManager;
 
-public class UserQueryRepositoryImpl implements UserQueryRepository {
+public class GameUserQueryRepositoryImpl implements GameUserQueryRepository {
 	private final JPAQueryFactory queryFactory;
 
-	public UserQueryRepositoryImpl(EntityManager em) {
+	public GameUserQueryRepositoryImpl(EntityManager em) {
 		this.queryFactory = new JPAQueryFactory(em);
 	}
 
@@ -43,10 +43,9 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
 			.limit(pageable.getPageSize())
 			.fetch();
 
-		Long total;
-		total = queryFactory.select(reward.count())
+		// 전체 결과 수 계산
+		Long total = queryFactory.select(reward.user.userId.countDistinct())
 			.from(reward)
-			.groupBy(user.userId, user.userNickname)
 			.fetchOne();
 
 		// Calculate rank and add it to each UserRankingDTO
@@ -56,7 +55,7 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
 	private Page<UserRankingDto> getUserRankingDtos(Pageable pageable, List<UserRankingDto> results, Long total) {
 		List<UserRankingDto> rankedResults = IntStream.range(0, results.size()).mapToObj(i -> {
 			UserRankingDto dto = results.get(i);
-			return new UserRankingDto(dto.getUserId(), dto.getNickname(), dto.getTotalHearts(), dto.getTotalBadges(),
+			return new UserRankingDto(dto.getUserId(), dto.getNickname(), dto.getTotalBadges(), dto.getTotalHearts(),
 				pageable.getOffset() + i + 1L // Calculate rank based on page offset
 			);
 		}).collect(Collectors.toList());
@@ -83,12 +82,12 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
 			.limit(pageable.getPageSize())
 			.fetch();
 
-		Long total = queryFactory.select(reward.count())
+		Long total = queryFactory.select(user.userId.countDistinct())
 			.from(reward)
-			.groupBy(user.userId, user.userNickname)
+			.where(reward.topic.topicId.eq(topicId))
 			.fetchOne();
 
 		// Calculate rank and add it to each UserRankingDTO
-		return getUserRankingDtos(pageable, results, total);
+		return getUserRankingDtos(pageable, results, total == null ? 0 : total);
 	}
 }

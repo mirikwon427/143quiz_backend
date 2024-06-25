@@ -1,4 +1,4 @@
-package garlicbears.quiz.domain.common.dto;
+package garlicbears.quiz.domain.game.user.dto;
 
 public class UserRankingDto {
 	private long userId;

@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import garlicbears.quiz.domain.common.dto.UserRankingDto;
 import garlicbears.quiz.domain.common.entity.Active;
 import garlicbears.quiz.domain.common.entity.User;
 import garlicbears.quiz.domain.common.repository.UserRepository;
@@ -21,6 +20,7 @@ import garlicbears.quiz.domain.game.common.repository.QuestionRepository;
 import garlicbears.quiz.domain.game.common.repository.TopicRepository;
 import garlicbears.quiz.domain.game.user.dto.ResponseGameStartDto;
 import garlicbears.quiz.domain.game.user.dto.TopicsListDto;
+import garlicbears.quiz.domain.game.user.dto.UserRankingDto;
 import garlicbears.quiz.global.exception.CustomException;
 import garlicbears.quiz.global.exception.ErrorCode;
 
