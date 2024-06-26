@@ -18,11 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.common.entity.User;
 import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
-import garlicbears.quiz.domain.management.common.dto.UpdateUserDto;
-import garlicbears.quiz.domain.management.common.service.UserService;
 import garlicbears.quiz.domain.management.user.dto.SignUpDto;
-import garlicbears.quiz.domain.management.user.service.ManageUserService;
+import garlicbears.quiz.domain.management.user.dto.UpdateUserDto;
 import garlicbears.quiz.domain.management.user.service.UserRatingService;
+import garlicbears.quiz.domain.management.user.service.UserService;
 import garlicbears.quiz.global.config.auth.PrincipalDetails;
 import garlicbears.quiz.global.exception.CustomException;
 import garlicbears.quiz.global.exception.ErrorCode;
@@ -35,14 +34,12 @@ import jakarta.validation.Valid;
 public class UserController implements SwaggerUserController {
 	private static final Logger logger = Logger.getLogger(UserController.class.getName());
 	private final UserService userService;
-	private final ManageUserService manageUserService;
 	private final UserRatingService userRatingService;
 
 	@Autowired
-	UserController(UserService userService, ManageUserService manageUserService,
+	UserController(UserService userService,
 		UserRatingService userRatingService) {
 		this.userService = userService;
-		this.manageUserService = manageUserService;
 		this.userRatingService = userRatingService;
 	}
 
@@ -55,7 +52,7 @@ public class UserController implements SwaggerUserController {
 		if (email == null || email.trim().isEmpty()) {
 			throw new CustomException(ErrorCode.INVALID_INPUT);
 		}
-		manageUserService.checkDuplicatedEmail(email);
+		userService.checkDuplicatedEmail(email);
 		return ResponseEntity.ok(ResponseDto.success());
 	}
 
@@ -68,7 +65,7 @@ public class UserController implements SwaggerUserController {
 		if (nickname == null || nickname.trim().isEmpty()) {
 			throw new CustomException(ErrorCode.INVALID_INPUT);
 		}
-		manageUserService.checkDuplicatedNickname(nickname);
+		userService.checkDuplicatedNickname(nickname);
 		return ResponseEntity.ok(ResponseDto.success());
 	}
 
@@ -89,9 +86,9 @@ public class UserController implements SwaggerUserController {
 			logger.warning("errorMessage : " + errorMessage.toString());
 			throw new CustomException(ErrorCode.BAD_REQUEST);
 		}
-		manageUserService.checkDuplicatedEmail(signUpDto.getEmail());
-		manageUserService.checkDuplicatedNickname(signUpDto.getNickname());
-		manageUserService.signUp(signUpDto);
+		userService.checkDuplicatedEmail(signUpDto.getEmail());
+		userService.checkDuplicatedNickname(signUpDto.getNickname());
+		userService.signUp(signUpDto);
 		return ResponseEntity.ok(ResponseDto.success());
 	}
 
@@ -120,7 +117,7 @@ public class UserController implements SwaggerUserController {
 	public ResponseEntity<?> deleteUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 		User user = principalDetails.getUser();
 
-		manageUserService.delete(user);
+		userService.delete(user);
 
 		return ResponseEntity.ok(ResponseDto.success());
 	}

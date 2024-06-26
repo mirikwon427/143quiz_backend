@@ -1,4 +1,4 @@
-package garlicbears.quiz.domain.management.common.dto;
+package garlicbears.quiz.domain.management.user.dto;
 
 public class UpdateUserDto {
 	private Integer birthYear;

@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
-import garlicbears.quiz.domain.management.common.dto.UpdateUserDto;
 import garlicbears.quiz.domain.management.user.dto.SignUpDto;
+import garlicbears.quiz.domain.management.user.dto.UpdateUserDto;
 import garlicbears.quiz.global.config.auth.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
