@@ -3,7 +3,13 @@ package garlicbears.quiz.domain.common.entity;
 import static garlicbears.quiz.domain.common.entity.Active.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import garlicbears.quiz.domain.game.common.entity.Reward;
 import garlicbears.quiz.domain.game.common.entity.UserAnswer;
@@ -16,12 +22,15 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class User extends BaseTimeEntity {
+public class User extends BaseTimeEntity implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,6 +70,13 @@ public class User extends BaseTimeEntity {
 	@OneToMany(mappedBy = "user")
 	private List<UserAnswer> userAnswers = new ArrayList<>();
 
+	@ManyToMany
+	@JoinTable(name = "user_role",
+		joinColumns = @JoinColumn(name = "user_seq"),
+		inverseJoinColumns = @JoinColumn(name = "role_seq")
+	)
+	private Set<Role> roles = new HashSet<>();
+
 	public User() {
 	}
 
@@ -72,6 +88,7 @@ public class User extends BaseTimeEntity {
 		this.userAge = builder.userAge;
 		this.userGender = builder.userGender;
 		this.userLocation = builder.userLocation;
+		this.roles = builder.roles;
 	}
 
 	public Long getUserId() {
@@ -114,8 +131,12 @@ public class User extends BaseTimeEntity {
 		return reward;
 	}
 
-	public List<UserAnswer> userAnswers() {
+	public List<UserAnswer> getUserAnswers() {
 		return userAnswers;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
 	}
 
 	public void setUserBirthYear(int userBirthYear) {
@@ -138,6 +159,41 @@ public class User extends BaseTimeEntity {
 		this.userActive = userActive;
 	}
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return null;
+	}
+
+	@Override
+	public String getPassword() {
+		return getUserPassword();
+	}
+
+	@Override
+	public String getUsername() {
+		return getUserEmail();
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+
 	public static class UserBuilder {
 		private final String userEmail;
 		private final String userPassword;
@@ -146,6 +202,8 @@ public class User extends BaseTimeEntity {
 		private int userAge;
 		private Gender userGender;
 		private Location userLocation;
+
+		private Set<Role> roles = new HashSet<>();
 
 		public UserBuilder(String userEmail, String userPassword, String userNickname) {
 			this.userEmail = userEmail;
@@ -170,6 +228,11 @@ public class User extends BaseTimeEntity {
 
 		public UserBuilder userLocation(Location userLocation) {
 			this.userLocation = userLocation;
+			return this;
+		}
+
+		public UserBuilder userRole(Role role) {
+			this.roles.add(role);
 			return this;
 		}
 
