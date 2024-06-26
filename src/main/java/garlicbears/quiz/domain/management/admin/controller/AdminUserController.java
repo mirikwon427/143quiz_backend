@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.management.admin.service.AdminUserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -36,6 +37,6 @@ public class AdminUserController implements SwaggerAdminUserController {
 		@RequestParam(value = "userId") long userId
 	) {
 		adminUserService.delete(userId);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(ResponseDto.success());
 	}
 }

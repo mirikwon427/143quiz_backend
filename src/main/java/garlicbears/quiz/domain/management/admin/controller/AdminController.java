@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,9 @@ public class AdminController implements SwaggerAdminController {
 		this.adminService = adminService;
 	}
 
+	/**
+	 * 이메일 중복 확인
+	 */
 	@Override
 	@PostMapping("/checkEmail")
 	public ResponseEntity<?> checkEmail(Map<String, String> request) {
@@ -40,6 +44,9 @@ public class AdminController implements SwaggerAdminController {
 		return ResponseEntity.ok(ResponseDto.success());
 	}
 
+	/**
+	 * 관리자 회원가입
+	 */
 	@Override
 	@PostMapping("/signup")
 	public ResponseEntity<?> signUp(AdminSignUpDto request, BindingResult bindingResult) {
@@ -59,6 +66,9 @@ public class AdminController implements SwaggerAdminController {
 		return ResponseEntity.ok(ResponseDto.success());
 	}
 
+	/**
+	 * 관리자 목록 조회
+	 */
 	@Override
 	@GetMapping("/")
 	public ResponseEntity<?> listAdmins(
@@ -66,5 +76,24 @@ public class AdminController implements SwaggerAdminController {
 		@RequestParam(defaultValue = "0") int pageNumber,
 		@RequestParam(defaultValue = "10") int pageSize) {
 		return ResponseEntity.ok(adminService.getAdminList(pageNumber, pageSize, sort));
+	}
+
+	/**
+	 * 관리자 권한 변경
+	 */
+	@Override
+	// @PatchMapping("/changeRole/{adminId}")
+	public ResponseEntity<?> changeAdminRole(@RequestParam(value = "adminId") long adminId) {
+		// TODO JWT 토큰이 완성되면 구현
+		return null;
+	}
+
+	/**
+	 * 관리자 삭제
+	 */
+	@DeleteMapping("/delete/{adminId}")
+	public ResponseEntity<?> deleteAdmin(@RequestParam(value = "adminId") long adminId) {
+		adminService.delete(adminId);
+		return ResponseEntity.ok(ResponseDto.success());
 	}
 }

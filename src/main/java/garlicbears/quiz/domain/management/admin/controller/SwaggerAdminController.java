@@ -47,4 +47,28 @@ public interface SwaggerAdminController {
 		@RequestParam(defaultValue = "0") int pageNumber,
 		@RequestParam(defaultValue = "10") int pageSize
 	);
+
+	@Operation(summary = "관리자 권한 변경", description = "관리자의 권한을 변경합니다.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Successfully retrieved",
+			content = {@Content(schema = @Schema(implementation = ResponseAdminDto.class))}),
+		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)"),
+		@ApiResponse(responseCode = "404", description = "Not Found (Admin not found)")
+	})
+	public ResponseEntity<?> changeAdminRole(
+		@RequestParam(value = "adminId") long adminId
+	);
+
+	@Operation(summary = "관리자 삭제", description = "입력된 관리자를 삭제합니다.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Successfully retrieved",
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)",
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
+		@ApiResponse(responseCode = "404", description = "Admin Not Found",
+			content = {@Content(schema = @Schema(implementation = ResponseDto.class))})
+	})
+	public ResponseEntity<?> deleteAdmin(
+		@RequestParam(value = "adminId") long adminId
+	);
 }

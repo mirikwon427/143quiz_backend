@@ -51,4 +51,12 @@ public class AdminService {
 		return new ResponseAdminListDto(sort, pageNumber, pageSize, page.getTotalPages(), page.getTotalElements(),
 			page.getContent());
 	}
+
+	@Transactional
+	public void delete(long adminId) {
+		Admin admin = adminRepository.findById(adminId)
+			.orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
+		admin.setActive(Active.inactive);
+		adminRepository.save(admin);
+	}
 }
