@@ -2,10 +2,13 @@ package garlicbears.quiz.domain.common.entity;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
@@ -48,7 +51,9 @@ public class Admin extends BaseTimeEntity implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		return roles.stream()
+			.map(role -> new SimpleGrantedAuthority(role.getRoleName()))
+			.collect(Collectors.toList());
 	}
 
 	@Override
