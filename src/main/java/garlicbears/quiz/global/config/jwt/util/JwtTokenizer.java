@@ -1,17 +1,15 @@
-package garlicbears.quiz.global.config.jwt;
+package garlicbears.quiz.global.config.jwt.util;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import garlicbears.quiz.domain.common.entity.Role;
 import garlicbears.quiz.global.exception.CustomException;
 import garlicbears.quiz.global.exception.ErrorCode;
 import io.jsonwebtoken.Claims;
@@ -37,25 +35,24 @@ public class JwtTokenizer {
 	/**
 	 * AccessToken 생성
 	 */
-	public String createAccessToken(Authentication authentication) {
-		return createToken(authentication, ACCESS_TOKEN_EXPIRE_COUNT, accessSecret);
+	public String createAccessToken(String email, Long userId, Role role) {
+		return createToken(email, userId, role, ACCESS_TOKEN_EXPIRE_COUNT, accessSecret);
 	}
 
 	/**
 	 * RefreshToken 생성
 	 */
-	public String createRefreshToken(Authentication authentication) {
-		return createToken(authentication, REFRESH_TOKEN_EXPIRE_COUNT, refreshSecret);
+	public String createRefreshToken(String email, Long userId, Role role) {
+		return createToken(email, userId, role, REFRESH_TOKEN_EXPIRE_COUNT, refreshSecret);
 	}
 
-	private String createToken(Authentication authentication, Long expire, byte[] secretKey) {
-		String authorities = authentication.getAuthorities().stream()
-			.map(GrantedAuthority::getAuthority)
-			.collect(Collectors.joining(","));
+	private String createToken(String email, Long id, Role role,
+		Long expire, byte[] secretKey) {
 
 		Claims claims = Jwts.claims()
-			.subject(authentication.getName())
-			.add("auth", authorities)
+			.subject(email)
+			.add("role", role)
+			.add("id", id)
 			.build();
 
 		Date date = new Date();
@@ -90,7 +87,7 @@ public class JwtTokenizer {
 				.parseSignedClaims(token) //토큰의 내용을 확인, 토큰의 서명이 설정된 키로부터 유효한지 검증
 				.getPayload();
 		} catch(JwtException e) {
-			logger.warning(e.getMessage());
+			logger.warning("error message " + e.getMessage());
 			throw new CustomException(ErrorCode.INVALID_TOKEN);
 		}
 	}
@@ -101,4 +98,5 @@ public class JwtTokenizer {
 	public static SecretKey getSigningKey(byte[] secretKey){
 		return Keys.hmacShaKeyFor(secretKey);
 	}
+
 }

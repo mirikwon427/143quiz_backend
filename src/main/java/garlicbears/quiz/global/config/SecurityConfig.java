@@ -12,8 +12,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.filter.CorsFilter;
 
 import garlicbears.quiz.domain.common.repository.UserRepository;
-import garlicbears.quiz.global.config.jwt.JwtAuthenticationFilter;
-import garlicbears.quiz.global.config.jwt.JwtAuthorizationFilter;
 
 @Configuration
 @EnableWebSecurity
