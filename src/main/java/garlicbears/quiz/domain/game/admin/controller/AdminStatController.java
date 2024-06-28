@@ -22,4 +22,9 @@ public class AdminStatController {
 	public ResponseEntity<?> getRatingStat() {
 		return ResponseEntity.ok(gameStatService.getRatingStat());
 	}
+
+	@GetMapping("/game")
+	public ResponseEntity<?> getGameStatList(int pageNumber, int pageSize, String sort) {
+		return ResponseEntity.ok(gameStatService.getGameStatList(pageNumber, pageSize, sort));
+	}
 }
