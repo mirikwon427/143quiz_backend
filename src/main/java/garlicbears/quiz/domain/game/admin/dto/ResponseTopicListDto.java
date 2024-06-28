@@ -43,9 +43,4 @@ public class ResponseTopicListDto {
 	public List<ResponseTopicDto> getTopics() {
 		return topics;
 	}
-
-	public static ResponseTopicListDto fromTopics(List<ResponseTopicDto> topics, String sort, int pageNumber,
-		int pageSize, int totalPage, long totalCount) {
-		return new ResponseTopicListDto(sort, pageNumber, pageSize, totalPage, totalCount, topics);
-	}
 }
