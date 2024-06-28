@@ -7,11 +7,11 @@ import garlicbears.quiz.domain.common.repository.RatingRepository;
 import garlicbears.quiz.domain.game.admin.dto.RatingStatDto;
 
 @Service
-public class AdminRatingService {
+public class GameStatService {
 	private final RatingRepository ratingRepository;
 
 	@Autowired
-	public AdminRatingService(RatingRepository ratingRepository) {
+	public GameStatService(RatingRepository ratingRepository) {
 		this.ratingRepository = ratingRepository;
 	}
 
