@@ -1,7 +1,8 @@
-package garlicbears.quiz.global.config.jwt.util;
+package garlicbears.quiz.global.jwt.util;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.crypto.SecretKey;
@@ -24,7 +25,7 @@ public class JwtTokenizer {
 	private final byte[] accessSecret;
 	private final byte[] refreshSecret;
 
-	public JwtTokenizer(@Value("${secretKey}")String accessSecret, @Value("${refreshKey}")String refreshSecret) {
+	public JwtTokenizer(@Value("${secretKey}") String accessSecret, @Value("${refreshKey}") String refreshSecret) {
 		this.accessSecret = accessSecret.getBytes(StandardCharsets.UTF_8);
 		this.refreshSecret = refreshSecret.getBytes(StandardCharsets.UTF_8);
 	}
@@ -35,23 +36,23 @@ public class JwtTokenizer {
 	/**
 	 * AccessToken 생성
 	 */
-	public String createAccessToken(String email, Long userId, Role role) {
-		return createToken(email, userId, role, ACCESS_TOKEN_EXPIRE_COUNT, accessSecret);
+	public String createAccessToken(String email, Long userId, List<String> roles) {
+		return createToken(email, userId, roles, ACCESS_TOKEN_EXPIRE_COUNT, accessSecret);
 	}
 
 	/**
 	 * RefreshToken 생성
 	 */
-	public String createRefreshToken(String email, Long userId, Role role) {
-		return createToken(email, userId, role, REFRESH_TOKEN_EXPIRE_COUNT, refreshSecret);
+	public String createRefreshToken(String email, Long userId, List<String> roles) {
+		return createToken(email, userId, roles, REFRESH_TOKEN_EXPIRE_COUNT, refreshSecret);
 	}
 
-	private String createToken(String email, Long id, Role role,
+	private String createToken(String email, Long id, List<String> roles,
 		Long expire, byte[] secretKey) {
 
 		Claims claims = Jwts.claims()
 			.subject(email)
-			.add("role", role)
+			.add("roles", roles)
 			.add("id", id)
 			.build();
 
@@ -80,13 +81,13 @@ public class JwtTokenizer {
 	}
 
 	public Claims verify(String token, byte[] secretKey) {
-		try{
+		try {
 			return Jwts.parser()
 				.verifyWith(getSigningKey(secretKey)) //이 키는 토큰의 서명이 해당 키로 생성되었는지 확인
 				.build()
 				.parseSignedClaims(token) //토큰의 내용을 확인, 토큰의 서명이 설정된 키로부터 유효한지 검증
 				.getPayload();
-		} catch(JwtException e) {
+		} catch (JwtException e) {
 			logger.warning("error message " + e.getMessage());
 			throw new CustomException(ErrorCode.INVALID_TOKEN);
 		}
@@ -95,7 +96,7 @@ public class JwtTokenizer {
 	/**
 	 * @return Key 형식 시크릿 키
 	 */
-	public static SecretKey getSigningKey(byte[] secretKey){
+	public static SecretKey getSigningKey(byte[] secretKey) {
 		return Keys.hmacShaKeyFor(secretKey);
 	}
 

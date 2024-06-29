@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -11,7 +12,6 @@ import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
 import garlicbears.quiz.domain.management.user.dto.SignUpDto;
 import garlicbears.quiz.domain.management.user.dto.UpdateUserDto;
-import garlicbears.quiz.global.config.auth.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -48,7 +48,7 @@ public interface SwaggerUserController {
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
 		@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
 		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)")})
-	public ResponseEntity<?> searchUser(@AuthenticationPrincipal PrincipalDetails principalDetails);
+	public ResponseEntity<?> searchUser(@AuthenticationPrincipal UserDetails userDetails);
 
 	@Operation(summary = "유저 정보(내 정보) 수정", description = "jwt token을 받아 유저 정보를 확인. resquest body로 전달받은 정보로 수정합니다.")
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
@@ -57,7 +57,7 @@ public interface SwaggerUserController {
 			@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
 		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)", content = {
 			@Content(schema = @Schema(implementation = ResponseUserDto.class))})})
-	public ResponseEntity<?> updateUser(@AuthenticationPrincipal PrincipalDetails principalDetails,
+	public ResponseEntity<?> updateUser(@AuthenticationPrincipal UserDetails userDetails,
 		@RequestBody UpdateUserDto updateUserDto);
 
 	@Operation(summary = "계정 탈퇴", description = "jwt token을 받아 유저 정보를 확인. status 를 inactive로 변환합니다.")
@@ -65,7 +65,7 @@ public interface SwaggerUserController {
 		@Content(schema = @Schema(implementation = ResponseDto.class))}),
 		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)", content = {
 			@Content(schema = @Schema(implementation = ResponseDto.class))})})
-	public ResponseEntity<?> deleteUser(@AuthenticationPrincipal PrincipalDetails principalDetails);
+	public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserDetails userDetails);
 
 	@Operation(summary = "평점 주기", description = "jwt token을 받아 유저 정보를 확인. request body로 평점을 전달받아 저장합니다.", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schemaProperties = {
 		@SchemaProperty(name = "ratingValue", schema = @Schema(type = "double", format = "json"))})))
@@ -75,6 +75,6 @@ public interface SwaggerUserController {
 			@Content(schema = @Schema(implementation = ResponseDto.class))}),
 		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)", content = {
 			@Content(schema = @Schema(implementation = ResponseDto.class))})})
-	public ResponseEntity<?> rating(@AuthenticationPrincipal PrincipalDetails principalDetails,
+	public ResponseEntity<?> rating(@AuthenticationPrincipal UserDetails userDetails,
 		@RequestBody Map<String, Double> request);
 }

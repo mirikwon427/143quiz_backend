@@ -1,4 +1,4 @@
-package garlicbears.quiz.global.config.jwt.dto;
+package garlicbears.quiz.global.jwt.dto;
 
 public class LoginInfoDto {
 	private Long id;

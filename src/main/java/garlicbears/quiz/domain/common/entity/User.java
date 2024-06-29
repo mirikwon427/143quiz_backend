@@ -82,6 +82,11 @@ public class User extends BaseTimeEntity implements UserDetails {
 	public User() {
 	}
 
+	public User(String userEmail, long userId) {
+		this.userEmail = userEmail;
+		this.userId = userId;
+	}
+
 	public User(UserBuilder builder) {
 		this.userEmail = builder.userEmail;
 		this.userPassword = builder.userPassword;

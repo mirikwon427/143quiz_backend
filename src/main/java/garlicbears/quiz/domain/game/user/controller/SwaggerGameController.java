@@ -2,6 +2,7 @@ package garlicbears.quiz.domain.game.user.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -9,7 +10,6 @@ import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.game.user.dto.ResponseGameStartDto;
 import garlicbears.quiz.domain.game.user.dto.ResponseTopicBadgeDto;
 import garlicbears.quiz.domain.game.user.dto.UserRankingDto;
-import garlicbears.quiz.global.config.auth.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -38,7 +38,7 @@ public interface SwaggerGameController {
 		@ApiResponse(responseCode = "500", description = "Internal Server Error",
 			content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
 	})
-	public ResponseEntity<?> topicList(@AuthenticationPrincipal PrincipalDetails principalDetails);
+	public ResponseEntity<?> topicList(@AuthenticationPrincipal UserDetails userDetails);
 
 	@Operation(summary = "뱃지 조회", description = "획득한 뱃지 조회.")
 	@ApiResponses(value = {
@@ -49,7 +49,7 @@ public interface SwaggerGameController {
 		@ApiResponse(responseCode = "500", description = "Internal Server Error",
 			content = {@Content(schema = @Schema(implementation = ResponseDto.class))})
 	})
-	public ResponseEntity<?> badges(@AuthenticationPrincipal PrincipalDetails principalDetails);
+	public ResponseEntity<?> badges(@AuthenticationPrincipal UserDetails userDetails);
 
 	@Operation(summary = "게임 시작", description = "주제를 선택한 후 게임 시작.")
 	@ApiResponses(value = {
@@ -63,5 +63,5 @@ public interface SwaggerGameController {
 			content = {@Content(schema = @Schema(implementation = ResponseDto.class))})
 	})
 	public ResponseEntity<?> gameStart(@PathVariable(value = "topicId") long topicId,
-		@AuthenticationPrincipal PrincipalDetails principalDetails);
+		@AuthenticationPrincipal UserDetails userDetails);
 }

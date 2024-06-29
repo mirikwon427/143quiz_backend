@@ -44,8 +44,8 @@ public class Admin extends BaseTimeEntity implements UserDetails {
 
 	@ManyToMany
 	@JoinTable(name = "admin_role",
-	joinColumns = @JoinColumn(name = "admin_seq"),
-	inverseJoinColumns = @JoinColumn(name = "role_seq")
+		joinColumns = @JoinColumn(name = "admin_seq"),
+		inverseJoinColumns = @JoinColumn(name = "role_seq")
 	)
 	private Set<Role> roles = new HashSet<>();
 
@@ -58,12 +58,12 @@ public class Admin extends BaseTimeEntity implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		return getPassword();
+		return adminPassword;
 	}
 
 	@Override
 	public String getUsername() {
-		return getUsername();
+		return adminEmail;
 	}
 
 	@Override
@@ -84,5 +84,38 @@ public class Admin extends BaseTimeEntity implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public Admin() {
+	}
+
+	public Admin(long adminId, String adminEmail, Active active) {
+		this.adminId = adminId;
+		this.adminEmail = adminEmail;
+		this.active = active;
+	}
+
+	public long getAdminId() {
+		return adminId;
+	}
+
+	public String getAdminEmail() {
+		return adminEmail;
+	}
+
+	public Active getActive() {
+		return active;
+	}
+
+	public String getAdminPassword() {
+		return adminPassword;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setActive(Active active) {
+		this.active = active;
 	}
 }
