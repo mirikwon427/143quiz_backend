@@ -3,6 +3,7 @@ package garlicbears.quiz.domain.management.admin.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +34,7 @@ public class AdminUserController implements SwaggerAdminUserController {
 	// 유저 삭제
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<?> deleteUser(
-		@RequestParam(value = "userId") long userId
+		@PathVariable(value = "userId") long userId
 	) {
 		adminUserService.delete(userId);
 		return ResponseEntity.ok().build();

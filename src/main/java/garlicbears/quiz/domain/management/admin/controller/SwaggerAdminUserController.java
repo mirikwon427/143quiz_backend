@@ -1,6 +1,7 @@
 package garlicbears.quiz.domain.management.admin.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import garlicbears.quiz.domain.management.admin.dto.ResponseUserListDto;
@@ -34,6 +35,6 @@ public interface SwaggerAdminUserController {
 			content = {@Content(schema = @Schema(implementation = ResponseDto.class))})
 	})
 	public ResponseEntity<?> deleteUser(
-		@RequestParam(value = "userId") long userId
+		@PathVariable(value = "userId") long userId
 	);
 }
