@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.HttpServletRequest;
 
 public interface SwaggerGameController {
 	@Operation(summary = "게임 랭킹 조회", description = "전체 뱃지 수, 하트 수를 기준으로 랭킹 정보 조회")
@@ -38,7 +39,8 @@ public interface SwaggerGameController {
 		@ApiResponse(responseCode = "500", description = "Internal Server Error",
 			content = {@Content(schema = @Schema(implementation = ResponseDto.class))}),
 	})
-	public ResponseEntity<?> topicList(@AuthenticationPrincipal PrincipalDetails principalDetails);
+	public ResponseEntity<?> topicList(@AuthenticationPrincipal PrincipalDetails principalDetails,
+		HttpServletRequest request);
 
 	@Operation(summary = "뱃지 조회", description = "획득한 뱃지 조회.")
 	@ApiResponses(value = {
@@ -49,7 +51,8 @@ public interface SwaggerGameController {
 		@ApiResponse(responseCode = "500", description = "Internal Server Error",
 			content = {@Content(schema = @Schema(implementation = ResponseDto.class))})
 	})
-	public ResponseEntity<?> badges(@AuthenticationPrincipal PrincipalDetails principalDetails);
+	public ResponseEntity<?> badges(@AuthenticationPrincipal PrincipalDetails principalDetails,
+		HttpServletRequest request);
 
 	@Operation(summary = "게임 시작", description = "주제를 선택한 후 게임 시작.")
 	@ApiResponses(value = {
