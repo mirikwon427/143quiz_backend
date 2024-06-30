@@ -43,17 +43,27 @@ public class GameController implements SwaggerGameController {
 	}
 
 	@GetMapping("/rankings")
-	public ResponseEntity<?> getRankings(@RequestParam(defaultValue = "0") int pageNumber,
+	public ResponseEntity<?> getRankings(@AuthenticationPrincipal PrincipalDetails principalDetails,
+		HttpServletRequest request,
+		@RequestParam(defaultValue = "0") int pageNumber,
 		@RequestParam(defaultValue = "10") int pageSize) {
+		User user = principalDetails.getUser();
+
+		logService.log(user, request.getRequestURI(), ClientIpHandler.getClientIp(request));
 
 		return ResponseEntity.ok(rankingService.getRankings(pageNumber, pageSize));
 	}
 
 	@GetMapping("/rankings/{topicId}")
-	public ResponseEntity<?> getRankingsByTopicId(@PathVariable(value = "topicId") long topicId,
+	public ResponseEntity<?> getRankingsByTopicId(@AuthenticationPrincipal PrincipalDetails principalDetails,
+		HttpServletRequest request,
+		@PathVariable(value = "topicId") long topicId,
 		@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize) {
+		User user = principalDetails.getUser();
 
 		topicService.findByTopicId(topicId).orElseThrow(() -> new CustomException(ErrorCode.TOPIC_NOT_FOUND));
+
+		logService.log(user, request.getRequestURI(), ClientIpHandler.getClientIp(request));
 
 		return ResponseEntity.ok(rankingService.getRankingsByTopicId(topicId, pageNumber, pageSize));
 	}
