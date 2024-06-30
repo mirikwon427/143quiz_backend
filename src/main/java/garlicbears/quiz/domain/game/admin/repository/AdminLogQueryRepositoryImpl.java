@@ -32,6 +32,16 @@ public class AdminLogQueryRepositoryImpl implements AdminLogQueryRepository{
 	}
 
 	@Override
+	public Page<VisitorCountDto> getWeeklyVisitors(Pageable pageable) {
+		DateTemplate<String> dateTemplate = Expressions.dateTemplate(
+			String.class,
+			"date_format({0}, '%Y-%u')",
+			QLog.log.createdAt);
+
+		return getVisitorsCount(pageable, dateTemplate);
+	}
+
+	@Override
 	public Page<VisitorCountDto> getMonthlyVisitors(Pageable pageable) {
 		DateTemplate<String> dateTemplate = Expressions.dateTemplate(
 			String.class,

@@ -47,6 +47,15 @@ public class AdminStatController implements SwaggerAdminStatController{
 	}
 
 	/**
+	 * 주간 방문자 수 조회
+	 */
+	@GetMapping("/weeklyVisitors")
+	public ResponseEntity<?> getWeeklyVisitors(@RequestParam(defaultValue = "0") int pageNumber,
+		@RequestParam(defaultValue = "10") int pageSize) {
+		return ResponseEntity.ok(gameStatService.getWeeklyVisitors(pageNumber, pageSize));
+	}
+
+	/**
 	 * 월별 방문자 수 조회
 	 */
 	@GetMapping("/monthlyVisitors")

@@ -7,5 +7,6 @@ import garlicbears.quiz.domain.game.admin.dto.VisitorCountDto;
 
 public interface AdminLogQueryRepository {
 	Page<VisitorCountDto> getDailyVisitors(Pageable pageable);
+	Page<VisitorCountDto> getWeeklyVisitors(Pageable pageable);
 	Page<VisitorCountDto> getMonthlyVisitors(Pageable pageable);
 }

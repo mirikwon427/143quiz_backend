@@ -75,6 +75,14 @@ public class GameStatService {
 		return new VisitorCountListDto(pageNumber, pageSize, page.getTotalPages(), page.getTotalElements(), page.getContent());
 	}
 
+	public VisitorCountListDto getWeeklyVisitors(int pageNumber, int pageSize) {
+		// 주간 방문자 수 반환
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		Page<VisitorCountDto> page = logRepository.getWeeklyVisitors(pageable);
+
+		return new VisitorCountListDto(pageNumber, pageSize, page.getTotalPages(), page.getTotalElements(), page.getContent());
+	}
+
 	public VisitorCountListDto getMonthlyVisitors(int pageNumber, int pageSize) {
 		// 월별 방문자 수 반환
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
