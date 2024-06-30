@@ -31,12 +31,11 @@ public class AdminGameSessionQueryRepositoryImpl implements AdminGameSessionQuer
 				gameSession.topic.topicId,
 				topic.topicTitle,
 				gameSession.gameSessionId.count().as("totalPlayCount"),
-				gameSession.gameDropout.when(false).then(1).otherwise(0).sum().as("completePlayCount"),
 				gameSession.heartsCount.sum().as("totalCorrectCount")
 			))
 			.from(gameSession)
 			.leftJoin(gameSession.topic, topic)
-			.groupBy(gameSession.topic.topicId, topic.topicTitle)
+			.groupBy(gameSession.topic.topicId)
 			.orderBy(getOrderSpecifier(topic, sort))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
