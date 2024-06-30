@@ -19,28 +19,9 @@ import garlicbears.quiz.global.exception.ErrorCode;
 @Service
 public class AdminService {
 	private final AdminRepository adminRepository;
-	private final PasswordEncoder passwordEncoder;
 
 	public AdminService(AdminRepository adminRepository, PasswordEncoder passwordEncoder) {
 		this.adminRepository = adminRepository;
-		this.passwordEncoder = passwordEncoder;
-	}
-
-	public void checkDuplicatedEmail(String email) {
-		adminRepository.findByAdminEmail(email).forEach(admin -> {
-			if (admin.getActive() == Active.active) {
-				throw new CustomException(ErrorCode.EMAIL_ALREADY_EXISTS);
-			}
-		});
-	}
-
-	@Transactional
-	public void signUp(AdminSignUpDto signUpDto) {
-
-		Admin admin = new Admin(signUpDto.getEmail(),
-			passwordEncoder.encode(signUpDto.getPassword()));
-
-		adminRepository.save(admin);
 	}
 
 	@Transactional

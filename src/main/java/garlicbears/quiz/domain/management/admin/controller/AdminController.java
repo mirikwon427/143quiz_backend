@@ -31,42 +31,6 @@ public class AdminController implements SwaggerAdminController {
 	}
 
 	/**
-	 * 이메일 중복 확인
-	 */
-	@Override
-	@PostMapping("/checkEmail")
-	public ResponseEntity<?> checkEmail(Map<String, String> request) {
-		String email = request.get("email");
-		if (email == null || email.trim().isEmpty()) {
-			throw new CustomException(ErrorCode.INVALID_INPUT);
-		}
-		adminService.checkDuplicatedEmail(email);
-		return ResponseEntity.ok(ResponseDto.success());
-	}
-
-	/**
-	 * 관리자 회원가입
-	 */
-	@Override
-	@PostMapping("/signup")
-	public ResponseEntity<?> signUp(AdminSignUpDto request, BindingResult bindingResult) {
-		// 유효성 검사 에러가 있는 경우
-		if (bindingResult.hasErrors()) {
-			StringBuilder errorMessage = new StringBuilder();
-			bindingResult.getFieldErrors()
-				.forEach(error -> errorMessage.append(error.getField())
-					.append(": ")
-					.append(error.getDefaultMessage())
-					.append("."));
-			logger.warning("errorMessage : " + errorMessage.toString());
-			throw new CustomException(ErrorCode.BAD_REQUEST);
-		}
-		adminService.checkDuplicatedEmail(request.getEmail());
-		adminService.signUp(request);
-		return ResponseEntity.ok(ResponseDto.success());
-	}
-
-	/**
 	 * 관리자 목록 조회
 	 */
 	@Override
