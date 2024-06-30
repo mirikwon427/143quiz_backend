@@ -38,6 +38,15 @@ public class AdminStatController implements SwaggerAdminStatController{
 	}
 
 	/**
+	 * 총 방문자 수 조회
+	 * 일일 방문자 수의 총 합으로 처리
+	 */
+	@GetMapping("/totalVisitors")
+	public ResponseEntity<?> getTotalVisitors() {
+		return ResponseEntity.ok(gameStatService.getTotalVisitors());
+	}
+
+	/**
 	 * 일일 방문자 수 조회
 	 */
 	@GetMapping("/dailyVisitors")

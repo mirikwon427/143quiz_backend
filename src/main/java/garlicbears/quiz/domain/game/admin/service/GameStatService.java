@@ -15,6 +15,7 @@ import garlicbears.quiz.domain.game.admin.dto.GameStatListDto;
 import garlicbears.quiz.domain.game.admin.dto.RatingStatDto;
 import garlicbears.quiz.domain.game.admin.dto.ResponseTopicDto;
 import garlicbears.quiz.domain.game.admin.dto.TopicPlayTimeDto;
+import garlicbears.quiz.domain.game.admin.dto.TotalVisitorCountDto;
 import garlicbears.quiz.domain.game.admin.dto.VisitorCountDto;
 import garlicbears.quiz.domain.game.admin.dto.VisitorCountListDto;
 import garlicbears.quiz.domain.game.common.repository.GameSessionRepository;
@@ -64,6 +65,29 @@ public class GameStatService {
 		}
 
 		return new GameStatListDto(sort, pageNumber, pageSize, page.getTotalPages(), page.getTotalElements(), content);
+	}
+
+	public TotalVisitorCountDto getTotalVisitors() {
+		// 총 방문자 수 반환 = 일일 방문자 수 총 합
+		int pageNumber = 0;
+		int pageSize = 10;
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		Page<VisitorCountDto> page = logRepository.getDailyVisitors(pageable);
+
+		long totalVisitors = 0;
+		while (pageNumber < page.getTotalPages())
+		{
+			for(VisitorCountDto visitorCountDto : page.getContent())
+			{
+				totalVisitors += visitorCountDto.getCount();
+			}
+
+			pageNumber++;
+			pageable = PageRequest.of(pageNumber, pageSize);
+			page = logRepository.getDailyVisitors(pageable);
+		}
+
+		return new TotalVisitorCountDto(totalVisitors);
 	}
 
 	public VisitorCountListDto getDailyVisitors(int pageNumber, int pageSize) {

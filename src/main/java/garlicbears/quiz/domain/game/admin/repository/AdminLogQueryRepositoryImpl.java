@@ -51,7 +51,7 @@ public class AdminLogQueryRepositoryImpl implements AdminLogQueryRepository{
 		return getVisitorsCount(pageable, dateTemplate);
 	}
 
-	public Page<VisitorCountDto> getVisitorsCount(Pageable pageable, DateTemplate<String> dateTemplate) {
+	private Page<VisitorCountDto> getVisitorsCount(Pageable pageable, DateTemplate<String> dateTemplate) {
 		QLog log = QLog.log;
 
 		List<VisitorCountDto> results = queryFactory
