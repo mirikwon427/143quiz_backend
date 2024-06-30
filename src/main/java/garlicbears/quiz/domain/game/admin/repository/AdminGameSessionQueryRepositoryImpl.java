@@ -1,5 +1,6 @@
 package garlicbears.quiz.domain.game.admin.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -22,7 +23,7 @@ public class AdminGameSessionQueryRepositoryImpl implements AdminGameSessionQuer
 	}
 
 	@Override
-	public Page<GameStatDto> calulateGameStat(String sort, Pageable pageable) {
+	public Page<GameStatDto> calculateGameStat(String sort, Pageable pageable) {
 		QGameSession gameSession = QGameSession.gameSession;
 		QTopic topic = QTopic.topic;
 
@@ -61,5 +62,20 @@ public class AdminGameSessionQueryRepositoryImpl implements AdminGameSessionQuer
 			case "usageCountDesc" -> topic.topicUsageCount.desc();
 			default -> topic.topicId.desc();
 		};
+	}
+
+	public long getTodayGameSessionCount() {
+		QGameSession gameSession = QGameSession.gameSession;
+
+		LocalDateTime today = LocalDateTime.now().toLocalDate().atStartOfDay();
+		LocalDateTime tomorrow = today.plusDays(1);
+
+		Long result = queryFactory
+			.select(gameSession.gameSessionId.count())
+			.from(gameSession)
+			.where(gameSession.gameStartTime.between(today, tomorrow))
+			.fetchOne();
+
+		return result == null ? 0 : result;
 	}
 }

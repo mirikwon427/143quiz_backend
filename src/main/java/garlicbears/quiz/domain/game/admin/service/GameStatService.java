@@ -10,10 +10,11 @@ import org.springframework.stereotype.Service;
 
 import garlicbears.quiz.domain.common.repository.LogRepository;
 import garlicbears.quiz.domain.common.repository.RatingRepository;
+import garlicbears.quiz.domain.common.repository.UserRepository;
+import garlicbears.quiz.domain.game.admin.dto.DashboadDto;
 import garlicbears.quiz.domain.game.admin.dto.GameStatDto;
 import garlicbears.quiz.domain.game.admin.dto.GameStatListDto;
 import garlicbears.quiz.domain.game.admin.dto.RatingStatDto;
-import garlicbears.quiz.domain.game.admin.dto.ResponseTopicDto;
 import garlicbears.quiz.domain.game.admin.dto.TopicPlayTimeDto;
 import garlicbears.quiz.domain.game.admin.dto.TotalVisitorCountDto;
 import garlicbears.quiz.domain.game.admin.dto.VisitorCountDto;
@@ -23,18 +24,31 @@ import garlicbears.quiz.domain.game.common.repository.UserAnswerRepository;
 
 @Service
 public class GameStatService {
+	private final UserRepository userRepository;
 	private final RatingRepository ratingRepository;
 	private final GameSessionRepository gameSessionRepository;
 	private final UserAnswerRepository userAnswerRepository;
 	private final LogRepository logRepository;
 
 	@Autowired
-	public GameStatService(RatingRepository ratingRepository, GameSessionRepository gameSessionRepository,
+	public GameStatService(UserRepository userRepository, RatingRepository ratingRepository, GameSessionRepository gameSessionRepository,
 		UserAnswerRepository userAnswerRepository, LogRepository logRepository) {
+		this.userRepository = userRepository;
 		this.ratingRepository = ratingRepository;
 		this.gameSessionRepository = gameSessionRepository;
 		this.userAnswerRepository = userAnswerRepository;
 		this.logRepository = logRepository;
+	}
+
+	public DashboadDto getDashboard() {
+		// 대시보드 정보 반환
+		long totalVisitors = getTotalVisitors().getTotalVisitors();
+		long dailyActiveUsers = logRepository.getDailyActiveUserCount();
+		long dailyGamePlays = gameSessionRepository.getTodayGameSessionCount();
+		long totalUsers = userRepository.count();
+		double averageRating = ratingRepository.getAverageRating();
+
+		return new DashboadDto(totalVisitors, dailyActiveUsers, dailyGamePlays, totalUsers, averageRating);
 	}
 
 	public RatingStatDto getRatingStat() {
@@ -49,7 +63,7 @@ public class GameStatService {
 	public GameStatListDto getGameStatList(int pageNumber, int pageSize, String sort) {
 		// 정렬 기준 순으로 주제별 전체 게임 수, 전체 정답 수 반환
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
-		Page<GameStatDto> page = gameSessionRepository.calulateGameStat(sort, pageable);
+		Page<GameStatDto> page = gameSessionRepository.calculateGameStat(sort, pageable);
 
 		List<GameStatDto> content = page.getContent();
 

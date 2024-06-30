@@ -6,5 +6,6 @@ import org.springframework.data.domain.Pageable;
 import garlicbears.quiz.domain.game.admin.dto.GameStatDto;
 
 public interface AdminGameSessionQueryRepository {
-	Page<GameStatDto> calulateGameStat(String sort, Pageable pageable);
+	Page<GameStatDto> calculateGameStat(String sort, Pageable pageable);
+	long getTodayGameSessionCount();
 }

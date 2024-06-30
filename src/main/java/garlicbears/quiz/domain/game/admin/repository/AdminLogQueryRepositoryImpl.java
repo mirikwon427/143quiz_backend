@@ -1,5 +1,6 @@
 package garlicbears.quiz.domain.game.admin.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -73,5 +74,20 @@ public class AdminLogQueryRepositoryImpl implements AdminLogQueryRepository{
 			.fetchOne();
 
 		return new PageImpl<>(results, pageable, total == null ? 0 : total);
+	}
+
+	public long getDailyActiveUserCount(){
+		QLog log = QLog.log;
+
+		LocalDateTime today = LocalDateTime.now().toLocalDate().atStartOfDay();
+		LocalDateTime tomorrow = today.plusDays(1);
+
+		Long result = queryFactory
+			.select(log.user.userId.countDistinct())
+			.from(log)
+			.where(log.createdAt.between(today, tomorrow))
+			.fetchOne();
+
+		return result == null ? 0 : result;
 	}
 }

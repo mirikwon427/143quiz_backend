@@ -9,4 +9,5 @@ public interface AdminLogQueryRepository {
 	Page<VisitorCountDto> getDailyVisitors(Pageable pageable);
 	Page<VisitorCountDto> getWeeklyVisitors(Pageable pageable);
 	Page<VisitorCountDto> getMonthlyVisitors(Pageable pageable);
+	long getDailyActiveUserCount();
 }
