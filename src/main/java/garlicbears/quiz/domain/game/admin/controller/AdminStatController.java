@@ -36,4 +36,22 @@ public class AdminStatController implements SwaggerAdminStatController{
 		@RequestParam(defaultValue = "10") int pageSize) {
 		return ResponseEntity.ok(gameStatService.getGameStatList(pageNumber, pageSize, sort));
 	}
+
+	/**
+	 * 일일 방문자 수 조회
+	 */
+	@GetMapping("/dailyVisitors")
+	public ResponseEntity<?> getDailyVisitors(@RequestParam(defaultValue = "0") int pageNumber,
+		@RequestParam(defaultValue = "10") int pageSize) {
+		return ResponseEntity.ok(gameStatService.getDailyVisitors(pageNumber, pageSize));
+	}
+
+	/**
+	 * 월별 방문자 수 조회
+	 */
+	@GetMapping("/monthlyVisitors")
+	public ResponseEntity<?> getMonthlyVisitors(@RequestParam(defaultValue = "0") int pageNumber,
+		@RequestParam(defaultValue = "10") int pageSize) {
+		return ResponseEntity.ok(gameStatService.getMonthlyVisitors(pageNumber, pageSize));
+	}
 }

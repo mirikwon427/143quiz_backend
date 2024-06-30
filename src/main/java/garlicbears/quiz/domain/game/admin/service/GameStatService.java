@@ -8,12 +8,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import garlicbears.quiz.domain.common.repository.LogRepository;
 import garlicbears.quiz.domain.common.repository.RatingRepository;
 import garlicbears.quiz.domain.game.admin.dto.GameStatDto;
 import garlicbears.quiz.domain.game.admin.dto.GameStatListDto;
 import garlicbears.quiz.domain.game.admin.dto.RatingStatDto;
 import garlicbears.quiz.domain.game.admin.dto.ResponseTopicDto;
 import garlicbears.quiz.domain.game.admin.dto.TopicPlayTimeDto;
+import garlicbears.quiz.domain.game.admin.dto.VisitorCountDto;
+import garlicbears.quiz.domain.game.admin.dto.VisitorCountListDto;
 import garlicbears.quiz.domain.game.common.repository.GameSessionRepository;
 import garlicbears.quiz.domain.game.common.repository.UserAnswerRepository;
 
@@ -22,13 +25,15 @@ public class GameStatService {
 	private final RatingRepository ratingRepository;
 	private final GameSessionRepository gameSessionRepository;
 	private final UserAnswerRepository userAnswerRepository;
+	private final LogRepository logRepository;
 
 	@Autowired
 	public GameStatService(RatingRepository ratingRepository, GameSessionRepository gameSessionRepository,
-		UserAnswerRepository userAnswerRepository) {
+		UserAnswerRepository userAnswerRepository, LogRepository logRepository) {
 		this.ratingRepository = ratingRepository;
 		this.gameSessionRepository = gameSessionRepository;
 		this.userAnswerRepository = userAnswerRepository;
+		this.logRepository = logRepository;
 	}
 
 	public RatingStatDto getRatingStat() {
@@ -59,5 +64,22 @@ public class GameStatService {
 		}
 
 		return new GameStatListDto(sort, pageNumber, pageSize, page.getTotalPages(), page.getTotalElements(), content);
+	}
+
+	public VisitorCountListDto getDailyVisitors(int pageNumber, int pageSize) {
+		// 일일 방문자 수 반환
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		Page<VisitorCountDto> page = logRepository.getDailyVisitors(pageable);
+
+
+		return new VisitorCountListDto(pageNumber, pageSize, page.getTotalPages(), page.getTotalElements(), page.getContent());
+	}
+
+	public VisitorCountListDto getMonthlyVisitors(int pageNumber, int pageSize) {
+		// 월별 방문자 수 반환
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		Page<VisitorCountDto> page = logRepository.getMonthlyVisitors(pageable);
+
+		return new VisitorCountListDto(pageNumber, pageSize, page.getTotalPages(), page.getTotalElements(), page.getContent());
 	}
 }
