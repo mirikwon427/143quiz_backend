@@ -16,8 +16,8 @@ public class CorsConfig {
 		config.addAllowedOriginPattern("http://localhost:3000");
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
-		config.addExposedHeader("Access-Token"); //Header에 Authorization을 노출
-		config.addExposedHeader("Refresh-Token");
+		config.addExposedHeader("Authoriztion"); //Header에 Authorization을 노출
+
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
 	}

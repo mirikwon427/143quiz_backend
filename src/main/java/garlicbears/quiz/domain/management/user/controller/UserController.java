@@ -201,7 +201,7 @@ public class UserController implements SwaggerUserController {
 		response.addCookie(createRefreshTokenCookie(refreshToken));
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Access-Token", accessToken);
+		headers.set("Authorization", accessToken);
 
 		return ResponseEntity.ok().headers(headers).body(ResponseDto.success());
 	}
@@ -248,7 +248,7 @@ public class UserController implements SwaggerUserController {
 		response.addCookie(createRefreshTokenCookie(newRefreshToken));
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Access-Token", accessToken);
+		headers.set("Authorization", accessToken);
 
 		return ResponseEntity.ok().headers(headers).body(ResponseDto.success());
 	}
