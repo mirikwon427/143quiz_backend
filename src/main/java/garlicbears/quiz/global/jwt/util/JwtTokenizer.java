@@ -81,16 +81,13 @@ public class JwtTokenizer {
 	}
 
 	public Claims verify(String token, byte[] secretKey) {
-		try {
-			return Jwts.parser()
-				.verifyWith(getSigningKey(secretKey)) //이 키는 토큰의 서명이 해당 키로 생성되었는지 확인
-				.build()
-				.parseSignedClaims(token) //토큰의 내용을 확인, 토큰의 서명이 설정된 키로부터 유효한지 검증
-				.getPayload();
-		} catch (JwtException e) {
-			logger.warning("error message " + e.getMessage());
-			throw new CustomException(ErrorCode.INVALID_TOKEN);
-		}
+
+		return Jwts.parser()
+			.verifyWith(getSigningKey(secretKey)) //이 키는 토큰의 서명이 해당 키로 생성되었는지 확인
+			.build()
+			.parseSignedClaims(token) //토큰의 내용을 확인, 토큰의 서명이 설정된 키로부터 유효한지 검증
+			.getPayload();
+
 	}
 
 	/**

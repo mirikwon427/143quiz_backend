@@ -59,7 +59,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 	 * @return
 	 */
 	private List<GrantedAuthority> getGrantedAuthorities(Claims claims) {
-		List<String> roles = (List<String>)claims.get("role");
+		List<String> roles = (List<String>)claims.get("roles");
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		for (String role : roles) {
 			authorities.add(() -> role);

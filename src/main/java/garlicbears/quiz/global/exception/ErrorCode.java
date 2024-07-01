@@ -27,7 +27,8 @@ public enum ErrorCode {
 	DELETED_TOPIC(HttpStatus.GONE, "삭제된 주제입니다."),
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류입니다."),
 	FILE_IO_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 처리중 발생한 오류입니다."),
-	INVALID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 토큰입니다.");
+	INVALID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 토큰입니다."),
+	REFRESH_TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "Refresh token을 찾을 수 없음");
 
 	private final HttpStatus status;
 	private final String message;
