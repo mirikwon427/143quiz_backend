@@ -82,14 +82,29 @@ public class GameService {
 		Topic topic = Optional.of(topicRepository.findByTopicId(topicId))
 			.orElseThrow(() -> new CustomException(ErrorCode.UNKNOWN_TOPIC));
 
+		//주제 사용 횟수 증가
+		updateTopicUsageCount(topicId);
+
+		//게임 세션 생성
 		GameSession gameSession = new GameSession(user, topic);
 		gameSessionRepository.save(gameSession);
+
+		logger.info("New game session created with ID: " + gameSession.getGameSessionId());
 
 		return new ResponseGameStartDto.ResponseGameStartBuilder()
 			.topicId(topicId)
 			.sessionId(gameSession.getGameSessionId())
 			.game(questionRepository.findGameQuestion(topicId, user.getUserId()))
 			.build();
+	}
+
+	/**
+	 * 주제 사용 횟수 증가
+	 */
+	private void updateTopicUsageCount(long topicId) {
+		Topic topic = topicRepository.findByTopicId(topicId);
+		int usageCount = topic.getTopicUsageCount();
+		topic.setTopicUsageCount(usageCount + 1);
 	}
 
 	/**

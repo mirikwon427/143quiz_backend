@@ -8,9 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import garlicbears.quiz.domain.common.dto.ResponseDto;
@@ -23,6 +25,7 @@ import garlicbears.quiz.global.exception.ErrorCode;
 import garlicbears.quiz.global.jwt.service.RefreshTokenService;
 import garlicbears.quiz.global.jwt.util.JwtTokenizer;
 import io.jsonwebtoken.Claims;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,7 +33,8 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/admin")
-public class AdminController {
+@Tag(name = "관리자 회원 관리")
+public class AdminController implements SwaggerAdminController {
 	private static final Logger logger = Logger.getLogger(AdminController.class.getName());
 	private final AdminService adminService;
 	private final JwtTokenizer jwtTokenizer;
@@ -99,7 +103,7 @@ public class AdminController {
 	/**
 	 * 리프레시 토큰을 이용해 새로운 액세스 토큰을 발급.
 	 */
-	@PostMapping("/refreshToken")
+	@GetMapping("/refreshToken")
 	public ResponseEntity<?> requestRefresh(HttpServletRequest request, HttpServletResponse response) {
 		// 쿠키에서 리프레시 토큰을 읽기
 		String refreshToken = getRefreshTokenFromCookies(request);
@@ -172,6 +176,37 @@ public class AdminController {
 		// 쿠키에서 리프레시 토큰 삭제
 		response.addCookie(deleteRefreshTokenCookie());
 
+		return ResponseEntity.ok(ResponseDto.success());
+	}
+
+	/**
+	 * 관리자 목록 조회
+	 */
+	@Override
+	@GetMapping("/")
+	public ResponseEntity<?> listAdmins(
+		@RequestParam(defaultValue = "createdAtDesc") String sort,
+		@RequestParam(defaultValue = "0") int pageNumber,
+		@RequestParam(defaultValue = "10") int pageSize) {
+		return ResponseEntity.ok(adminService.getAdminList(pageNumber, pageSize, sort));
+	}
+
+	/**
+	 * 관리자 권한 변경
+	 */
+	@Override
+	// @PatchMapping("/changeRole/{adminId}")
+	public ResponseEntity<?> changeAdminRole(@RequestParam(value = "adminId") long adminId) {
+		// TODO JWT 토큰이 완성되면 구현
+		return null;
+	}
+
+	/**
+	 * 관리자 삭제
+	 */
+	@DeleteMapping("/delete/{adminId}")
+	public ResponseEntity<?> deleteAdmin(@RequestParam(value = "adminId") long adminId) {
+		adminService.delete(adminId);
 		return ResponseEntity.ok(ResponseDto.success());
 	}
 }

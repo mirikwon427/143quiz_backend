@@ -220,7 +220,7 @@ public class UserController implements SwaggerUserController {
 	/**
 	 * 리프레시 토큰을 이용해 새로운 액세스 토큰을 발급.
 	 */
-	@PostMapping("/refreshToken")
+	@GetMapping("/refreshToken")
 	public ResponseEntity<?> requestRefresh(HttpServletRequest request, HttpServletResponse response) {
 		// 쿠키에서 리프레시 토큰을 읽기
 		String refreshToken = getRefreshTokenFromCookies(request);

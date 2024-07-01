@@ -57,8 +57,6 @@ public class UserAnswer {
 	private int timeTaken;
 
 	@Column(name = "user_answered_at", nullable = false)
-	@CreationTimestamp
-	@ColumnDefault("CURRENT_TIMESTAMP")
 	private LocalDateTime userAnsweredAt;
 
 	public long getUserAnswerId() {

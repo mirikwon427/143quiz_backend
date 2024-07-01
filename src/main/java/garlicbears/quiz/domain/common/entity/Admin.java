@@ -2,11 +2,9 @@ package garlicbears.quiz.domain.common.entity;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,8 +37,7 @@ public class Admin extends BaseTimeEntity implements UserDetails {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "admin_active")
-	@ColumnDefault("'active'")
-	private Active active;
+	private Active active = Active.active;
 
 	@ManyToMany
 	@JoinTable(name = "admin_role",
@@ -87,6 +84,11 @@ public class Admin extends BaseTimeEntity implements UserDetails {
 	}
 
 	public Admin() {
+	}
+
+	public Admin(String adminEmail, String adminPassword) {
+		this.adminEmail = adminEmail;
+		this.adminPassword = adminPassword;
 	}
 
 	public Admin(long adminId, String adminEmail, Active active) {
