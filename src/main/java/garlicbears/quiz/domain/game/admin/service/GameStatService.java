@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import garlicbears.quiz.domain.common.repository.LogRepository;
 import garlicbears.quiz.domain.common.repository.RatingRepository;
 import garlicbears.quiz.domain.common.repository.UserRepository;
-import garlicbears.quiz.domain.game.admin.dto.DashboadDto;
+import garlicbears.quiz.domain.game.admin.dto.DashboardDto;
 import garlicbears.quiz.domain.game.admin.dto.GameStatDto;
 import garlicbears.quiz.domain.game.admin.dto.GameStatListDto;
 import garlicbears.quiz.domain.game.admin.dto.RatingStatDto;
@@ -40,7 +40,7 @@ public class GameStatService {
 		this.logRepository = logRepository;
 	}
 
-	public DashboadDto getDashboard() {
+	public DashboardDto getDashboard() {
 		// 대시보드 정보 반환
 		long totalVisitors = getTotalVisitors().getTotalVisitors();
 		long dailyActiveUsers = logRepository.getDailyActiveUserCount();
@@ -48,7 +48,7 @@ public class GameStatService {
 		long totalUsers = userRepository.count();
 		double averageRating = ratingRepository.getAverageRating();
 
-		return new DashboadDto(totalVisitors, dailyActiveUsers, dailyGamePlays, totalUsers, averageRating);
+		return new DashboardDto(totalVisitors, dailyActiveUsers, dailyGamePlays, totalUsers, averageRating);
 	}
 
 	public RatingStatDto getRatingStat() {

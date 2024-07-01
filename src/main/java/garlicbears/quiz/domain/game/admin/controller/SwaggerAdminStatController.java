@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import garlicbears.quiz.domain.game.admin.dto.DashboardDto;
 import garlicbears.quiz.domain.game.admin.dto.RatingStatDto;
 import garlicbears.quiz.domain.game.admin.dto.ResponseTopicListDto;
 import garlicbears.quiz.domain.game.admin.dto.TotalVisitorCountDto;
@@ -25,6 +26,14 @@ public interface SwaggerAdminStatController {
 			@Content(schema = @Schema(implementation = RatingStatDto.class))}),
 		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)")})
 	public ResponseEntity<?> getRatingStat();
+
+	@Operation(summary = "대시보드 조회", description = "총 사이트 방문자수, 일일 활성 사용자 수, 일일 게임 플레이 수, 전체 사용자 수, 평균 평점")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
+			@Content(schema = @Schema(implementation = DashboardDto.class))}),
+		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)")
+	})
+	public ResponseEntity<?> getDashboard();
 
 	@Operation(summary = "유저 랭킹 조회", description = "전체 뱃지 수, 하트 수를 기준으로 랭킹 정보 조회")
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {

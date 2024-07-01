@@ -35,7 +35,7 @@ public class AdminStatController implements SwaggerAdminStatController{
 
 	/**
 	 * 대시보드 조회
-	 * 총 사이트 방문자수, 일일 활성 사용자 수, 일일 게임 플레이 수, 전체 사용자 수
+	 * 총 사이트 방문자수, 일일 활성 사용자 수, 일일 게임 플레이 수, 전체 사용자 수, 평균 평점
 	 */
 	@GetMapping("/dashboard")
 	public ResponseEntity<?> getDashboard() {

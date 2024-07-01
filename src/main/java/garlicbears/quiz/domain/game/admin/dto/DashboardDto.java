@@ -1,13 +1,13 @@
 package garlicbears.quiz.domain.game.admin.dto;
 
-public class DashboadDto {
+public class DashboardDto {
 	private long totalVisitors;
 	private long dailyActiveUsers;
 	private long dailyGamePlays;
 	private long totalUsers;
 	private double averageRating;
 
-	public DashboadDto(long totalVisitors, long dailyActiveUsers, long dailyGamePlays, long totalUsers,
+	public DashboardDto(long totalVisitors, long dailyActiveUsers, long dailyGamePlays, long totalUsers,
 		double averageRating) {
 		this.totalVisitors = totalVisitors;
 		this.dailyActiveUsers = dailyActiveUsers;
