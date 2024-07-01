@@ -70,7 +70,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			logger.warning("====================================================");
 			throw new BadCredentialsException("throw new exception", e);
 		}
-		filterChain.doFilter(request, response);
 	}
 
 	private String getToken(HttpServletRequest request) {

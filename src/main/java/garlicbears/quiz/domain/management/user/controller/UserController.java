@@ -116,9 +116,8 @@ public class UserController implements SwaggerUserController {
 
 	@GetMapping("/")
 	public ResponseEntity<?> searchUser(@AuthenticationPrincipal UserDetails userDetails) {
-		// 현재 인증된 사용자의 정보를 principalDetails로부터 가져올 수 있습니다.
 		if (userDetails == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
 		}
 		// 현재 인증된 사용자의 정보를 UserDetails로부터 가져올 수 있습니다.
 		User user = userService.findByEmail(userDetails.getUsername());
@@ -132,7 +131,7 @@ public class UserController implements SwaggerUserController {
 	public ResponseEntity<?> updateUser(@AuthenticationPrincipal UserDetails userDetails,
 		@RequestBody UpdateUserDto updateUserDto) {
 		if (userDetails == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
 		}
 		// 현재 인증된 사용자의 정보를 UserDetails로부터 가져올 수 있습니다.
 		User user = userService.findByEmail(userDetails.getUsername());
@@ -145,7 +144,7 @@ public class UserController implements SwaggerUserController {
 	@DeleteMapping("/")
 	public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserDetails userDetails) {
 		if (userDetails == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
 		}
 		// 현재 인증된 사용자의 정보를 UserDetails로부터 가져올 수 있습니다.
 		User user = userService.findByEmail(userDetails.getUsername());
@@ -159,7 +158,7 @@ public class UserController implements SwaggerUserController {
 	public ResponseEntity<?> rating(@AuthenticationPrincipal UserDetails userDetails,
 		@RequestBody Map<String, Double> request) {
 		if (userDetails == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
 		}
 		// 현재 인증된 사용자의 정보를 UserDetails로부터 가져올 수 있습니다.
 		User user = userService.findByEmail(userDetails.getUsername());
@@ -286,7 +285,7 @@ public class UserController implements SwaggerUserController {
 	 * 전달받은 리프레시 토큰 삭제
 	 */
 	@DeleteMapping("/logout")
-	public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+	public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
 		String refreshToken = getRefreshTokenFromCookies(request);
 		Claims claims = jwtTokenizer.parseRefreshToken(refreshToken);
 		String email = claims.getSubject();
@@ -295,7 +294,7 @@ public class UserController implements SwaggerUserController {
 		// 쿠키에서 리프레시 토큰 삭제
 		response.addCookie(deleteRefreshTokenCookie());
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(ResponseDto.success());
 	}
 
 }

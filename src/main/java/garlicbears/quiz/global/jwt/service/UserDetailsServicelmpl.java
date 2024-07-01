@@ -14,6 +14,7 @@ import garlicbears.quiz.domain.common.repository.AdminRepository;
 import garlicbears.quiz.domain.common.repository.UserRepository;
 import garlicbears.quiz.global.exception.CustomException;
 import garlicbears.quiz.global.exception.ErrorCode;
+import jakarta.transaction.Transactional;
 
 @Component
 public class UserDetailsServicelmpl implements UserDetailsService {
@@ -26,6 +27,7 @@ public class UserDetailsServicelmpl implements UserDetailsService {
 	}
 
 	@Override
+	@Transactional
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		Optional<User> user = userRepository.findByUserEmailAndUserActive(email, Active.active);
 		if (user.isPresent()) {
