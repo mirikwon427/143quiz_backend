@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.common.entity.Role;
 import garlicbears.quiz.domain.common.entity.User;
+import garlicbears.quiz.domain.common.service.LogService;
 import garlicbears.quiz.domain.management.common.dto.LoginDto;
 import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
 import garlicbears.quiz.domain.management.user.dto.SignUpDto;
@@ -38,6 +38,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import garlicbears.quiz.global.handler.ClientIpHandler;
 import jakarta.validation.Valid;
 
 @RestController
@@ -50,18 +51,21 @@ public class UserController implements SwaggerUserController {
 	private final JwtTokenizer jwtTokenizer;
 	private final PasswordEncoder passwordEncoder;
 	private final RefreshTokenService refreshTokenService;
+	private final LogService logService;
 
 	@Autowired
 	UserController(UserService userService,
 		UserRatingService userRatingService,
 		JwtTokenizer jwtTokenizer,
 		PasswordEncoder passwordEncoder,
-		RefreshTokenService refreshTokenService) {
+		RefreshTokenService refreshTokenService,
+		LogService logService) {
 		this.userService = userService;
 		this.userRatingService = userRatingService;
 		this.jwtTokenizer = jwtTokenizer;
 		this.passwordEncoder = passwordEncoder;
 		this.refreshTokenService = refreshTokenService;
+		this.logService = logService;
 	}
 
 	/**
@@ -114,14 +118,15 @@ public class UserController implements SwaggerUserController {
 	}
 
 	@GetMapping("/")
-	public ResponseEntity<?> searchUser(@AuthenticationPrincipal UserDetails userDetails) {
+	public ResponseEntity<?> searchUser(@AuthenticationPrincipal UserDetails userDetails,
+		HttpServletRequest request) {
 		if (userDetails == null) {
 			throw new CustomException(ErrorCode.UNAUTHORIZED);
 		}
 		// 현재 인증된 사용자의 정보를 UserDetails로부터 가져올 수 있습니다.
 		User user = userService.findByEmail(userDetails.getUsername());
 
-		System.out.println(user);
+		logService.log(user, request.getRequestURI(), ClientIpHandler.getClientIp(request));
 
 		return ResponseEntity.ok(ResponseUserDto.fromUser(user));
 	}

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import garlicbears.quiz.domain.common.entity.Active;
 import garlicbears.quiz.domain.common.entity.User;
-import garlicbears.quiz.domain.game.user.repository.GameUserQueryRepository;
+import garlicbears.quiz.domain.game.common.repository.GameUserQueryRepository;
 import garlicbears.quiz.domain.management.admin.repository.AdminUserQueryRepository;
 
 @Repository
@@ -19,5 +19,9 @@ public interface UserRepository extends JpaRepository<User, Long>, GameUserQuery
 
 	List<User> findByUserNickname(String nickname);
 
+<<<<<<< HEAD
 	Optional<User> findByUserEmailAndUserActive(String email, Active active);
+=======
+	Long countByUserActiveIsFalse();
+>>>>>>> develop
 }

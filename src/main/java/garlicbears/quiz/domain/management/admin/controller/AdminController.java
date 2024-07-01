@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -205,7 +206,7 @@ public class AdminController implements SwaggerAdminController {
 	 * 관리자 삭제
 	 */
 	@DeleteMapping("/delete/{adminId}")
-	public ResponseEntity<?> deleteAdmin(@RequestParam(value = "adminId") long adminId) {
+	public ResponseEntity<?> deleteAdmin(@PathVariable long adminId) {
 		adminService.delete(adminId);
 		return ResponseEntity.ok(ResponseDto.success());
 	}
