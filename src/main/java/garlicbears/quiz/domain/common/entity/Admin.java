@@ -1,7 +1,5 @@
 package garlicbears.quiz.domain.common.entity;
 
-import org.hibernate.annotations.ColumnDefault;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,6 +25,40 @@ public class Admin extends BaseTimeEntity {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "admin_active")
-	@ColumnDefault("'active'")
-	private Active active;
+	private Active active = Active.active;
+
+	public Admin() {
+
+	}
+
+	public Admin(String adminEmail, String adminPassword) {
+		this.adminEmail = adminEmail;
+		this.adminPassword = adminPassword;
+	}
+
+	public Admin(long adminId, String adminEmail, Active active) {
+		this.adminId = adminId;
+		this.adminEmail = adminEmail;
+		this.active = active;
+	}
+
+	public long getAdminId() {
+		return adminId;
+	}
+
+	public String getAdminEmail() {
+		return adminEmail;
+	}
+
+	public Active getActive() {
+		return active;
+	}
+
+	public String getAdminPassword() {
+		return adminPassword;
+	}
+
+	public void setActive(Active active) {
+		this.active = active;
+	}
 }
