@@ -31,7 +31,6 @@ import garlicbears.quiz.domain.management.user.service.UserRatingService;
 import garlicbears.quiz.domain.management.user.service.UserService;
 import garlicbears.quiz.global.exception.CustomException;
 import garlicbears.quiz.global.exception.ErrorCode;
-import garlicbears.quiz.global.jwt.dto.RefreshTokenDto;
 import garlicbears.quiz.global.jwt.service.RefreshTokenService;
 import garlicbears.quiz.global.jwt.util.JwtTokenizer;
 import io.jsonwebtoken.Claims;
