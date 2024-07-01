@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import garlicbears.quiz.domain.game.admin.service.GameStatService;
+import garlicbears.quiz.domain.game.common.service.RankingService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,9 +17,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "통계 관리")
 public class AdminStatController implements SwaggerAdminStatController{
 	private final GameStatService gameStatService;
+	private final RankingService rankingService;
 
-	public AdminStatController(GameStatService gameStatService) {
+	public AdminStatController(GameStatService gameStatService,
+		RankingService rankingService) {
 		this.gameStatService = gameStatService;
+		this.rankingService = rankingService;
 	}
 
 	/**
@@ -36,6 +40,15 @@ public class AdminStatController implements SwaggerAdminStatController{
 	@GetMapping("/dashboard")
 	public ResponseEntity<?> getDashboard() {
 		return ResponseEntity.ok(gameStatService.getDashboard());
+	}
+
+	/**
+	 * 유저 랭킹 조회
+	 */
+	@GetMapping("/userRanking")
+	public ResponseEntity<?> getUserRanking(@RequestParam(defaultValue = "0") int pageNumber,
+		@RequestParam(defaultValue = "30") int pageSize) {
+		return ResponseEntity.ok(rankingService.getRankings(pageNumber, pageSize));
 	}
 
 	/**
