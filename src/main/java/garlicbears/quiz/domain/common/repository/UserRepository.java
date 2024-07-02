@@ -19,9 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long>, GameUserQuery
 
 	List<User> findByUserNickname(String nickname);
 
-<<<<<<< HEAD
 	Optional<User> findByUserEmailAndUserActive(String email, Active active);
-=======
+
 	Long countByUserActiveIsFalse();
->>>>>>> develop
 }

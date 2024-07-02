@@ -1,5 +1,7 @@
 package garlicbears.quiz.global.jwt.util;
 
+import java.time.Duration;
+
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,11 @@ public class RedisClient {
 	public void setValues(String key, String Data) {
 		ValueOperations<String, String> values = redisTemplate.opsForValue();
 		values.set(key, Data);
+	}
+
+	public void setValues(String key, String data, Duration duration) {
+		ValueOperations<String, String> values = redisTemplate.opsForValue();
+		values.set(key, data, duration);
 	}
 
 	public String getValues(String key) {

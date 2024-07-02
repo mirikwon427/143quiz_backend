@@ -22,8 +22,8 @@ public class RefreshTokenService {
 	 * 리프레시 토큰을 저장하는 메서드.
 	 */
 	@Transactional
-	public void save(String email, String token) {
-		redisRefreshTokenRepository.save(email, token);
+	public void save(String email, String token, long ttl) {
+		redisRefreshTokenRepository.save(email, token, ttl);
 	}
 
 	/**

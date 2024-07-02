@@ -79,7 +79,7 @@ public class AdminController implements SwaggerAdminController {
 		String refreshToken = jwtTokenizer.createRefreshToken(admin.getAdminEmail(), admin.getAdminId(), roles);
 
 		// 리프레시 토큰을 Redis에 저장
-		refreshTokenService.save(admin.getAdminEmail(), refreshToken);
+		refreshTokenService.save(admin.getAdminEmail(), refreshToken, JwtTokenizer.REFRESH_TOKEN_EXPIRE_COUNT);
 
 		// 리프레시 토큰을 쿠키에 저장
 		response.addCookie(createRefreshTokenCookie(refreshToken));
@@ -126,7 +126,7 @@ public class AdminController implements SwaggerAdminController {
 
 		// 기존 리프레시 토큰 삭제 후 새로운 리프레시 토큰 저장
 		refreshTokenService.deleteRefreshToken(email);
-		refreshTokenService.save(email, newRefreshToken);
+		refreshTokenService.save(email, newRefreshToken, JwtTokenizer.REFRESH_TOKEN_EXPIRE_COUNT);
 
 		// 새로운 리프레시 토큰을 쿠키에 저장
 		response.addCookie(createRefreshTokenCookie(newRefreshToken));

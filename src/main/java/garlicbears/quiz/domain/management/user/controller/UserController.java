@@ -200,7 +200,7 @@ public class UserController implements SwaggerUserController {
 		String refreshToken = jwtTokenizer.createRefreshToken(user.getUserEmail(), user.getUserId(), roles);
 
 		// 리프레시 토큰을 Redis에 저장
-		refreshTokenService.save(user.getUserEmail(), refreshToken);
+		refreshTokenService.save(user.getUserEmail(), refreshToken, JwtTokenizer.REFRESH_TOKEN_EXPIRE_COUNT);
 
 		// 리프레시 토큰을 쿠키에 저장
 		response.addCookie(createRefreshTokenCookie(refreshToken));
@@ -247,7 +247,7 @@ public class UserController implements SwaggerUserController {
 
 		// 기존 리프레시 토큰 삭제 후 새로운 리프레시 토큰 저장
 		refreshTokenService.deleteRefreshToken(email);
-		refreshTokenService.save(email, newRefreshToken);
+		refreshTokenService.save(email, refreshToken, JwtTokenizer.REFRESH_TOKEN_EXPIRE_COUNT);
 
 		// 새로운 리프레시 토큰을 쿠키에 저장
 		response.addCookie(createRefreshTokenCookie(newRefreshToken));

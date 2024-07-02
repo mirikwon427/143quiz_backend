@@ -1,5 +1,6 @@
 package garlicbears.quiz.global.jwt.repository;
 
+import java.time.Duration;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -23,10 +24,11 @@ public class RedisRefreshTokenRepository implements RefreshTokenRepository {
 	 *
 	 * @param email 저장할 이메일
 	 * @param token 저장할 토큰
+	 * @param ttl 토큰의 유효 시간 (밀리초 단위)
 	 */
 	@Override
-	public void save(String email, String token) {
-		redisClient.setValues(email, token);
+	public void save(String email, String token, long ttl) {
+		redisClient.setValues(email, token, Duration.ofMillis(ttl));
 	}
 
 	/**

@@ -33,34 +33,30 @@ public class GameController implements SwaggerGameController {
 
 	private final GameService gameService;
 	private final TopicService topicService;
-<<<<<<< HEAD
+	private final RankingService rankingService;
+	private final LogService logService;
 	private final UserService userService;
 
 	public GameController(GameService gameService, TopicService topicService,
+		LogService logService, RankingService rankingService,
 		UserService userService) {
-		this.gameService = gameService;
-		this.topicService = topicService;
-		this.userService = userService;
-
-=======
-	private final RankingService rankingService;
-	private final LogService logService;
-
-	public GameController(GameService gameService, TopicService topicService,
-		LogService logService, RankingService rankingService) {
 		this.gameService = gameService;
 		this.topicService = topicService;
 		this.logService = logService;
 		this.rankingService = rankingService;
->>>>>>> develop
+		this.userService = userService;
 	}
 
 	@GetMapping("/rankings")
-	public ResponseEntity<?> getRankings(@AuthenticationPrincipal PrincipalDetails principalDetails,
+	public ResponseEntity<?> getRankings(@AuthenticationPrincipal UserDetails userDetails,
 		HttpServletRequest request,
 		@RequestParam(defaultValue = "0") int pageNumber,
 		@RequestParam(defaultValue = "10") int pageSize) {
-		User user = principalDetails.getUser();
+		if (userDetails == null) {
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
+		}
+		// 현재 인증된 사용자의 정보를 UserDetails로부터 가져올 수 있습니다.
+		User user = userService.findByEmail(userDetails.getUsername());
 
 		logService.log(user, request.getRequestURI(), ClientIpHandler.getClientIp(request));
 
@@ -68,11 +64,15 @@ public class GameController implements SwaggerGameController {
 	}
 
 	@GetMapping("/rankings/{topicId}")
-	public ResponseEntity<?> getRankingsByTopicId(@AuthenticationPrincipal PrincipalDetails principalDetails,
+	public ResponseEntity<?> getRankingsByTopicId(@AuthenticationPrincipal UserDetails userDetails,
 		HttpServletRequest request,
 		@PathVariable(value = "topicId") long topicId,
 		@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize) {
-		User user = principalDetails.getUser();
+		if (userDetails == null) {
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
+		}
+		// 현재 인증된 사용자의 정보를 userDetails로부터 가져올 수 있습니다.
+		User user = userService.findByEmail(userDetails.getUsername());
 
 		topicService.findByTopicId(topicId).orElseThrow(() -> new CustomException(ErrorCode.TOPIC_NOT_FOUND));
 
@@ -85,18 +85,14 @@ public class GameController implements SwaggerGameController {
 	 * 게임 주제 목록 ( 뱃지 미획득 )
 	 */
 	@GetMapping("/topics")
-<<<<<<< HEAD
-	public ResponseEntity<?> topicList(@AuthenticationPrincipal UserDetails userDetails) {
+	public ResponseEntity<?> topicList(@AuthenticationPrincipal UserDetails userDetails,
+		HttpServletRequest request) {
 		if (userDetails == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
 		}
 		// 현재 인증된 사용자의 정보를 userDetails로부터 가져올 수 있습니다.
 		User user = userService.findByEmail(userDetails.getUsername());
-=======
-	public ResponseEntity<?> topicList(@AuthenticationPrincipal PrincipalDetails principalDetails,
-		HttpServletRequest request) {
-		User user = principalDetails.getUser();
->>>>>>> develop
+
 		List<TopicsListDto> topics = gameService.topicList(user.getUserId());
 
 		logService.log(user, request.getRequestURI(), ClientIpHandler.getClientIp(request));
@@ -108,19 +104,14 @@ public class GameController implements SwaggerGameController {
 	 * 뱃지 주제 목록
 	 */
 	@GetMapping("/badges")
-<<<<<<< HEAD
-	public ResponseEntity<?> badges(@AuthenticationPrincipal UserDetails userDetails) {
+	public ResponseEntity<?> badges(@AuthenticationPrincipal UserDetails userDetails,
+		HttpServletRequest request) {
 		if (userDetails == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
 		}
 		// 현재 인증된 사용자의 정보를 userDetails로부터 가져올 수 있습니다.
 		User user = userService.findByEmail(userDetails.getUsername());
 
-=======
-	public ResponseEntity<?> badges(@AuthenticationPrincipal PrincipalDetails principalDetails,
-		HttpServletRequest request) {
-		User user = principalDetails.getUser();
->>>>>>> develop
 		List<TopicsListDto> topics = gameService.badgeList(user.getUserId());
 
 		logService.log(user, request.getRequestURI(), ClientIpHandler.getClientIp(request));
@@ -135,7 +126,7 @@ public class GameController implements SwaggerGameController {
 	public ResponseEntity<?> gameStart(@PathVariable(value = "topicId") long topicId,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		if (userDetails == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
 		}
 		// 현재 인증된 사용자의 정보를 userDetails로부터 가져올 수 있습니다.
 		User user = userService.findByEmail(userDetails.getUsername());

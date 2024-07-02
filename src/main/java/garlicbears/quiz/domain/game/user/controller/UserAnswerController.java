@@ -18,6 +18,7 @@ import garlicbears.quiz.domain.game.user.dto.RequestUserAnswerDto;
 import garlicbears.quiz.domain.common.entity.User;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.management.user.service.UserService;
+import garlicbears.quiz.global.exception.CustomException;
 import garlicbears.quiz.global.exception.ErrorCode;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -49,7 +50,7 @@ public class UserAnswerController implements SwaggerUserAnswerController {
 		}
 
 		if (userDetails == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
 		}
 		// 현재 인증된 사용자의 정보를 userDetails로부터 가져올 수 있습니다.
 		User user = userService.findByEmail(userDetails.getUsername());
@@ -63,7 +64,7 @@ public class UserAnswerController implements SwaggerUserAnswerController {
 		@AuthenticationPrincipal UserDetails userDetails) {
 
 		if (userDetails == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
 		}
 		// 현재 인증된 사용자의 정보를 userDetails로부터 가져올 수 있습니다.
 		User user = userService.findByEmail(userDetails.getUsername());
