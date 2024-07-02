@@ -19,6 +19,11 @@ public class AdminRatingQueryRepositoryImpl implements AdminRatingQueryRepositor
 	public Double getAverageRating() {
 		QRating rating = QRating.rating;
 
-		return jpaQueryFactory.select(rating.ratingValue.avg().as("averageRating")).from(rating).fetchOne();
+		return jpaQueryFactory
+			.select(
+				rating.ratingValue.avg().as("averageRating")
+			)
+			.from(rating)
+			.fetchOne();
 	}
 }
