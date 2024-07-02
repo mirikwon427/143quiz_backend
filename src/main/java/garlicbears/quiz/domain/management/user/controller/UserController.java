@@ -215,7 +215,7 @@ public class UserController implements SwaggerUserController {
 	 * 리프레시 토큰을 쿠키에 저장
 	 */
 	private Cookie createRefreshTokenCookie(String refreshToken) {
-		Cookie refreshTokenCookie = new Cookie("Refresh-Token", refreshToken);
+		Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
 		refreshTokenCookie.setHttpOnly(true); // JavaScript에서 접근 불가능하도록 설정
 		refreshTokenCookie.setPath("/");
 		refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
@@ -225,7 +225,7 @@ public class UserController implements SwaggerUserController {
 	/**
 	 * 리프레시 토큰을 이용해 새로운 액세스 토큰을 발급.
 	 */
-	@GetMapping("/refreshToken")
+	@GetMapping("/reissue")
 	public ResponseEntity<?> requestRefresh(HttpServletRequest request, HttpServletResponse response) {
 		// 쿠키에서 리프레시 토큰을 읽기
 		String refreshToken = getRefreshTokenFromCookies(request);
@@ -265,7 +265,7 @@ public class UserController implements SwaggerUserController {
 		Cookie[] cookies = request.getCookies();
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
-				if ("Refresh-Token".equals(cookie.getName())) {
+				if ("refreshToken".equals(cookie.getName())) {
 					return cookie.getValue();
 				}
 			}
@@ -277,7 +277,7 @@ public class UserController implements SwaggerUserController {
 	 * 리프레시 토큰을 쿠키에서 삭제하는 메서드.
 	 */
 	private Cookie deleteRefreshTokenCookie() {
-		Cookie refreshTokenCookie = new Cookie("Refresh-Token", null);
+		Cookie refreshTokenCookie = new Cookie("refreshToken", null);
 		refreshTokenCookie.setHttpOnly(true); // JavaScript에서 접근 불가능하도록 설정
 		refreshTokenCookie.setPath("/");
 		refreshTokenCookie.setMaxAge(0); // 쿠키 삭제
