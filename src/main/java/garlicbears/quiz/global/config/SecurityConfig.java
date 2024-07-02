@@ -32,7 +32,16 @@ public class SecurityConfig {
 
 	private static final String[] PERMIT_ALL_PATTERNS = new String[] {
 		"/user/checkNickname", "/user/checkEmail", "/user/signup",
-		"/user/login", "/admin/login"
+		"/user/login", "/admin/login",
+		"/v3/api-docs/**",
+		"/swagger-resources",
+		"/swagger-resources/**",
+		"/configuration/ui",
+		"/configuration/security",
+		"/swagger-ui.html",
+		"/swagger-ui/**",
+		"/webjars/**",
+		"/swagger"
 	};
 
 	@Bean
