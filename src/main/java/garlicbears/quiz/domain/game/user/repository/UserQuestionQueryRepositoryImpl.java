@@ -68,7 +68,7 @@ public class UserQuestionQueryRepositoryImpl implements UserQuestionQueryReposit
 				.and(question.topic.topicId.eq(userAnswer.topic.topicId))
 				.and(userAnswer.user.userId.eq(userId)))
 			.where(conditions)
-			.orderBy(NumberExpression.random().asc())
+			.orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
 			.distinct()
 			.limit(limit)
 			.fetch();
