@@ -22,6 +22,6 @@ public class ResponseDto<T> {
 	}
 
 	public static <T> ResponseDto<T> success() {
-		return new ResponseDto<>("SUCCESS");
+		return new ResponseDto<>(200, "SUCCESS");
 	}
 }

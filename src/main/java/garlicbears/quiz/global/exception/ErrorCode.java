@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 	INVALID_INPUT(HttpStatus.BAD_REQUEST, "입력 값이 유효하지 않습니다."),
 	BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
+	UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증되지 않은 사용자입니다."),
 	MISSING_REQUIRED_FIELDS(HttpStatus.BAD_REQUEST, "필수 입력값이 누락되었습니다."),
 	ILLEGAL_RATING_VALUE(HttpStatus.BAD_REQUEST, "별점 값은 0 과 5 사이여야 합니다."),
 	MISSING_REQUEST_BODY_VARIABLE(HttpStatus.BAD_REQUEST, "요청 내용의 필드가 누락되었습니다."),
@@ -26,7 +27,9 @@ public enum ErrorCode {
 	QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "문제를 찾을 수 없습니다."),
 	DELETED_TOPIC(HttpStatus.GONE, "삭제된 주제입니다."),
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류입니다."),
-	FILE_IO_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 처리중 발생한 오류입니다.");
+	FILE_IO_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 처리중 발생한 오류입니다."),
+	INVALID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 토큰입니다."),
+	REFRESH_TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "Refresh token을 찾을 수 없음");
 
 	private final HttpStatus status;
 	private final String message;

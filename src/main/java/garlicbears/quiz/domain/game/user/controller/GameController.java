@@ -2,8 +2,10 @@ package garlicbears.quiz.domain.game.user.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +19,7 @@ import garlicbears.quiz.domain.game.common.service.RankingService;
 import garlicbears.quiz.domain.game.user.dto.ResponseTopicBadgeDto;
 import garlicbears.quiz.domain.game.user.dto.TopicsListDto;
 import garlicbears.quiz.domain.game.user.service.GameService;
-import garlicbears.quiz.global.config.auth.PrincipalDetails;
+import garlicbears.quiz.domain.management.user.service.UserService;
 import garlicbears.quiz.global.exception.CustomException;
 import garlicbears.quiz.global.exception.ErrorCode;
 import garlicbears.quiz.global.handler.ClientIpHandler;
@@ -33,21 +35,28 @@ public class GameController implements SwaggerGameController {
 	private final TopicService topicService;
 	private final RankingService rankingService;
 	private final LogService logService;
+	private final UserService userService;
 
 	public GameController(GameService gameService, TopicService topicService,
-		LogService logService, RankingService rankingService) {
+		LogService logService, RankingService rankingService,
+		UserService userService) {
 		this.gameService = gameService;
 		this.topicService = topicService;
 		this.logService = logService;
 		this.rankingService = rankingService;
+		this.userService = userService;
 	}
 
 	@GetMapping("/rankings")
-	public ResponseEntity<?> getRankings(@AuthenticationPrincipal PrincipalDetails principalDetails,
+	public ResponseEntity<?> getRankings(@AuthenticationPrincipal UserDetails userDetails,
 		HttpServletRequest request,
 		@RequestParam(defaultValue = "0") int pageNumber,
 		@RequestParam(defaultValue = "10") int pageSize) {
-		User user = principalDetails.getUser();
+		if (userDetails == null) {
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
+		}
+		// 현재 인증된 사용자의 정보를 UserDetails로부터 가져올 수 있습니다.
+		User user = userService.findByEmail(userDetails.getUsername());
 
 		logService.log(user, request.getRequestURI(), ClientIpHandler.getClientIp(request));
 
@@ -55,11 +64,15 @@ public class GameController implements SwaggerGameController {
 	}
 
 	@GetMapping("/rankings/{topicId}")
-	public ResponseEntity<?> getRankingsByTopicId(@AuthenticationPrincipal PrincipalDetails principalDetails,
+	public ResponseEntity<?> getRankingsByTopicId(@AuthenticationPrincipal UserDetails userDetails,
 		HttpServletRequest request,
 		@PathVariable(value = "topicId") long topicId,
 		@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "10") int pageSize) {
-		User user = principalDetails.getUser();
+		if (userDetails == null) {
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
+		}
+		// 현재 인증된 사용자의 정보를 userDetails로부터 가져올 수 있습니다.
+		User user = userService.findByEmail(userDetails.getUsername());
 
 		topicService.findByTopicId(topicId).orElseThrow(() -> new CustomException(ErrorCode.TOPIC_NOT_FOUND));
 
@@ -72,9 +85,14 @@ public class GameController implements SwaggerGameController {
 	 * 게임 주제 목록 ( 뱃지 미획득 )
 	 */
 	@GetMapping("/topics")
-	public ResponseEntity<?> topicList(@AuthenticationPrincipal PrincipalDetails principalDetails,
+	public ResponseEntity<?> topicList(@AuthenticationPrincipal UserDetails userDetails,
 		HttpServletRequest request) {
-		User user = principalDetails.getUser();
+		if (userDetails == null) {
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
+		}
+		// 현재 인증된 사용자의 정보를 userDetails로부터 가져올 수 있습니다.
+		User user = userService.findByEmail(userDetails.getUsername());
+
 		List<TopicsListDto> topics = gameService.topicList(user.getUserId());
 
 		logService.log(user, request.getRequestURI(), ClientIpHandler.getClientIp(request));
@@ -86,9 +104,14 @@ public class GameController implements SwaggerGameController {
 	 * 뱃지 주제 목록
 	 */
 	@GetMapping("/badges")
-	public ResponseEntity<?> badges(@AuthenticationPrincipal PrincipalDetails principalDetails,
+	public ResponseEntity<?> badges(@AuthenticationPrincipal UserDetails userDetails,
 		HttpServletRequest request) {
-		User user = principalDetails.getUser();
+		if (userDetails == null) {
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
+		}
+		// 현재 인증된 사용자의 정보를 userDetails로부터 가져올 수 있습니다.
+		User user = userService.findByEmail(userDetails.getUsername());
+
 		List<TopicsListDto> topics = gameService.badgeList(user.getUserId());
 
 		logService.log(user, request.getRequestURI(), ClientIpHandler.getClientIp(request));
@@ -101,8 +124,12 @@ public class GameController implements SwaggerGameController {
 	 */
 	@GetMapping("/start/{topicId}")
 	public ResponseEntity<?> gameStart(@PathVariable(value = "topicId") long topicId,
-		@AuthenticationPrincipal PrincipalDetails principalDetails) {
-		User user = principalDetails.getUser();
+		@AuthenticationPrincipal UserDetails userDetails) {
+		if (userDetails == null) {
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
+		}
+		// 현재 인증된 사용자의 정보를 userDetails로부터 가져올 수 있습니다.
+		User user = userService.findByEmail(userDetails.getUsername());
 
 		return ResponseEntity.ok(gameService.gameStart(topicId, user));
 	}

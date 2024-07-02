@@ -1,58 +1,91 @@
 package garlicbears.quiz.global.config;
 
+import java.util.Arrays;
+import java.util.logging.Logger;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.CorsFilter;
 
-import garlicbears.quiz.domain.common.repository.UserRepository;
-import garlicbears.quiz.global.config.jwt.JwtAuthenticationFilter;
-import garlicbears.quiz.global.config.jwt.JwtAuthorizationFilter;
+import garlicbears.quiz.global.jwt.exception.CustomAuthenticationEntryPoint;
+import garlicbears.quiz.global.jwt.filter.JwtAuthenticationFilter;
+import garlicbears.quiz.global.jwt.provider.JwtAuthenticationProvider;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
-
+	private static final Logger logger = Logger.getLogger(SecurityConfig.class.getName());
+	private final JwtAuthenticationProvider jwtAuthenticationProvider;
 	private final CorsFilter corsFilter;
-	private final UserRepository userRepository;
 
-	public SecurityConfig(CorsFilter corsFilter, UserRepository userRepository) {
+	public SecurityConfig(JwtAuthenticationProvider jwtAuthenticationProvider, CorsFilter corsFilter) {
+		this.jwtAuthenticationProvider = jwtAuthenticationProvider;
 		this.corsFilter = corsFilter;
-		this.userRepository = userRepository;
+	}
+
+	private static final String[] PERMIT_ALL_PATTERNS = new String[] {
+		"/user/checkNickname", "/user/checkEmail", "/user/signup",
+		"/user/login", "/admin/login",
+		"/v3/api-docs/**",
+		"/swagger-resources",
+		"/swagger-resources/**",
+		"/configuration/ui",
+		"/configuration/security",
+		"/swagger-ui.html",
+		"/swagger-ui/**",
+		"/webjars/**",
+		"/swagger"
+	};
+
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
+		AuthenticationManager authenticationManager) throws Exception {
+		if (authenticationManager == null) {
+			logger.warning("AuthenticationManager is null");
+		} else {
+			logger.info("AuthenticationManager is not null");
+		}
+
+		httpSecurity
+			.csrf(AbstractHttpConfigurer::disable)
+			.formLogin(AbstractHttpConfigurer::disable)
+			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.httpBasic(AbstractHttpConfigurer::disable)
+			.addFilter(corsFilter)
+			.authenticationProvider(jwtAuthenticationProvider)
+			.authorizeHttpRequests(httpRequests -> httpRequests
+				.requestMatchers(Arrays.stream(PERMIT_ALL_PATTERNS)
+					.map(AntPathRequestMatcher::antMatcher)
+					.toArray(AntPathRequestMatcher[]::new)
+				).permitAll()
+				.requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
+				.anyRequest().authenticated()
+			)
+			.exceptionHandling(exceptionHandling -> exceptionHandling
+				.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+			)
+			.addFilterBefore(new JwtAuthenticationFilter(authenticationManager),
+				UsernamePasswordAuthenticationFilter.class);
+
+		return httpSecurity.build();
 	}
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		AuthenticationManagerBuilder sharedObject = http.getSharedObject(AuthenticationManagerBuilder.class);
-		AuthenticationManager authenticationManager = sharedObject.build();
-		http.authenticationManager(authenticationManager);
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+		AuthenticationManager authenticationManager = configuration.getAuthenticationManager();
+		if (authenticationManager == null) {
+			logger.severe("AuthenticationManager is null in authenticationManagerBean method");
+		} else {
+			logger.info("AuthenticationManager is successfully injected in authenticationManagerBean method");
+		}
 
-		JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager);
-		jwtAuthenticationFilter.setFilterProcessesUrl("/user/login");
-
-		http.csrf(AbstractHttpConfigurer::disable)
-			.formLogin(AbstractHttpConfigurer::disable)
-			.httpBasic(AbstractHttpConfigurer::disable)
-			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.addFilter(corsFilter)
-			.addFilter(jwtAuthenticationFilter)
-			.addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository))
-			.authorizeHttpRequests(
-				auth -> auth.requestMatchers("/user/signup", "/user/checkEmail", "/user/checkNickname")
-					.permitAll()
-					.requestMatchers("/user/**")
-					.authenticated()
-					//                        .requestMatchers("/api/v1/manager/**").hasAnyRole("ADMIN", "MANAGER")
-					//                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-					.anyRequest()
-					.permitAll());
-
-		return http.build();
+		return authenticationManager;
 	}
 }

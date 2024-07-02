@@ -2,12 +2,12 @@ package garlicbears.quiz.domain.game.user.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import garlicbears.quiz.domain.game.user.dto.RequestUserAnswerDto;
-import garlicbears.quiz.global.config.auth.PrincipalDetails;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -39,7 +39,7 @@ public interface SwaggerUserAnswerController {
 	})
 	public ResponseEntity<?> userAnswerSave(@Valid @RequestBody RequestUserAnswerDto requestUserAnswerDto,
 		BindingResult bindingResult,
-		@AuthenticationPrincipal PrincipalDetails principalDetails);
+		@AuthenticationPrincipal UserDetails userDetails);
 
 	@Operation(summary = "사용자 게임 중도 이탈", description = "사용자가 게임을 중도 이탈했을 경우")
 	@ApiResponses(value = {
@@ -53,5 +53,5 @@ public interface SwaggerUserAnswerController {
 			content = {@Content(schema = @Schema(implementation = ResponseDto.class))})
 	})
 	public ResponseEntity<?> userAnswerDrop(@PathVariable(value = "sessionId") long sessionId,
-		@AuthenticationPrincipal PrincipalDetails principalDetails);
+		@AuthenticationPrincipal UserDetails userDetails);
 }

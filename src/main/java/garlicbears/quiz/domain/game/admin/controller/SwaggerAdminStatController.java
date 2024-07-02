@@ -10,14 +10,12 @@ import garlicbears.quiz.domain.game.admin.dto.ResponseTopicListDto;
 import garlicbears.quiz.domain.game.admin.dto.TotalVisitorCountDto;
 import garlicbears.quiz.domain.game.admin.dto.VisitorCountListDto;
 import garlicbears.quiz.domain.game.user.dto.UserRankingDto;
-import garlicbears.quiz.global.config.auth.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.servlet.http.HttpServletRequest;
 
 public interface SwaggerAdminStatController {
 	@Operation(summary = "평가 통계 조회", description = "평가 통계 정보를 반환합니다. 평균 평점, 평가 횟수")

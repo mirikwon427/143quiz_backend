@@ -83,4 +83,11 @@ public class UserService {
 		user.setUserActive(Active.inactive);
 		userRepository.save(user);
 	}
+
+	@Transactional
+	public User findByEmail(String email) {
+		return userRepository.findByUserEmailAndUserActive(email, Active.active)
+			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+	}
+
 }

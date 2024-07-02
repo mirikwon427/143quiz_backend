@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -67,6 +68,7 @@ public class UserQuestionQueryRepositoryImpl implements UserQuestionQueryReposit
 				.and(question.topic.topicId.eq(userAnswer.topic.topicId))
 				.and(userAnswer.user.userId.eq(userId)))
 			.where(conditions)
+			.orderBy(NumberExpression.random().asc())
 			.distinct()
 			.limit(limit)
 			.fetch();
