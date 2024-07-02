@@ -33,6 +33,8 @@ public class SecurityConfig {
 	private static final String[] PERMIT_ALL_PATTERNS = new String[] {
 		"/user/checkNickname", "/user/checkEmail", "/user/signup",
 		"/user/login", "/admin/login",
+		"/user/reissue",
+		"/admin/reissue",
 		"/v3/api-docs/**",
 		"/swagger-resources",
 		"/swagger-resources/**",
