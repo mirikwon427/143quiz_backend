@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import garlicbears.quiz.domain.common.entity.Active;
+import garlicbears.quiz.domain.common.entity.Image;
 import garlicbears.quiz.domain.common.entity.Role;
 import garlicbears.quiz.domain.common.entity.User;
 import garlicbears.quiz.domain.common.repository.UserRepository;
@@ -99,4 +100,9 @@ public class UserService {
 			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 	}
 
+	@Transactional
+	public void updateImage(User user, Image image) {
+		user.setImage(image);
+		userRepository.save(user);
+	}
 }

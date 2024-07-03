@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,11 +21,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import garlicbears.quiz.domain.common.dto.ResponseDto;
+import garlicbears.quiz.domain.common.entity.Image;
 import garlicbears.quiz.domain.common.entity.Role;
 import garlicbears.quiz.domain.common.entity.User;
 import garlicbears.quiz.domain.common.service.LogService;
+import garlicbears.quiz.domain.management.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.management.common.dto.LoginDto;
 import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
+import garlicbears.quiz.domain.management.common.service.ImageService;
 import garlicbears.quiz.domain.management.user.dto.SignUpDto;
 import garlicbears.quiz.domain.management.user.dto.UpdateUserDto;
 import garlicbears.quiz.domain.management.user.service.UserRatingService;
@@ -52,6 +56,7 @@ public class UserController implements SwaggerUserController {
 	private final PasswordEncoder passwordEncoder;
 	private final RefreshTokenService refreshTokenService;
 	private final LogService logService;
+	private final ImageService imageService;
 
 	@Autowired
 	UserController(UserService userService,
@@ -59,13 +64,15 @@ public class UserController implements SwaggerUserController {
 		JwtTokenizer jwtTokenizer,
 		PasswordEncoder passwordEncoder,
 		RefreshTokenService refreshTokenService,
-		LogService logService) {
+		LogService logService,
+		ImageService imageService) {
 		this.userService = userService;
 		this.userRatingService = userRatingService;
 		this.jwtTokenizer = jwtTokenizer;
 		this.passwordEncoder = passwordEncoder;
 		this.refreshTokenService = refreshTokenService;
 		this.logService = logService;
+		this.imageService = imageService;
 	}
 
 	/**
@@ -299,6 +306,27 @@ public class UserController implements SwaggerUserController {
 		response.addCookie(deleteRefreshTokenCookie());
 
 		return ResponseEntity.ok(ResponseDto.success());
+	}
+
+
+	/**
+	 * 회원 프로필 이미지 수정
+	 */
+	@PatchMapping("/image")
+	public ResponseEntity<?> image(@AuthenticationPrincipal UserDetails userDetails,
+		@ModelAttribute ImageSaveDto imageSaveDto) {
+		if (userDetails == null) {
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
+		}
+		// AWS S3와 DB에 이미지 정보 저장
+		Image image = imageService.saveImage(imageSaveDto.getImage());
+
+		User user = userService.findByEmail(userDetails.getUsername());
+
+		// 사용자 정보에 이미지 정보 저장
+		userService.updateImage(user, image);
+
+		return ResponseEntity.ok(image.getAccessUrl());
 	}
 
 }

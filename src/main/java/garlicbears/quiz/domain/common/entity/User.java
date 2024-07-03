@@ -28,6 +28,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -78,6 +79,9 @@ public class User extends BaseTimeEntity implements UserDetails {
 		inverseJoinColumns = @JoinColumn(name = "role_seq")
 	)
 	private Set<Role> roles = new HashSet<>();
+	@OneToOne
+	@JoinColumn(name = "user_image_seq", nullable = false)
+	private Image image;
 
 	public User() {
 	}
@@ -164,6 +168,10 @@ public class User extends BaseTimeEntity implements UserDetails {
 
 	public void setUserActive(Active userActive) {
 		this.userActive = userActive;
+	}
+
+	public void setImage(Image image) {
+		this.image = image;
 	}
 
 	@Override

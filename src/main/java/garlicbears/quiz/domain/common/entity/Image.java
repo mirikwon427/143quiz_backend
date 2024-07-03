@@ -1,5 +1,7 @@
 package garlicbears.quiz.domain.common.entity;
 
+import java.util.UUID;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,11 +26,42 @@ public class Image {
 
 	@Lob
 	@Column(name = "image_url", nullable = false)
-	private String url;
+	private String accessUrl;
+
+	public Image() {
+	}
+
+	public Image(String originName) {
+		this.imageName = getFileName(originName);
+		this.originName = originName;
+		this.accessUrl = "";
+	}
+
+	public void setAccessUrl(String accessUrl) {
+		this.accessUrl = accessUrl;
+	}
+
+	//이미지 파일의 확장자를 추출하는 메소드
+	public String extractExtension(String originName) {
+		String[] split = this.originName.split("\\.");
+		return split[split.length - 1];
+	}
+
+	//이미지 파일의 이름을 저장하기 위한 이름으로 변환하는 메소드
+	public String getFileName(String originName) {
+		return UUID.randomUUID().toString() + "." + extractExtension(originName);
+	}
 
 	public Long getImageId() {
 		return imageId;
 	}
 
+	public String getImageName() {
+		return imageName;
+	}
+
+	public String getAccessUrl() {
+		return accessUrl;
+	}
 }
 

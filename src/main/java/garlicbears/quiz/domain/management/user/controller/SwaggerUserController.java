@@ -6,9 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import garlicbears.quiz.domain.common.dto.ResponseDto;
+import garlicbears.quiz.domain.management.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
 import garlicbears.quiz.domain.management.user.dto.SignUpDto;
 import garlicbears.quiz.domain.management.user.dto.UpdateUserDto;
@@ -49,8 +52,7 @@ public interface SwaggerUserController {
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
 		@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
 		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)")})
-	public ResponseEntity<?> searchUser(@AuthenticationPrincipal UserDetails userDetails,HttpServletRequest request);
-
+	public ResponseEntity<?> searchUser(@AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request);
 
 	@Operation(summary = "유저 정보(내 정보) 수정", description = "jwt token을 받아 유저 정보를 확인. resquest body로 전달받은 정보로 수정합니다.")
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
@@ -79,4 +81,17 @@ public interface SwaggerUserController {
 			@Content(schema = @Schema(implementation = ResponseDto.class))})})
 	public ResponseEntity<?> rating(@AuthenticationPrincipal UserDetails userDetails,
 		@RequestBody Map<String, Double> request);
+
+	@PatchMapping("/image")
+	@Operation(summary = "회원 이미지 업로드", description = "회원 프로필 이미지 업로드")
+	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
+			@Content(schema = @Schema(implementation = ResponseDto.class))
+		}),
+		@ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+			@Content(schema = @Schema(implementation = ResponseDto.class))
+		}),
+		@ApiResponse(responseCode = "500", description = "Internal server error", content = {
+			@Content(schema = @Schema(implementation = ResponseDto.class))})})
+	public ResponseEntity<?> image(@AuthenticationPrincipal UserDetails userDetails,
+		@ModelAttribute ImageSaveDto imageSaveDto);
 }
