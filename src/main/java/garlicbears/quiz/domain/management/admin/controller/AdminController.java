@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,8 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.common.entity.Admin;
 import garlicbears.quiz.domain.common.entity.Role;
+import garlicbears.quiz.domain.management.admin.dto.RequestChangeRoleDto;
 import garlicbears.quiz.domain.management.admin.service.AdminService;
 import garlicbears.quiz.domain.management.common.dto.LoginDto;
+import garlicbears.quiz.domain.management.common.repository.RoleRepository;
 import garlicbears.quiz.global.exception.CustomException;
 import garlicbears.quiz.global.exception.ErrorCode;
 import garlicbears.quiz.global.jwt.service.RefreshTokenService;
@@ -41,15 +44,18 @@ public class AdminController implements SwaggerAdminController {
 	private final JwtTokenizer jwtTokenizer;
 	private final PasswordEncoder passwordEncoder;
 	private final RefreshTokenService refreshTokenService;
+	private final RoleRepository roleRepository;
 
 	public AdminController(AdminService adminService,
 		JwtTokenizer jwtTokenizer,
 		PasswordEncoder passwordEncoder,
-		RefreshTokenService refreshTokenService) {
+		RefreshTokenService refreshTokenService,
+		RoleRepository roleRepository) {
 		this.adminService = adminService;
 		this.jwtTokenizer = jwtTokenizer;
 		this.passwordEncoder = passwordEncoder;
 		this.refreshTokenService = refreshTokenService;
+		this.roleRepository = roleRepository;
 	}
 
 	/**
@@ -196,10 +202,13 @@ public class AdminController implements SwaggerAdminController {
 	 * 관리자 권한 변경
 	 */
 	@Override
-	// @PatchMapping("/changeRole/{adminId}")
-	public ResponseEntity<?> changeAdminRole(@RequestParam(value = "adminId") long adminId) {
-		// TODO JWT 토큰이 완성되면 구현
-		return null;
+	@PatchMapping("/changeRole")
+	public ResponseEntity<?> changeAdminRole(@Valid @RequestBody RequestChangeRoleDto requestChangeRoleDto) {
+		Admin admin = adminService.findById(requestChangeRoleDto.getAdminId());
+		Role adminRole = roleRepository.findByRoleName(requestChangeRoleDto.getRole())
+			.orElseThrow(() -> new CustomException(ErrorCode.ROLE_NOT_FOUND));
+		adminService.updateRole(admin, adminRole);
+		return ResponseEntity.ok(ResponseDto.success());
 	}
 
 	/**

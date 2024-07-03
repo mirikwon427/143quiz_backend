@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.management.admin.dto.AdminSignUpDto;
+import garlicbears.quiz.domain.management.admin.dto.RequestChangeRoleDto;
 import garlicbears.quiz.domain.management.admin.dto.ResponseAdminDto;
 import garlicbears.quiz.domain.management.admin.dto.ResponseAdminListDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,7 +42,7 @@ public interface SwaggerAdminController {
 		@ApiResponse(responseCode = "404", description = "Not Found (Admin not found)")
 	})
 	public ResponseEntity<?> changeAdminRole(
-		@RequestParam(value = "adminId") long adminId
+		@Valid @RequestBody RequestChangeRoleDto requestChangeRoleDto
 	);
 
 	@Operation(summary = "관리자 삭제", description = "입력된 관리자를 삭제합니다.")

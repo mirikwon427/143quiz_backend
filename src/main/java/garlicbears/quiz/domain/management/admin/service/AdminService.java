@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import garlicbears.quiz.domain.common.entity.Active;
 import garlicbears.quiz.domain.common.entity.Admin;
 
+import garlicbears.quiz.domain.common.entity.Role;
 import garlicbears.quiz.domain.common.repository.AdminRepository;
 import garlicbears.quiz.domain.management.admin.dto.ResponseAdminDto;
 import garlicbears.quiz.domain.management.admin.dto.ResponseAdminListDto;
@@ -46,6 +47,18 @@ public class AdminService {
 		Admin admin = adminRepository.findById(adminId)
 			.orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
 		admin.setActive(Active.inactive);
+		adminRepository.save(admin);
+	}
+
+	@Transactional
+	public Admin findById(long adminId) {
+		return adminRepository.findById(adminId)
+			.orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
+	}
+
+	@Transactional
+	public void updateRole(Admin admin, Role role) {
+		admin.setRoles(role);
 		adminRepository.save(admin);
 	}
 }
