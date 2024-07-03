@@ -19,7 +19,16 @@ public class Image {
 	@Column(name = "image_name", nullable = false, length = 200)
 	private String imageName;
 
+	@Column(name = "image_origin_name", nullable = false, length = 200)
+	private String originName;
+
 	@Lob
-	@Column(name = "image_data", nullable = false)
-	private byte[] imageData;
+	@Column(name = "image_url", nullable = false)
+	private String url;
+
+	public Long getImageId() {
+		return imageId;
+	}
+
 }
+

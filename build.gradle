@@ -47,6 +47,9 @@ dependencies {
 	//embedded-redis
 	implementation group: 'com.github.codemonstur', name: 'embedded-redis', version: '1.4.3'
 
+	//AWS S3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

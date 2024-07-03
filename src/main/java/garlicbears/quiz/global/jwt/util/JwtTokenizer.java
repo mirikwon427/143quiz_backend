@@ -10,11 +10,8 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import garlicbears.quiz.domain.common.entity.Role;
-import garlicbears.quiz.global.exception.CustomException;
-import garlicbears.quiz.global.exception.ErrorCode;
+
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -30,7 +27,7 @@ public class JwtTokenizer {
 		this.refreshSecret = refreshSecret.getBytes(StandardCharsets.UTF_8);
 	}
 
-	public final static Long ACCESS_TOKEN_EXPIRE_COUNT = 60 * 1000L; // 30 minutes
+	public final static Long ACCESS_TOKEN_EXPIRE_COUNT = 30 * 1000L; // 30 minutes
 	public final static Long REFRESH_TOKEN_EXPIRE_COUNT = 7 * 24 * 60 * 60 * 1000L; // 7 days
 
 	/**

@@ -106,9 +106,11 @@ public class AdminController implements SwaggerAdminController {
 	 */
 	@GetMapping("/reisuue")
 	public ResponseEntity<?> requestRefresh(HttpServletRequest request, HttpServletResponse response) {
+
+
 		// 쿠키에서 리프레시 토큰을 읽기
 		String refreshToken = getRefreshTokenFromCookies(request);
-
+		logger.info(refreshToken);
 		// 전달받은 유저의 아이디로 유저가 존재하는지 확인
 		Claims claims = jwtTokenizer.parseRefreshToken(refreshToken);
 		String email = claims.getSubject();
