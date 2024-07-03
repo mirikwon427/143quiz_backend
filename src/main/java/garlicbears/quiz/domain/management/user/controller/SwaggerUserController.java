@@ -6,9 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.ErrorResponse;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import garlicbears.quiz.domain.common.dto.ResponseDto;
+import garlicbears.quiz.domain.management.common.dto.LoginDto;
 import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
 import garlicbears.quiz.domain.management.user.dto.SignUpDto;
 import garlicbears.quiz.domain.management.user.dto.UpdateUserDto;
@@ -19,6 +23,7 @@ import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 public interface SwaggerUserController {
@@ -79,4 +84,33 @@ public interface SwaggerUserController {
 			@Content(schema = @Schema(implementation = ResponseDto.class))})})
 	public ResponseEntity<?> rating(@AuthenticationPrincipal UserDetails userDetails,
 		@RequestBody Map<String, Double> request);
+
+	@Operation(summary = "로그인", description = "email, password를 입력 받아 로그인을 시도합니다.")
+		@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
+			@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+			@ApiResponse(responseCode = "400", description = "Invalid input",
+				content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+			@ApiResponse(responseCode = "401", description = "Unauthorized",
+				content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
+	public ResponseEntity<?> login(@Valid @RequestBody LoginDto loginDto, BindingResult bindingResult,
+		HttpServletResponse response);
+
+	@Operation(summary = "Reissue Token", description = "Access Token 만료 시 재발급")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Successfully retrieved",
+			content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+		@ApiResponse(responseCode = "400", description = "Invalid refresh token",
+			content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+		@ApiResponse(responseCode = "401", description = "Unauthorized",
+			content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
+	@GetMapping("/reissue")
+	public ResponseEntity<?> requestRefresh(HttpServletRequest request, HttpServletResponse response);
+
+	@Operation(summary = "로그아웃", description = "로그아웃 처리")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+		@ApiResponse(responseCode = "400", description = "Invalid request"),
+		@ApiResponse(responseCode = "500", description = "Internal server error")})
+	@DeleteMapping("/logout")
+	public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response);
 }
