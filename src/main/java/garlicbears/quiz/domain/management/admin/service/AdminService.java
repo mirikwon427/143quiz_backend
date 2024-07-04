@@ -1,5 +1,7 @@
 package garlicbears.quiz.domain.management.admin.service;
 
+import java.util.Iterator;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -57,8 +59,22 @@ public class AdminService {
 	}
 
 	@Transactional
-	public void updateRole(Admin admin, Role role) {
-		admin.setRoles(role);
+	public void updateRole(Admin admin, Role newRole) {
+
+		// ROLE_ADMIN 제외한 모든 역할 제거
+		// Iterator : 컬렉션 객체의 요소를 순차적으로 접근하고 반복하는 데 사용되는 인터페이스
+		// admin.getRoles().removeIf(role -> !role.getRoleName().equals("ROLE_ADMIN"));
+		Iterator<Role> iterator = admin.getRoles().iterator();
+		while(iterator.hasNext()) {
+			Role role = iterator.next();
+			if(!role.getRoleName().equals("ROLE_ADMIN")) {
+				iterator.remove();
+			}
+		}
+
+		// 새로운 역할 추가
+		admin.addRole(newRole);
+
 		adminRepository.save(admin);
 	}
 }

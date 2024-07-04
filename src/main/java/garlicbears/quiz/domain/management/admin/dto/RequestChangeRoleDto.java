@@ -7,10 +7,10 @@ public class RequestChangeRoleDto {
 	@NotNull
 	long adminId;
 	@NotNull
-	String role;
+	String roleName;
 
-	public String getRole() {
-		return role;
+	public String getRoleName() {
+		return roleName;
 	}
 
 	public long getAdminId(){
@@ -21,8 +21,8 @@ public class RequestChangeRoleDto {
 
 	}
 
-	public RequestChangeRoleDto(long adminId, String role) {
+	public RequestChangeRoleDto(long adminId, String roleName) {
 		this.adminId = adminId;
-		this.role = role;
+		this.roleName = roleName;
 	}
 }

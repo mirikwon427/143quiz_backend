@@ -205,7 +205,7 @@ public class AdminController implements SwaggerAdminController {
 	@PatchMapping("/changeRole")
 	public ResponseEntity<?> changeAdminRole(@Valid @RequestBody RequestChangeRoleDto requestChangeRoleDto) {
 		Admin admin = adminService.findById(requestChangeRoleDto.getAdminId());
-		Role adminRole = roleRepository.findByRoleName(requestChangeRoleDto.getRole())
+		Role adminRole = roleRepository.findByRoleName(requestChangeRoleDto.getRoleName())
 			.orElseThrow(() -> new CustomException(ErrorCode.ROLE_NOT_FOUND));
 		adminService.updateRole(admin, adminRole);
 		return ResponseEntity.ok(ResponseDto.success());
