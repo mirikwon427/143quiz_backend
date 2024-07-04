@@ -13,7 +13,9 @@ import garlicbears.quiz.domain.common.entity.Image;
 import garlicbears.quiz.domain.common.entity.Role;
 import garlicbears.quiz.domain.common.entity.User;
 import garlicbears.quiz.domain.common.repository.UserRepository;
+import garlicbears.quiz.domain.management.common.repository.ImageRepository;
 import garlicbears.quiz.domain.management.common.repository.RoleRepository;
+import garlicbears.quiz.domain.management.common.service.ImageService;
 import garlicbears.quiz.domain.management.user.dto.SignUpDto;
 import garlicbears.quiz.domain.management.user.dto.UpdateUserDto;
 import garlicbears.quiz.global.exception.CustomException;
@@ -24,13 +26,15 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final RoleRepository roleRepository;
+	private final ImageRepository imageRepository;
 
 	@Autowired
 	UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-		RoleRepository roleRepository) {
+		RoleRepository roleRepository, ImageRepository imageRepository) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.roleRepository = roleRepository;
+		this.imageRepository = imageRepository;
 	}
 
 	public void checkDuplicatedEmail(String email) {
@@ -54,6 +58,9 @@ public class UserService {
 		Role userRole = roleRepository.findByRoleName("ROLE_USER")
 			.orElseThrow(() -> new CustomException(ErrorCode.ROLE_NOT_FOUND));
 
+		User.Gender gender = User.Gender.fromKoreanName(signUpDto.getGender());
+		Image image = imageRepository.findByImageId((long)1);
+
 		User user = new User.UserBuilder(signUpDto.getEmail(), passwordEncoder.encode(signUpDto.getPassword()),
 			signUpDto.getNickname())
 			.userBirthYear(signUpDto.getBirthYear())
@@ -61,6 +68,7 @@ public class UserService {
 			.userLocation(User.Location.fromKoreanName(signUpDto.getLocation()))
 			.userGender(User.Gender.fromKoreanName(signUpDto.getGender()))
 			.userRole(userRole)
+			.userImage(image)
 			.build();
 
 		userRepository.save(user);

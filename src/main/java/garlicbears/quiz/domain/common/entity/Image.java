@@ -43,8 +43,9 @@ public class Image {
 
 	//이미지 파일의 확장자를 추출하는 메소드
 	public String extractExtension(String originName) {
-		String[] split = this.originName.split("\\.");
-		return split[split.length - 1];
+		int index = originName.lastIndexOf('.');
+
+		return originName.substring(index, originName.length());
 	}
 
 	//이미지 파일의 이름을 저장하기 위한 이름으로 변환하는 메소드

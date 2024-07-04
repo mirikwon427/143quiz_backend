@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.common.entity.Image;
@@ -315,13 +316,26 @@ public class UserController implements SwaggerUserController {
 	@PatchMapping("/image")
 	public ResponseEntity<?> image(@AuthenticationPrincipal UserDetails userDetails,
 		@ModelAttribute ImageSaveDto imageSaveDto) {
+
 		if (userDetails == null) {
 			throw new CustomException(ErrorCode.UNAUTHORIZED);
 		}
-		// AWS S3와 DB에 이미지 정보 저장
-		Image image = imageService.saveImage(imageSaveDto.getImage());
 
 		User user = userService.findByEmail(userDetails.getUsername());
+		Long currentImageId = (user.getImage() != null) ? user.getImage().getImageId() : null;
+
+		if(currentImageId != null) {
+			Long userImageId = user.getImage().getImageId();
+			//기존 회원 이미지 삭제
+			user.setImage(null);
+			//S3에서 이미지 삭제
+			imageService.deleteS3Image(userImageId);
+			//DB에서 이미지 삭제
+			imageService.deleteDBImage(userImageId);
+		}
+
+		// AWS S3와 DB에 이미지 정보 저장
+		Image image = imageService.saveImage(imageSaveDto.getImage());
 
 		// 사용자 정보에 이미지 정보 저장
 		userService.updateImage(user, image);
