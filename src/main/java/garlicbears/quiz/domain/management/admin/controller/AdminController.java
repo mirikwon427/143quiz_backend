@@ -21,6 +21,7 @@ import garlicbears.quiz.domain.common.entity.Admin;
 import garlicbears.quiz.domain.common.entity.Role;
 import garlicbears.quiz.domain.management.admin.service.AdminService;
 import garlicbears.quiz.domain.management.common.dto.LoginDto;
+import garlicbears.quiz.domain.management.common.service.AuthService;
 import garlicbears.quiz.global.exception.CustomException;
 import garlicbears.quiz.global.exception.ErrorCode;
 import garlicbears.quiz.global.jwt.service.RefreshTokenService;
@@ -38,18 +39,15 @@ import jakarta.validation.Valid;
 public class AdminController implements SwaggerAdminController {
 	private static final Logger logger = Logger.getLogger(AdminController.class.getName());
 	private final AdminService adminService;
-	private final JwtTokenizer jwtTokenizer;
 	private final PasswordEncoder passwordEncoder;
-	private final RefreshTokenService refreshTokenService;
+	private final AuthService authService;
 
 	public AdminController(AdminService adminService,
-		JwtTokenizer jwtTokenizer,
 		PasswordEncoder passwordEncoder,
-		RefreshTokenService refreshTokenService) {
+		AuthService authService) {
 		this.adminService = adminService;
-		this.jwtTokenizer = jwtTokenizer;
 		this.passwordEncoder = passwordEncoder;
-		this.refreshTokenService = refreshTokenService;
+		this.authService = authService;
 	}
 
 	/**
@@ -69,67 +67,15 @@ public class AdminController implements SwaggerAdminController {
 			throw new CustomException(ErrorCode.INVALID_INPUT);
 		}
 
-		// 사용자의 역할(Role)을 문자열 리스트로 변환
-		List<String> roles = admin.getRoles().stream()
-			.map(Role::getRoleName)
-			.toList();
-
-		// JWT토큰을 생성
-		String accessToken = jwtTokenizer.createAccessToken(admin.getAdminEmail(), admin.getAdminId(), roles);
-		String refreshToken = jwtTokenizer.createRefreshToken(admin.getAdminEmail(), admin.getAdminId(), roles);
-
-		// 리프레시 토큰을 Redis에 저장
-		refreshTokenService.save(admin.getAdminEmail(), refreshToken, JwtTokenizer.REFRESH_TOKEN_EXPIRE_COUNT);
-
-		// 리프레시 토큰을 쿠키에 저장
-		response.addCookie(createRefreshTokenCookie(refreshToken));
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", accessToken);
-
-		return ResponseEntity.ok().headers(headers).body(ResponseDto.success());
-	}
-
-	/**
-	 * 리프레시 토큰을 쿠키에 저장
-	 */
-	private Cookie createRefreshTokenCookie(String refreshToken) {
-		Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
-		refreshTokenCookie.setHttpOnly(true); // JavaScript에서 접근 불가능하도록 설정
-		refreshTokenCookie.setPath("/");
-		refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
-		return refreshTokenCookie;
+		return authService.createTokensAndRespond(admin, response);
 	}
 
 	/**
 	 * 리프레시 토큰을 이용해 새로운 액세스 토큰을 발급.
 	 */
-	@GetMapping("/reisuue")
+	@GetMapping("/reissue")
 	public ResponseEntity<?> requestRefresh(HttpServletRequest request, HttpServletResponse response) {
-		// 쿠키에서 리프레시 토큰을 읽기
-		String refreshToken = getRefreshTokenFromCookies(request);
-
-		// 전달받은 유저의 아이디로 유저가 존재하는지 확인
-		Claims claims = jwtTokenizer.parseRefreshToken(refreshToken);
-		String email = claims.getSubject();
-
-		// 전달받은 이메일로 리프레시 토큰이 존재하는지 확인하고, 존재하지 않으면 예외를 발생
-		refreshTokenService.findRefreshToken(email)
-			.orElseThrow(() -> new CustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND));
-
-		long userId = Long.valueOf((Integer)claims.get("id"));
-		List roles = (List)claims.get("roles");
-
-		// Token을 발급
-		String accessToken = jwtTokenizer.createAccessToken(email, userId, roles);
-		String newRefreshToken = jwtTokenizer.createRefreshToken(email, userId, roles);
-
-		// 기존 리프레시 토큰 삭제 후 새로운 리프레시 토큰 저장
-		refreshTokenService.deleteRefreshToken(email);
-		refreshTokenService.save(email, newRefreshToken, JwtTokenizer.REFRESH_TOKEN_EXPIRE_COUNT);
-
-		// 새로운 리프레시 토큰을 쿠키에 저장
-		response.addCookie(createRefreshTokenCookie(newRefreshToken));
+		String accessToken = authService.requestRefresh(request, response);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", accessToken);
@@ -137,31 +83,6 @@ public class AdminController implements SwaggerAdminController {
 		return ResponseEntity.ok().headers(headers).body(ResponseDto.success());
 	}
 
-	/**
-	 * 쿠키에서 리프레시 토큰을 읽음
-	 */
-	private String getRefreshTokenFromCookies(HttpServletRequest request) {
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if ("refreshToken".equals(cookie.getName())) {
-					return cookie.getValue();
-				}
-			}
-		}
-		throw new CustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND);
-	}
-
-	/**
-	 * 리프레시 토큰을 쿠키에서 삭제하는 메서드.
-	 */
-	private Cookie deleteRefreshTokenCookie() {
-		Cookie refreshTokenCookie = new Cookie("refreshToken", null);
-		refreshTokenCookie.setHttpOnly(true); // JavaScript에서 접근 불가능하도록 설정
-		refreshTokenCookie.setPath("/");
-		refreshTokenCookie.setMaxAge(0); // 쿠키 삭제
-		return refreshTokenCookie;
-	}
 
 	/**
 	 * 로그아웃
@@ -169,14 +90,7 @@ public class AdminController implements SwaggerAdminController {
 	 */
 	@DeleteMapping("/logout")
 	public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
-		String refreshToken = getRefreshTokenFromCookies(request);
-		Claims claims = jwtTokenizer.parseRefreshToken(refreshToken);
-		String email = claims.getSubject();
-		// 리프레시 토큰 삭제
-		refreshTokenService.deleteRefreshToken(email);
-		// 쿠키에서 리프레시 토큰 삭제
-		response.addCookie(deleteRefreshTokenCookie());
-
+		authService.logout(request, response);
 		return ResponseEntity.ok(ResponseDto.success());
 	}
 
