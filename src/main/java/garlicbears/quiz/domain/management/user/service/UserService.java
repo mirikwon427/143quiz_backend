@@ -1,6 +1,7 @@
 package garlicbears.quiz.domain.management.user.service;
 
 import java.time.Year;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -8,8 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import garlicbears.quiz.domain.common.entity.Active;
+import garlicbears.quiz.domain.common.entity.Role;
 import garlicbears.quiz.domain.common.entity.User;
 import garlicbears.quiz.domain.common.repository.UserRepository;
+import garlicbears.quiz.domain.management.common.repository.RoleRepository;
 import garlicbears.quiz.domain.management.user.dto.SignUpDto;
 import garlicbears.quiz.domain.management.user.dto.UpdateUserDto;
 import garlicbears.quiz.global.exception.CustomException;
@@ -19,11 +22,14 @@ import garlicbears.quiz.global.exception.ErrorCode;
 public class UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final RoleRepository roleRepository;
 
 	@Autowired
-	UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+	UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+		RoleRepository roleRepository) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.roleRepository = roleRepository;
 	}
 
 	public void checkDuplicatedEmail(String email) {
@@ -44,6 +50,8 @@ public class UserService {
 
 	@Transactional
 	public void signUp(SignUpDto signUpDto) {
+		Role userRole = roleRepository.findByRoleName("ROLE_USER")
+			.orElseThrow(() -> new CustomException(ErrorCode.ROLE_NOT_FOUND));
 
 		User user = new User.UserBuilder(signUpDto.getEmail(), passwordEncoder.encode(signUpDto.getPassword()),
 			signUpDto.getNickname())
@@ -51,6 +59,7 @@ public class UserService {
 			.userAge(Year.now().getValue() - signUpDto.getBirthYear())
 			.userLocation(User.Location.fromKoreanName(signUpDto.getLocation()))
 			.userGender(User.Gender.fromKoreanName(signUpDto.getGender()))
+			.userRole(userRole)
 			.build();
 
 		userRepository.save(user);
