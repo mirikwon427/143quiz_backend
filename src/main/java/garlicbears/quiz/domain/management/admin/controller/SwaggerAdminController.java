@@ -71,8 +71,9 @@ public interface SwaggerAdminController {
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "Successfully retrieved",
 			content = {@Content(schema = @Schema(implementation = ResponseAdminDto.class))}),
+		@ApiResponse(responseCode = "400", description = "BAD REQUEST (Missing request body variable)"),
 		@ApiResponse(responseCode = "401", description = "Unauthorized (Invalid token)"),
-		@ApiResponse(responseCode = "404", description = "Not Found (Admin not found)")
+		@ApiResponse(responseCode = "404", description = "Not Found (Role Not Found)")
 	})
 	public ResponseEntity<?> changeAdminRole(
 		@Valid @RequestBody RequestChangeRoleDto requestChangeRoleDto
