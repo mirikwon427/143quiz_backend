@@ -120,4 +120,13 @@ public class Admin extends BaseTimeEntity implements UserDetails {
 	public void setActive(Active active) {
 		this.active = active;
 	}
+
+	public void addRole(Role role) {
+		this.roles.add(role);
+	}
+
+	// 필요한 경우, 여러 역할을 한 번에 설정하는 메서드
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
 }
