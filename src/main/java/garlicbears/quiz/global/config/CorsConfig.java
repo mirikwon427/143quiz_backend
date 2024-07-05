@@ -12,8 +12,9 @@ public class CorsConfig {
 	public CorsFilter corsFilter() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
-		//config.setAllowCredentials(true);
+		config.setAllowCredentials(true);
 		config.addAllowedOriginPattern("http://localhost:3000");
+		config.addAllowedOriginPattern("https://garlicbears.com");
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
 
