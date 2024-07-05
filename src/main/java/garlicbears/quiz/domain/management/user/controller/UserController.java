@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import garlicbears.quiz.domain.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
+import garlicbears.quiz.domain.common.dto.ResponseImageDto;
 import garlicbears.quiz.domain.common.entity.Image;
 import garlicbears.quiz.domain.common.entity.Role;
 import garlicbears.quiz.domain.common.entity.User;
@@ -325,7 +326,9 @@ public class UserController implements SwaggerUserController {
 		Image image = imageService.processImage(user, imageSaveDto.getImage(), 1L);
 		userService.updateImage(user, image);
 
-		return ResponseEntity.ok(image.getAccessUrl());
+		// 이미지 URL을 JSON 형식으로 반환
+		ResponseImageDto responseImageDto = new ResponseImageDto(image.getAccessUrl());
+		return ResponseEntity.ok(responseImageDto);
 	}
 
 }

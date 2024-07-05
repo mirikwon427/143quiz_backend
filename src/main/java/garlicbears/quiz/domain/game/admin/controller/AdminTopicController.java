@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import garlicbears.quiz.domain.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
+import garlicbears.quiz.domain.common.dto.ResponseImageDto;
 import garlicbears.quiz.domain.common.entity.Image;
 import garlicbears.quiz.domain.common.service.ImageService;
 import garlicbears.quiz.domain.game.admin.service.TopicService;
@@ -117,7 +118,9 @@ public class AdminTopicController implements SwaggerAdminTopicController {
 		if (topic.isPresent()) {
 			Image image = imageService.processImage(topic.get(), imageSaveDto.getImage(), null);
 			topicService.updateImage(topic.get(), image);
-			return ResponseEntity.ok(image.getAccessUrl());
+			// 이미지 URL을 JSON 형식으로 반환
+			ResponseImageDto responseImageDto = new ResponseImageDto(image.getAccessUrl());
+			return ResponseEntity.ok(responseImageDto);
 		} else {
 			logger.error("해당 topicId의 주제가 없습니다");
 			throw new CustomException(ErrorCode.TOPIC_NOT_FOUND);
