@@ -4,12 +4,15 @@ import java.util.Map;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import garlicbears.quiz.domain.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.game.admin.dto.ResponseTopicListDto;
 import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
@@ -74,4 +77,17 @@ public interface SwaggerAdminTopicController {
 		@ApiResponse(responseCode = "404", description = "Topic Not Found", content = {
 			@Content(schema = @Schema(implementation = ResponseUserDto.class))})})
 	public ResponseEntity<?> deleteTopic(@PathVariable Long topicId);
+
+	@Operation(summary = "주제 이미지 업로드", description = "주제 이미지를 업로드합니다.")
+	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
+		@Content(schema = @Schema(implementation = String.class))}),
+		@ApiResponse(responseCode = "404", description = "Topic Not Found", content = {
+			@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+		@ApiResponse(responseCode = "404", description = "Image Not Found", content = {
+			@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+		@ApiResponse(responseCode = "500", description = "Internal Server Error", content = {
+			@Content(schema = @Schema(implementation = ResponseDto.class))})})
+	@PostMapping("/topic/{topicId}/image")
+	public ResponseEntity<?> uploadTopicImage(
+		@PathVariable Long topicId, @Valid @RequestBody ImageSaveDto imageSaveDto);
 }
