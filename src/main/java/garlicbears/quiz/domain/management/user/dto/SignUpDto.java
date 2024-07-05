@@ -1,5 +1,6 @@
 package garlicbears.quiz.domain.management.user.dto;
 
+import garlicbears.quiz.domain.common.entity.User;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -28,10 +29,10 @@ public class SignUpDto {
 	private int birthYear;
 
 	@NotNull
-	private String gender;
+	private User.Gender gender;
 
 	@NotNull
-	private String location;
+	private User.Location location;
 
 	public String getEmail() {
 		return email;
@@ -49,11 +50,11 @@ public class SignUpDto {
 		return birthYear;
 	}
 
-	public String getGender() {
+	public User.Gender getGender() {
 		return gender;
 	}
 
-	public String getLocation() {
+	public User.Location getLocation() {
 		return location;
 	}
 }
