@@ -19,17 +19,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
+import garlicbears.quiz.domain.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.common.entity.Image;
 import garlicbears.quiz.domain.common.entity.Role;
 import garlicbears.quiz.domain.common.entity.User;
+import garlicbears.quiz.domain.common.service.ImageService;
 import garlicbears.quiz.domain.common.service.LogService;
-import garlicbears.quiz.domain.management.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.management.common.dto.LoginDto;
 import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
-import garlicbears.quiz.domain.management.common.service.ImageService;
 import garlicbears.quiz.domain.management.user.dto.SignUpDto;
 import garlicbears.quiz.domain.management.user.dto.UpdateUserDto;
 import garlicbears.quiz.domain.management.user.service.UserRatingService;
@@ -314,7 +313,7 @@ public class UserController implements SwaggerUserController {
 	 * 회원 프로필 이미지 수정
 	 */
 	@PatchMapping("/image")
-	public ResponseEntity<?> image(@AuthenticationPrincipal UserDetails userDetails,
+	public ResponseEntity<?> updateUserImage(@AuthenticationPrincipal UserDetails userDetails,
 		@ModelAttribute ImageSaveDto imageSaveDto) {
 
 		if (userDetails == null) {
@@ -323,20 +322,7 @@ public class UserController implements SwaggerUserController {
 		}
 
 		User user = userService.findByEmail(userDetails.getUsername());
-		Long currentImageId = (user.getImage() != null) ? user.getImage().getImageId() : null;
-
-		// 1번 이미지는 기본 이미지로 사용
-		if(currentImageId != null && currentImageId != 1L) {
-			//기존 회원 이미지 삭제
-			user.setImage(null);
-			//S3,DB 기존 이미지 삭제
-			imageService.deleteS3Image(currentImageId);
-		}
-
-		// AWS S3와 DB에 이미지 정보 저장
-		Image image = imageService.saveImage(imageSaveDto.getImage());
-
-		// 사용자 정보에 이미지 정보 저장
+		Image image = imageService.processImage(user, imageSaveDto.getImage(), 1L);
 		userService.updateImage(user, image);
 
 		return ResponseEntity.ok(image.getAccessUrl());

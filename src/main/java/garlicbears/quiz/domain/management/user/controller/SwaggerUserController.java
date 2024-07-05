@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import garlicbears.quiz.domain.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
-import garlicbears.quiz.domain.management.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
 import garlicbears.quiz.domain.management.user.dto.SignUpDto;
 import garlicbears.quiz.domain.management.user.dto.UpdateUserDto;
@@ -85,13 +85,13 @@ public interface SwaggerUserController {
 	@PatchMapping("/image")
 	@Operation(summary = "회원 이미지 업로드", description = "회원 프로필 이미지 업로드")
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
-			@Content(schema = @Schema(implementation = ResponseDto.class))
-		}),
-		@ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-			@Content(schema = @Schema(implementation = ResponseDto.class))
-		}),
+			@Content(schema = @Schema(implementation = String.class))}),
+		@ApiResponse(responseCode = "404", description = "User Not Found", content = {
+			@Content(schema = @Schema(implementation = ResponseDto.class))}),
+		@ApiResponse(responseCode = "404", description = "Image Not Found", content = {
+			@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
 		@ApiResponse(responseCode = "500", description = "Internal server error", content = {
 			@Content(schema = @Schema(implementation = ResponseDto.class))})})
-	public ResponseEntity<?> image(@AuthenticationPrincipal UserDetails userDetails,
+	public ResponseEntity<?> updateUserImage(@AuthenticationPrincipal UserDetails userDetails,
 		@ModelAttribute ImageSaveDto imageSaveDto);
 }

@@ -1,4 +1,4 @@
-package garlicbears.quiz.domain.management.common.service;
+package garlicbears.quiz.domain.common.service;
 
 import java.util.logging.Logger;
 
@@ -11,9 +11,12 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 
 import garlicbears.quiz.domain.common.entity.Image;
+import garlicbears.quiz.domain.common.entity.User;
+import garlicbears.quiz.domain.game.common.entity.Topic;
 import garlicbears.quiz.domain.management.common.repository.ImageRepository;
 import garlicbears.quiz.global.exception.CustomException;
 import garlicbears.quiz.global.exception.ErrorCode;
+
 @Service
 public class ImageService {
 	private static final Logger logger = Logger.getLogger(ImageService.class.getName());
@@ -26,6 +29,41 @@ public class ImageService {
 	public ImageService(AmazonS3Client amazonS3Client, ImageRepository imageRepository) {
 		this.amazonS3Client = amazonS3Client;
 		this.imageRepository = imageRepository;
+	}
+
+	@Transactional
+	public Image processImage(Object container, MultipartFile newImageFile, Long defaultImageId) {
+		Image currentImage = null;
+
+		if (container instanceof User user) {
+			currentImage = user.getImage();
+		} else if (container instanceof Topic topic) {
+			currentImage = topic.getTopicImage();
+		}
+
+		Long currentImageId = (currentImage != null) ? currentImage.getImageId() : null;
+
+		// 기본 이미지는 삭제하지 않음
+		if (currentImageId != null && !currentImageId.equals(defaultImageId)) {
+			if (container instanceof User) {
+				((User) container).setImage(null);
+			} else {
+				((Topic) container).setTopicImage(null);
+			}
+
+			deleteS3Image(currentImageId);
+		}
+
+		// AWS S3와 DB에 새 이미지 정보 저장
+		Image newImage = saveImage(newImageFile);
+
+		if (container instanceof User) {
+			((User) container).setImage(newImage);
+		} else if (container instanceof Topic) {
+			((Topic) container).setTopicImage(newImage);
+		}
+
+		return newImage;
 	}
 
 	@Transactional
@@ -86,13 +124,5 @@ public class ImageService {
 			logger.warning("Unexpected DB deleting imageId : " + e.getMessage());
 			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
-	}
-
-	public Image findDefaultImage(){
-		Image image = imageRepository.findByImageId((long) 1);
-		if(image == null){
-			throw new CustomException(ErrorCode.IMAGE_NOT_FOUND);
-		}
-		return image;
 	}
 }

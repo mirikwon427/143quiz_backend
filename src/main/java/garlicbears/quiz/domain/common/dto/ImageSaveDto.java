@@ -1,4 +1,4 @@
-package garlicbears.quiz.domain.management.common.dto;
+package garlicbears.quiz.domain.common.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 

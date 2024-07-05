@@ -17,7 +17,6 @@ import garlicbears.quiz.domain.common.entity.User;
 import garlicbears.quiz.domain.common.repository.UserRepository;
 import garlicbears.quiz.domain.management.common.repository.ImageRepository;
 import garlicbears.quiz.domain.management.common.repository.RoleRepository;
-import garlicbears.quiz.domain.management.common.service.ImageService;
 import garlicbears.quiz.domain.management.user.dto.SignUpDto;
 import garlicbears.quiz.domain.management.user.dto.UpdateUserDto;
 import garlicbears.quiz.global.exception.CustomException;
