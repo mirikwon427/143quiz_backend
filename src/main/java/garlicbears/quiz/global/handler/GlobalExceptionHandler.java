@@ -31,10 +31,6 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(NullPointerException.class)
 	public ResponseEntity<ResponseDto<String>> handleNullPointerException(NullPointerException e) {
 		ErrorCode errorCode = ErrorCode.MISSING_REQUEST_BODY_VARIABLE;
-
-		// 예외 스택 트레이스를 로깅합니다.
-		logger.error("NullPointerException occurred: ", e);
-
 		ResponseDto<String> response = new ResponseDto<>(errorCode.getStatus().value(), errorCode.toString());
 		return new ResponseEntity<>(response, errorCode.getStatus());
 	}

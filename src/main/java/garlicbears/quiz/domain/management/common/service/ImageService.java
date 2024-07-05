@@ -65,19 +65,27 @@ public class ImageService {
 		String imageName = image.getImageName();
 		try {
 			amazonS3Client.deleteObject(bucketName, imageName);
+			//DB에서 이미지 삭제
+			deleteDBImage(imageId);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.warning("Unexpected AWS S3 deleting imageId : " + e.getMessage());
 			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@Transactional
 	public void deleteDBImage(Long imageId) {
-		Image image = imageRepository.findByImageId(imageId);
-		if (image == null) {
-			throw new CustomException(ErrorCode.IMAGE_NOT_FOUND);
+		try {
+			Image image = imageRepository.findByImageId(imageId);
+			if (image == null) {
+				logger.warning("ImageId not found : " + imageId);
+				throw new CustomException(ErrorCode.IMAGE_NOT_FOUND);
+			}
+			imageRepository.delete(image);
+		} catch (Exception e) {
+			logger.warning("Unexpected DB deleting imageId : " + e.getMessage());
+			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
 		}
-		imageRepository.delete(image);
 	}
 
 	public Image findDefaultImage(){

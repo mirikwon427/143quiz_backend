@@ -318,20 +318,19 @@ public class UserController implements SwaggerUserController {
 		@ModelAttribute ImageSaveDto imageSaveDto) {
 
 		if (userDetails == null) {
+			logger.warning("AccessToken에 관리자 정보가 없습니다.");
 			throw new CustomException(ErrorCode.UNAUTHORIZED);
 		}
 
 		User user = userService.findByEmail(userDetails.getUsername());
 		Long currentImageId = (user.getImage() != null) ? user.getImage().getImageId() : null;
 
-		if(currentImageId != null) {
-			Long userImageId = user.getImage().getImageId();
+		// 1번 이미지는 기본 이미지로 사용
+		if(currentImageId != null && currentImageId != 1L) {
 			//기존 회원 이미지 삭제
 			user.setImage(null);
-			//S3에서 이미지 삭제
-			imageService.deleteS3Image(userImageId);
-			//DB에서 이미지 삭제
-			imageService.deleteDBImage(userImageId);
+			//S3,DB 기존 이미지 삭제
+			imageService.deleteS3Image(currentImageId);
 		}
 
 		// AWS S3와 DB에 이미지 정보 저장

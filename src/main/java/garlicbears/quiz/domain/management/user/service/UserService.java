@@ -3,6 +3,8 @@ package garlicbears.quiz.domain.management.user.service;
 import java.time.Year;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import garlicbears.quiz.global.exception.ErrorCode;
 
 @Service
 public class UserService {
+	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final RoleRepository roleRepository;
@@ -104,8 +107,13 @@ public class UserService {
 
 	@Transactional
 	public User findByEmail(String email) {
-		return userRepository.findByUserEmailAndUserActive(email, Active.active)
-			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+		Optional<User> user = userRepository.findByUserEmailAndUserActive(email, Active.active);
+		if (user.isPresent()) {
+			return user.get();
+		} else {
+			logger.error("AccessToken에 해당 유저의 정보가 없습니다. Email: {}", email);
+			throw new CustomException(ErrorCode.USER_NOT_FOUND);
+		}
 	}
 
 	@Transactional
