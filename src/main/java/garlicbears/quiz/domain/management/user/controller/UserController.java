@@ -1,6 +1,5 @@
 package garlicbears.quiz.domain.management.user.controller;
 
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -24,7 +23,6 @@ import garlicbears.quiz.domain.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.common.dto.ResponseImageDto;
 import garlicbears.quiz.domain.common.entity.Image;
-import garlicbears.quiz.domain.common.entity.Role;
 import garlicbears.quiz.domain.common.entity.User;
 import garlicbears.quiz.domain.common.service.ImageService;
 import garlicbears.quiz.domain.common.service.LogService;
@@ -37,11 +35,7 @@ import garlicbears.quiz.domain.management.user.service.UserRatingService;
 import garlicbears.quiz.domain.management.user.service.UserService;
 import garlicbears.quiz.global.exception.CustomException;
 import garlicbears.quiz.global.exception.ErrorCode;
-import garlicbears.quiz.global.jwt.service.RefreshTokenService;
-import garlicbears.quiz.global.jwt.util.JwtTokenizer;
-import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import garlicbears.quiz.global.handler.ClientIpHandler;

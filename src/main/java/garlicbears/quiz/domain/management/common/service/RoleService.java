@@ -1,4 +1,4 @@
-package garlicbears.quiz.domain.management.common.sevice;
+package garlicbears.quiz.domain.management.common.service;
 
 import org.springframework.stereotype.Service;
 

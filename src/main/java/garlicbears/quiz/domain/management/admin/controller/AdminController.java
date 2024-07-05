@@ -1,6 +1,5 @@
 package garlicbears.quiz.domain.management.admin.controller;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.http.HttpHeaders;
@@ -24,15 +23,10 @@ import garlicbears.quiz.domain.management.admin.dto.RequestChangeRoleDto;
 import garlicbears.quiz.domain.management.admin.service.AdminService;
 import garlicbears.quiz.domain.management.common.dto.LoginDto;
 import garlicbears.quiz.domain.management.common.service.AuthService;
-import garlicbears.quiz.domain.management.common.repository.RoleRepository;
-import garlicbears.quiz.domain.management.common.sevice.RoleService;
+import garlicbears.quiz.domain.management.common.service.RoleService;
 import garlicbears.quiz.global.exception.CustomException;
 import garlicbears.quiz.global.exception.ErrorCode;
-import garlicbears.quiz.global.jwt.service.RefreshTokenService;
-import garlicbears.quiz.global.jwt.util.JwtTokenizer;
-import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;

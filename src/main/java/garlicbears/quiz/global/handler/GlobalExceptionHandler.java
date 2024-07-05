@@ -14,8 +14,6 @@ import garlicbears.quiz.global.exception.ErrorCode;
 public class GlobalExceptionHandler {
 	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
 	/**
 	 * CustomException을 처리하는 핸들러
 	 */
