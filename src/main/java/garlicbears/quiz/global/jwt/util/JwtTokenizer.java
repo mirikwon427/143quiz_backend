@@ -10,11 +10,8 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import garlicbears.quiz.domain.common.entity.Role;
-import garlicbears.quiz.global.exception.CustomException;
-import garlicbears.quiz.global.exception.ErrorCode;
+
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 

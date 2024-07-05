@@ -5,6 +5,7 @@ import java.util.List;
 
 import garlicbears.quiz.domain.common.entity.Active;
 import garlicbears.quiz.domain.common.entity.BaseTimeEntity;
+import garlicbears.quiz.domain.common.entity.Image;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,7 +13,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -38,6 +42,10 @@ public class Topic extends BaseTimeEntity {
 
 	@OneToMany(mappedBy = "topic")
 	private List<Reward> reward = new ArrayList<>();
+
+	@OneToOne
+	@JoinColumn(name = "topic_image_seq")
+	private Image topicImage;
 
 	public Topic() {
 	}
@@ -88,5 +96,13 @@ public class Topic extends BaseTimeEntity {
 
 	public void setTopicUsageCount(int topicUsageCount) {
 		this.topicUsageCount = topicUsageCount;
+	}
+
+	public Image getTopicImage() {
+		return topicImage;
+	}
+
+	public void setTopicImage(Image topicImage) {
+		this.topicImage = topicImage;
 	}
 }

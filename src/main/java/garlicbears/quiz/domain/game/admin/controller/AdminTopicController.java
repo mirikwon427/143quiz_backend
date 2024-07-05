@@ -1,12 +1,16 @@
 package garlicbears.quiz.domain.game.admin.controller;
 
 import java.util.Map;
+import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +21,13 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import garlicbears.quiz.domain.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
+import garlicbears.quiz.domain.common.dto.ResponseImageDto;
+import garlicbears.quiz.domain.common.entity.Image;
+import garlicbears.quiz.domain.common.service.ImageService;
 import garlicbears.quiz.domain.game.admin.service.TopicService;
+import garlicbears.quiz.domain.game.common.entity.Topic;
 import garlicbears.quiz.global.exception.CustomException;
 import garlicbears.quiz.global.exception.ErrorCode;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,11 +40,15 @@ import jakarta.validation.Valid;
 @RequestMapping("/admin")
 @Tag(name = "주제 관리")
 public class AdminTopicController implements SwaggerAdminTopicController {
+	private static Logger logger = LoggerFactory.getLogger(AdminTopicController.class);
 	private final TopicService topicService;
+	private final ImageService imageService;
 
 	@Autowired
-	public AdminTopicController(TopicService topicService) {
+	public AdminTopicController(TopicService topicService,
+		ImageService imageService) {
 		this.topicService = topicService;
+		this.imageService = imageService;
 	}
 
 	@GetMapping("/topics")
@@ -95,4 +108,20 @@ public class AdminTopicController implements SwaggerAdminTopicController {
 		return ResponseEntity.ok(ResponseDto.success());
 	}
 
+	@PostMapping("/topic/{topicId}/image")
+	public ResponseEntity<?> uploadTopicImage(
+		@PathVariable Long topicId, @ModelAttribute ImageSaveDto imageSaveDto) {
+
+		Optional<Topic> topic = topicService.findByTopicId(topicId);
+		if (topic.isPresent()) {
+			Image image = imageService.processImage(topic.get(), imageSaveDto.getImage(), null);
+			topicService.updateImage(topic.get(), image);
+			// 이미지 URL을 JSON 형식으로 반환
+			ResponseImageDto responseImageDto = new ResponseImageDto(image.getAccessUrl());
+			return ResponseEntity.ok(responseImageDto);
+		} else {
+			logger.error("해당 topicId의 주제가 없습니다");
+			throw new CustomException(ErrorCode.TOPIC_NOT_FOUND);
+		}
+	}
 }
