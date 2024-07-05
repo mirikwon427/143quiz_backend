@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import garlicbears.quiz.domain.common.entity.Active;
+import garlicbears.quiz.domain.common.entity.Image;
+import garlicbears.quiz.domain.common.entity.User;
 import garlicbears.quiz.domain.game.admin.dto.ResponseQuestionDto;
 import garlicbears.quiz.domain.game.admin.dto.ResponseTopicDto;
 import garlicbears.quiz.domain.game.admin.dto.ResponseTopicListDto;
@@ -150,5 +152,11 @@ public class TopicService {
 
 	public List<Topic> findByTopicTitle(String topicTitle) {
 		return topicRepository.findByTopicTitle(topicTitle);
+	}
+
+	@Transactional
+	public void updateImage(Topic topic, Image image) {
+		topic.setTopicImage(image);
+		topicRepository.save(topic);
 	}
 }

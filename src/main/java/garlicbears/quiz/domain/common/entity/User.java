@@ -27,7 +27,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -79,6 +81,10 @@ public class User extends BaseTimeEntity implements UserDetails {
 	)
 	private Set<Role> roles = new HashSet<>();
 
+	@ManyToOne
+	@JoinColumn(name = "user_image_seq")
+	private Image image;
+
 	public User() {
 	}
 
@@ -96,6 +102,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 		this.userGender = builder.userGender;
 		this.userLocation = builder.userLocation;
 		this.roles = builder.roles;
+		this.image = builder.image;
 	}
 
 	public Long getUserId() {
@@ -146,6 +153,10 @@ public class User extends BaseTimeEntity implements UserDetails {
 		return roles;
 	}
 
+	public Image getImage() {
+		return image;
+	}
+
 	public void setUserBirthYear(int userBirthYear) {
 		this.userBirthYear = userBirthYear;
 	}
@@ -164,6 +175,10 @@ public class User extends BaseTimeEntity implements UserDetails {
 
 	public void setUserActive(Active userActive) {
 		this.userActive = userActive;
+	}
+
+	public void setImage(Image image) {
+		this.image = image;
 	}
 
 	@Override
@@ -211,8 +226,8 @@ public class User extends BaseTimeEntity implements UserDetails {
 		private int userAge;
 		private Gender userGender;
 		private Location userLocation;
-
 		private Set<Role> roles = new HashSet<>();
+		private Image image;
 
 		public UserBuilder(String userEmail, String userPassword, String userNickname) {
 			this.userEmail = userEmail;
@@ -242,6 +257,10 @@ public class User extends BaseTimeEntity implements UserDetails {
 
 		public UserBuilder userRole(Role role) {
 			this.roles.add(role);
+			return this;
+		}
+		public UserBuilder userImage(Image image) {
+			this.image = image;
 			return this;
 		}
 

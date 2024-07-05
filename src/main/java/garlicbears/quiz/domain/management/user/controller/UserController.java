@@ -13,14 +13,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import garlicbears.quiz.domain.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
+import garlicbears.quiz.domain.common.dto.ResponseImageDto;
+import garlicbears.quiz.domain.common.entity.Image;
+import garlicbears.quiz.domain.common.entity.Role;
 import garlicbears.quiz.domain.common.entity.User;
+import garlicbears.quiz.domain.common.service.ImageService;
 import garlicbears.quiz.domain.common.service.LogService;
 import garlicbears.quiz.domain.management.common.dto.LoginDto;
 import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
@@ -48,27 +54,24 @@ public class UserController implements SwaggerUserController {
 	private static final Logger logger = Logger.getLogger(UserController.class.getName());
 	private final UserService userService;
 	private final UserRatingService userRatingService;
-	private final JwtTokenizer jwtTokenizer;
 	private final PasswordEncoder passwordEncoder;
-	private final RefreshTokenService refreshTokenService;
 	private final LogService logService;
 	private final AuthService authService;
+	private final ImageService imageService;
 
 	@Autowired
 	UserController(UserService userService,
 		UserRatingService userRatingService,
-		JwtTokenizer jwtTokenizer,
 		PasswordEncoder passwordEncoder,
-		RefreshTokenService refreshTokenService,
 		LogService logService,
-		AuthService authService) {
+		AuthService authService,
+		ImageService imageService) {
 		this.userService = userService;
 		this.userRatingService = userRatingService;
-		this.jwtTokenizer = jwtTokenizer;
 		this.passwordEncoder = passwordEncoder;
-		this.refreshTokenService = refreshTokenService;
 		this.logService = logService;
 		this.authService = authService;
+		this.imageService = imageService;
 	}
 
 	/**
@@ -218,6 +221,28 @@ public class UserController implements SwaggerUserController {
 	public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
 		authService.logout(request, response);
 		return ResponseEntity.ok(ResponseDto.success());
+	}
+
+
+	/**
+	 * 회원 프로필 이미지 수정
+	 */
+	@PatchMapping("/image")
+	public ResponseEntity<?> updateUserImage(@AuthenticationPrincipal UserDetails userDetails,
+		@ModelAttribute ImageSaveDto imageSaveDto) {
+
+		if (userDetails == null) {
+			logger.warning("AccessToken에 관리자 정보가 없습니다.");
+			throw new CustomException(ErrorCode.UNAUTHORIZED);
+		}
+
+		User user = userService.findByEmail(userDetails.getUsername());
+		Image image = imageService.processImage(user, imageSaveDto.getImage(), 1L);
+		userService.updateImage(user, image);
+
+		// 이미지 URL을 JSON 형식으로 반환
+		ResponseImageDto responseImageDto = new ResponseImageDto(image.getAccessUrl());
+		return ResponseEntity.ok(responseImageDto);
 	}
 
 }
