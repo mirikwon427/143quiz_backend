@@ -7,17 +7,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.common.entity.Admin;
 import garlicbears.quiz.domain.common.entity.User;
 import garlicbears.quiz.domain.common.entity.Role;
-import garlicbears.quiz.domain.management.admin.service.AdminService;
-import garlicbears.quiz.domain.management.user.service.UserService;
 import garlicbears.quiz.global.exception.CustomException;
 import garlicbears.quiz.global.exception.ErrorCode;
 import garlicbears.quiz.global.jwt.service.RefreshTokenService;
