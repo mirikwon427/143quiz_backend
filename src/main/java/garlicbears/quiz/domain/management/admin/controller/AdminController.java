@@ -104,7 +104,7 @@ public class AdminController implements SwaggerAdminController {
 	/**
 	 * 리프레시 토큰을 이용해 새로운 액세스 토큰을 발급.
 	 */
-	@GetMapping("/reisuue")
+	@GetMapping("/reissue")
 	public ResponseEntity<?> requestRefresh(HttpServletRequest request, HttpServletResponse response) {
 
 

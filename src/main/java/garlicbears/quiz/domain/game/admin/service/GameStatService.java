@@ -42,11 +42,11 @@ public class GameStatService {
 
 	public DashboardDto getDashboard() {
 		// 대시보드 정보 반환
-		long totalVisitors = getTotalVisitors().getTotalVisitors();
+		TotalVisitorCountDto totalVisitors = getTotalVisitors();
 		long dailyActiveUsers = logRepository.getDailyActiveUserCount();
 		long dailyGamePlays = gameSessionRepository.getTodayGameSessionCount();
 		long totalUsers = userRepository.count();
-		double averageRating = ratingRepository.getAverageRating();
+		Double averageRating = ratingRepository.getAverageRating();
 
 		return new DashboardDto(totalVisitors, dailyActiveUsers, dailyGamePlays, totalUsers, averageRating);
 	}

@@ -7,13 +7,13 @@ public class DashboardDto {
 	private long totalUsers;
 	private double averageRating;
 
-	public DashboardDto(long totalVisitors, long dailyActiveUsers, long dailyGamePlays, long totalUsers,
-		double averageRating) {
-		this.totalVisitors = totalVisitors;
+	public DashboardDto(TotalVisitorCountDto totalVisitors, long dailyActiveUsers, long dailyGamePlays, long totalUsers,
+		Double averageRating) {
+		this.totalVisitors = totalVisitors.getTotalVisitors();
 		this.dailyActiveUsers = dailyActiveUsers;
 		this.dailyGamePlays = dailyGamePlays;
 		this.totalUsers = totalUsers;
-		this.averageRating = averageRating;
+		this.averageRating = averageRating == null ? 0 : averageRating;
 	}
 
 	public long getTotalVisitors() {
