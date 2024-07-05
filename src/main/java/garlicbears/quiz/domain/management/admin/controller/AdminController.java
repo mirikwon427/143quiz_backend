@@ -24,6 +24,7 @@ import garlicbears.quiz.domain.management.admin.dto.RequestChangeRoleDto;
 import garlicbears.quiz.domain.management.admin.service.AdminService;
 import garlicbears.quiz.domain.management.common.dto.LoginDto;
 import garlicbears.quiz.domain.management.common.repository.RoleRepository;
+import garlicbears.quiz.domain.management.common.sevice.RoleService;
 import garlicbears.quiz.global.exception.CustomException;
 import garlicbears.quiz.global.exception.ErrorCode;
 import garlicbears.quiz.global.jwt.service.RefreshTokenService;
@@ -44,18 +45,18 @@ public class AdminController implements SwaggerAdminController {
 	private final JwtTokenizer jwtTokenizer;
 	private final PasswordEncoder passwordEncoder;
 	private final RefreshTokenService refreshTokenService;
-	private final RoleRepository roleRepository;
+	private final RoleService roleService;
 
 	public AdminController(AdminService adminService,
 		JwtTokenizer jwtTokenizer,
 		PasswordEncoder passwordEncoder,
 		RefreshTokenService refreshTokenService,
-		RoleRepository roleRepository) {
+		RoleService roleService) {
 		this.adminService = adminService;
 		this.jwtTokenizer = jwtTokenizer;
 		this.passwordEncoder = passwordEncoder;
 		this.refreshTokenService = refreshTokenService;
-		this.roleRepository = roleRepository;
+		this.roleService = roleService;
 	}
 
 	/**
@@ -205,8 +206,7 @@ public class AdminController implements SwaggerAdminController {
 	@PatchMapping("/changeRole")
 	public ResponseEntity<?> changeAdminRole(@Valid @RequestBody RequestChangeRoleDto requestChangeRoleDto) {
 		Admin admin = adminService.findById(requestChangeRoleDto.getAdminId());
-		Role adminRole = roleRepository.findByRoleName(requestChangeRoleDto.getRoleName())
-			.orElseThrow(() -> new CustomException(ErrorCode.ROLE_NOT_FOUND));
+		Role adminRole = roleService.findByRoleName(requestChangeRoleDto.getRoleName());
 		adminService.updateRole(admin, adminRole);
 		return ResponseEntity.ok(ResponseDto.success());
 	}
