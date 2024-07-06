@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import garlicbears.quiz.domain.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
+import garlicbears.quiz.domain.common.dto.ResponseImageDto;
 import garlicbears.quiz.domain.game.admin.dto.ResponseTopicListDto;
 import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -80,7 +81,7 @@ public interface SwaggerAdminTopicController {
 
 	@Operation(summary = "주제 이미지 업로드", description = "주제 이미지를 업로드합니다.")
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
-		@Content(schema = @Schema(implementation = String.class))}),
+		@Content(schema = @Schema(implementation = ResponseImageDto.class))}),
 		@ApiResponse(responseCode = "404", description = "Topic Not Found", content = {
 			@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
 		@ApiResponse(responseCode = "404", description = "Image Not Found", content = {
@@ -88,6 +89,7 @@ public interface SwaggerAdminTopicController {
 		@ApiResponse(responseCode = "500", description = "Internal Server Error", content = {
 			@Content(schema = @Schema(implementation = ResponseDto.class))})})
 	@PostMapping("/topic/{topicId}/image")
-	public ResponseEntity<?> uploadTopicImage(
-		@PathVariable Long topicId, @Valid @RequestBody ImageSaveDto imageSaveDto);
+	public ResponseEntity<?> uploadTopicImage(@PathVariable Long topicId,
+		@Parameter(description = "이미지 파일", content = @Content(mediaType = "multipart/form-data"))
+		@Valid @RequestBody ImageSaveDto imageSaveDto);
 }
