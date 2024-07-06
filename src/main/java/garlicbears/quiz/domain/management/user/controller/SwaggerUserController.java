@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import garlicbears.quiz.domain.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
+import garlicbears.quiz.domain.common.dto.ResponseImageDto;
 import garlicbears.quiz.domain.management.common.dto.LoginDto;
 import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
 import garlicbears.quiz.domain.management.user.dto.SignUpDto;
 import garlicbears.quiz.domain.management.user.dto.UpdateUserDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.SchemaProperty;
@@ -90,7 +92,7 @@ public interface SwaggerUserController {
 	@PatchMapping("/image")
 	@Operation(summary = "회원 이미지 업로드", description = "회원 프로필 이미지 업로드")
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
-			@Content(schema = @Schema(implementation = ImageSaveDto.class))}),
+			@Content(schema = @Schema(implementation = ResponseImageDto.class))}),
 		@ApiResponse(responseCode = "404", description = "User Not Found", content = {
 			@Content(schema = @Schema(implementation = ResponseDto.class))}),
 		@ApiResponse(responseCode = "404", description = "Image Not Found", content = {
@@ -98,6 +100,7 @@ public interface SwaggerUserController {
 		@ApiResponse(responseCode = "500", description = "Internal server error", content = {
 			@Content(schema = @Schema(implementation = ResponseDto.class))})})
 	public ResponseEntity<?> updateUserImage(@AuthenticationPrincipal UserDetails userDetails,
+		@Parameter(description = "이미지 파일", content = @Content(mediaType = "multipart/form-data"))
 		@ModelAttribute ImageSaveDto imageSaveDto);
 
 	@Operation(summary = "로그인", description = "email, password를 입력 받아 로그인을 시도합니다.")
