@@ -16,13 +16,12 @@ public class ResponseAdminDto {
 	private List<String> adminRole;
 
 	public ResponseAdminDto(long adminId, String adminEmail, Active adminActive,
-		LocalDateTime createdAt, LocalDateTime updatedAt, List<String> adminRole) {
+		LocalDateTime createdAt, LocalDateTime updatedAt) {
 		this.adminId = adminId;
 		this.adminEmail = adminEmail;
 		this.adminActive = adminActive.name();
 		this.createdAt = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		this.updatedAt = updatedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-		this.adminRole = adminRole;
 	}
 
 	public long getAdminId() {
@@ -47,5 +46,9 @@ public class ResponseAdminDto {
 
 	public List<String> getAdminRole() {
 		return adminRole;
+	}
+
+	public void setAdminRole(List<String> adminRole) {
+		this.adminRole = adminRole;
 	}
 }
