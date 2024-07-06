@@ -1,11 +1,13 @@
 package garlicbears.quiz.domain.management.user.dto;
 
+import garlicbears.quiz.domain.common.entity.User;
+
 public class UpdateUserDto {
 	private Integer birthYear;
-	private String gender;
-	private String location;
+	private User.Gender gender;
+	private User.Location location;
 
-	public UpdateUserDto(Integer birthYear, String gender, String location) {
+	public UpdateUserDto(Integer birthYear, User.Gender gender, User.Location location) {
 		this.birthYear = birthYear;
 		this.gender = gender;
 		this.location = location;
@@ -15,11 +17,11 @@ public class UpdateUserDto {
 		return birthYear;
 	}
 
-	public String getGender() {
+	public User.Gender getGender() {
 		return gender;
 	}
 
-	public String getLocation() {
+	public User.Location getLocation() {
 		return location;
 	}
 }

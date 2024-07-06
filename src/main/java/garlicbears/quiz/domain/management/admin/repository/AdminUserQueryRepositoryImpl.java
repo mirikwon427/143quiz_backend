@@ -48,7 +48,8 @@ public class AdminUserQueryRepositoryImpl implements AdminUserQueryRepository {
 				user.userAge,
 				user.userGender,
 				user.userLocation,
-				user.userActive
+				user.userActive,
+				user.image.accessUrl
 			))
 			.from(user)
 			.orderBy(getOrderSpecifier(user, sortBy))

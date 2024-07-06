@@ -9,8 +9,8 @@ public class ResponseUserDto {
 	private String nickname;
 	private int birthYear;
 	private int age;
-	private String gender;
-	private String location;
+	private User.Gender gender;
+	private User.Location location;
 	private String active;
 	private String imageUrl;
 
@@ -21,8 +21,8 @@ public class ResponseUserDto {
 		this.nickname = nickname;
 		this.birthYear = birthYear;
 		this.age = age;
-		this.gender = gender.getKoreanName();
-		this.location = location.getKoreanName();
+		this.gender = gender;
+		this.location = location;
 		this.active = active.name();
 		this.imageUrl = imageUrl;
 	}
@@ -47,11 +47,11 @@ public class ResponseUserDto {
 		return age;
 	}
 
-	public String getGender() {
+	public User.Gender getGender() {
 		return gender;
 	}
 
-	public String getLocation() {
+	public User.Location getLocation() {
 		return location;
 	}
 
