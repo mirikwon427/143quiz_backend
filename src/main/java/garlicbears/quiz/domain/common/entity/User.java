@@ -259,6 +259,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 			this.roles.add(role);
 			return this;
 		}
+
 		public UserBuilder userImage(Image image) {
 			this.image = image;
 			return this;
@@ -270,50 +271,20 @@ public class User extends BaseTimeEntity implements UserDetails {
 	}
 
 	public enum Gender {
-		male("남자"), female("여자"), other("기타");
-
-		private final String koreanName;
-
-		Gender(String koreanName) {
-			this.koreanName = koreanName;
-		}
-
-		public String getKoreanName() {
-			return koreanName;
-		}
-
-		public static Gender fromKoreanName(String koreanName) {
-			for (Gender gender : Gender.values()) {
-				if (gender.getKoreanName().equalsIgnoreCase(koreanName)) {
-					return gender;
-				}
-			}
-			throw new CustomException(ErrorCode.UNKNOWN_GENDER);
-		}
+		male,
+		female,
+		other;
 	}
 
 	public enum Location {
-		Seoul("서울"), Gyeonggi("경기"), Incheon("인천"), Chungcheong("충청"), Jeolla("전라"), Gyeongsang("경상"), Jeju(
-			"제주"), Overseas(
-			"해외");
-
-		private final String koreanName;
-
-		Location(String koreanName) {
-			this.koreanName = koreanName;
-		}
-
-		public String getKoreanName() {
-			return koreanName;
-		}
-
-		public static Location fromKoreanName(String koreanName) {
-			for (Location location : Location.values()) {
-				if (location.getKoreanName().equalsIgnoreCase(koreanName)) {
-					return location;
-				}
-			}
-			throw new CustomException(ErrorCode.UNKNOWN_LOCATION);
-		}
+		Seoul,
+		Gangwon,
+		Gyeonggi,
+		Incheon,
+		Chungcheong,
+		Jeolla,
+		Gyeongsang,
+		Jeju,
+		Overseas;
 	}
 }

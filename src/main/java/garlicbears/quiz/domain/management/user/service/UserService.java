@@ -60,15 +60,14 @@ public class UserService {
 		Role userRole = roleRepository.findByRoleName("ROLE_USER")
 			.orElseThrow(() -> new CustomException(ErrorCode.ROLE_NOT_FOUND));
 
-		User.Gender gender = User.Gender.fromKoreanName(signUpDto.getGender());
 		Image image = imageRepository.findByImageId((long)1);
 
 		User user = new User.UserBuilder(signUpDto.getEmail(), passwordEncoder.encode(signUpDto.getPassword()),
 			signUpDto.getNickname())
 			.userBirthYear(signUpDto.getBirthYear())
 			.userAge(Year.now().getValue() - signUpDto.getBirthYear())
-			.userLocation(User.Location.fromKoreanName(signUpDto.getLocation()))
-			.userGender(User.Gender.fromKoreanName(signUpDto.getGender()))
+			.userLocation(signUpDto.getLocation())
+			.userGender(signUpDto.getGender())
 			.userRole(userRole)
 			.userImage(image)
 			.build();
@@ -88,11 +87,11 @@ public class UserService {
 		}
 
 		if (updateUserDto.getGender() != null) {
-			user.setUserGender(User.Gender.fromKoreanName(updateUserDto.getGender()));
+			user.setUserGender(updateUserDto.getGender());
 		}
 
 		if (updateUserDto.getLocation() != null) {
-			user.setUserLocation(User.Location.fromKoreanName(updateUserDto.getLocation()));
+			user.setUserLocation(updateUserDto.getLocation());
 		}
 
 		userRepository.save(user);
