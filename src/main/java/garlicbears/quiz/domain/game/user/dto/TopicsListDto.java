@@ -19,9 +19,10 @@ public class TopicsListDto {
 	public TopicsListDto() {
 	}
 
-	public TopicsListDto(long topicId, String title) {
+	public TopicsListDto(long topicId, String title, String topicImage) {
 		this.topicId = topicId;
 		this.title = title;
+		this.topicImage = topicImage;
 	}
 
 	public TopicsListDto(long topicId, String title, int heartsCount, String topicImage) {
