@@ -12,8 +12,8 @@ import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
-import garlicbears.quiz.domain.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.common.dto.ResponseImageDto;
 import garlicbears.quiz.domain.management.common.dto.LoginDto;
@@ -100,8 +100,7 @@ public interface SwaggerUserController {
 		@ApiResponse(responseCode = "500", description = "Internal server error", content = {
 			@Content(schema = @Schema(implementation = ResponseDto.class))})})
 	public ResponseEntity<?> updateUserImage(@AuthenticationPrincipal UserDetails userDetails,
-		@Parameter(description = "이미지 파일", content = @Content(mediaType = "multipart/form-data"))
-		@ModelAttribute ImageSaveDto imageSaveDto);
+		@ModelAttribute MultipartFile image);
 
 	@Operation(summary = "로그인", description = "email, password를 입력 받아 로그인을 시도합니다.")
 		@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {

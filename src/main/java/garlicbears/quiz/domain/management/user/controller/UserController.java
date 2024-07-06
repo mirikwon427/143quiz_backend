@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import garlicbears.quiz.domain.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.common.dto.ResponseImageDto;
 import garlicbears.quiz.domain.common.entity.Image;
@@ -223,7 +223,7 @@ public class UserController implements SwaggerUserController {
 	 */
 	@PatchMapping("/image")
 	public ResponseEntity<?> updateUserImage(@AuthenticationPrincipal UserDetails userDetails,
-		@ModelAttribute ImageSaveDto imageSaveDto) {
+		@ModelAttribute MultipartFile image) {
 
 		if (userDetails == null) {
 			logger.warning("AccessToken에 관리자 정보가 없습니다.");
@@ -231,11 +231,11 @@ public class UserController implements SwaggerUserController {
 		}
 
 		User user = userService.findByEmail(userDetails.getUsername());
-		Image image = imageService.processImage(user, imageSaveDto.getImage(), 1L);
-		userService.updateImage(user, image);
+		Image newImage = imageService.processImage(user, image, 1L);
+		userService.updateImage(user, newImage);
 
 		// 이미지 URL을 JSON 형식으로 반환
-		ResponseImageDto responseImageDto = new ResponseImageDto(image.getAccessUrl());
+		ResponseImageDto responseImageDto = new ResponseImageDto(newImage.getAccessUrl());
 		return ResponseEntity.ok(responseImageDto);
 	}
 

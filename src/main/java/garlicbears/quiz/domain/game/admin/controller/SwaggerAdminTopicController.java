@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-import garlicbears.quiz.domain.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.common.dto.ResponseImageDto;
 import garlicbears.quiz.domain.game.admin.dto.ResponseTopicListDto;
@@ -90,6 +89,5 @@ public interface SwaggerAdminTopicController {
 			@Content(schema = @Schema(implementation = ResponseDto.class))})})
 	@PostMapping("/topic/{topicId}/image")
 	public ResponseEntity<?> uploadTopicImage(@PathVariable Long topicId,
-		@Parameter(description = "이미지 파일", content = @Content(mediaType = "multipart/form-data"))
-		@Valid @RequestBody ImageSaveDto imageSaveDto);
+		@ModelAttribute MultipartFile image);
 }
