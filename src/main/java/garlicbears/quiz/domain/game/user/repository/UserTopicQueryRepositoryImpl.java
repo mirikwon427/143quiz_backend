@@ -32,7 +32,8 @@ public class UserTopicQueryRepositoryImpl implements UserTopicQueryRepository {
 			.select(Projections.constructor(TopicsListDto.class,
 				topic.topicId,
 				topic.topicTitle,
-				reward.rewardNumberHearts
+				reward.rewardNumberHearts,
+				topic.topicImage.accessUrl
 			))
 			.from(topic)
 			.leftJoin(reward)
@@ -53,7 +54,8 @@ public class UserTopicQueryRepositoryImpl implements UserTopicQueryRepository {
 		return queryFactory
 			.select(Projections.constructor(TopicsListDto.class,
 				topic.topicId,
-				topic.topicTitle
+				topic.topicTitle,
+				topic.topicImage.accessUrl
 			))
 			.from(topic)
 			.join(reward)

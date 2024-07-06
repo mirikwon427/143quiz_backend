@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import garlicbears.quiz.domain.common.dto.ImageSaveDto;
 import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.common.dto.ResponseImageDto;
 import garlicbears.quiz.domain.common.entity.Image;
@@ -110,14 +109,14 @@ public class AdminTopicController implements SwaggerAdminTopicController {
 
 	@PostMapping("/topic/{topicId}/image")
 	public ResponseEntity<?> uploadTopicImage(
-		@PathVariable Long topicId, @ModelAttribute ImageSaveDto imageSaveDto) {
+		@PathVariable Long topicId, @ModelAttribute MultipartFile image) {
 
 		Optional<Topic> topic = topicService.findByTopicId(topicId);
 		if (topic.isPresent()) {
-			Image image = imageService.processImage(topic.get(), imageSaveDto.getImage(), null);
-			topicService.updateImage(topic.get(), image);
+			Image newImage = imageService.processImage(topic.get(), image, null);
+			topicService.updateImage(topic.get(), newImage);
 			// 이미지 URL을 JSON 형식으로 반환
-			ResponseImageDto responseImageDto = new ResponseImageDto(image.getAccessUrl());
+			ResponseImageDto responseImageDto = new ResponseImageDto(newImage.getAccessUrl());
 			return ResponseEntity.ok(responseImageDto);
 		} else {
 			logger.error("해당 topicId의 주제가 없습니다");

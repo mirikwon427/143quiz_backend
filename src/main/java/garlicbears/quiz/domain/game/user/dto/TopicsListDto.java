@@ -14,18 +14,22 @@ public class TopicsListDto {
 
 	long totalQuestionsCount;
 
+	String topicImage;
+
 	public TopicsListDto() {
 	}
 
-	public TopicsListDto(long topicId, String title) {
+	public TopicsListDto(long topicId, String title, String topicImage) {
 		this.topicId = topicId;
 		this.title = title;
+		this.topicImage = topicImage;
 	}
 
-	public TopicsListDto(long topicId, String title, int heartsCount) {
+	public TopicsListDto(long topicId, String title, int heartsCount, String topicImage) {
 		this.topicId = topicId;
 		this.title = title;
 		this.heartsCount = heartsCount;
+		this.topicImage = topicImage;
 	}
 
 	public long getTopicId() {
@@ -42,6 +46,10 @@ public class TopicsListDto {
 
 	public long getTotalQuestionsCount() {
 		return totalQuestionsCount;
+	}
+
+	public String getTopicImage() {
+		return topicImage;
 	}
 
 	public void setTotalQuestionsCount(long totalQuestionsCount) {
