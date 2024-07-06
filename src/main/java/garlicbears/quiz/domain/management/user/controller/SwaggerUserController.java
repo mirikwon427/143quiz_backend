@@ -90,7 +90,7 @@ public interface SwaggerUserController {
 	@PatchMapping("/image")
 	@Operation(summary = "회원 이미지 업로드", description = "회원 프로필 이미지 업로드")
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
-			@Content(schema = @Schema(implementation = String.class))}),
+			@Content(schema = @Schema(implementation = ImageSaveDto.class))}),
 		@ApiResponse(responseCode = "404", description = "User Not Found", content = {
 			@Content(schema = @Schema(implementation = ResponseDto.class))}),
 		@ApiResponse(responseCode = "404", description = "Image Not Found", content = {

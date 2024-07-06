@@ -80,7 +80,7 @@ public interface SwaggerAdminTopicController {
 
 	@Operation(summary = "주제 이미지 업로드", description = "주제 이미지를 업로드합니다.")
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
-		@Content(schema = @Schema(implementation = String.class))}),
+		@Content(schema = @Schema(implementation = ImageSaveDto.class))}),
 		@ApiResponse(responseCode = "404", description = "Topic Not Found", content = {
 			@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
 		@ApiResponse(responseCode = "404", description = "Image Not Found", content = {
