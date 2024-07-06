@@ -32,40 +32,49 @@ public class ImageService {
 	}
 
 	@Transactional
-	public Image processImage(Object container, MultipartFile newImageFile, Long defaultImageId) {
+	// public Image processImage(Object container, MultipartFile newImageFile, Long defaultImageId) {
+	// 	Image currentImage = null;
+	//
+	// 	if (container instanceof User user) {
+	// 		currentImage = user.getImage();
+	// 	} else if (container instanceof Topic topic) {
+	// 		currentImage = topic.getTopicImage();
+	// 	}
+	//
+	// 	Long currentImageId = (currentImage != null) ? currentImage.getImageId() : null;
+	//
+	// 	// 기본 이미지는 삭제하지 않음
+	// 	if (currentImageId != null && !currentImageId.equals(defaultImageId)) {
+	// 		if (container instanceof User) {
+	// 			((User) container).setImage(null);
+	// 		} else {
+	// 			((Topic) container).setTopicImage(null);
+	// 		}
+	//
+	// 		deleteS3Image(currentImageId);
+	// 	}
+	//
+	// 	// AWS S3와 DB에 새 이미지 정보 저장
+	// 	Image newImage = saveImage(newImageFile);
+	//
+	// 	if (container instanceof User) {
+	// 		((User) container).setImage(newImage);
+	// 	} else if (container instanceof Topic) {
+	// 		((Topic) container).setTopicImage(newImage);
+	// 	}
+	//
+	// 	return newImage;
+	// }
+	public Image processImage(MultipartFile newImageFile, Long defaultImageId) {
 		Image currentImage = null;
 
-		if (container instanceof User user) {
-			currentImage = user.getImage();
-		} else if (container instanceof Topic topic) {
-			currentImage = topic.getTopicImage();
-		}
-
-		Long currentImageId = (currentImage != null) ? currentImage.getImageId() : null;
-
-		// 기본 이미지는 삭제하지 않음
-		if (currentImageId != null && !currentImageId.equals(defaultImageId)) {
-			if (container instanceof User) {
-				((User) container).setImage(null);
-			} else {
-				((Topic) container).setTopicImage(null);
-			}
-
-			deleteS3Image(currentImageId);
-		}
 
 		// AWS S3와 DB에 새 이미지 정보 저장
 		Image newImage = saveImage(newImageFile);
 
-		if (container instanceof User) {
-			((User) container).setImage(newImage);
-		} else if (container instanceof Topic) {
-			((Topic) container).setTopicImage(newImage);
-		}
 
 		return newImage;
 	}
-
 	@Transactional
 	public Image saveImage(MultipartFile multipartFile) {
 		logger.info(multipartFile.getOriginalFilename());

@@ -99,7 +99,7 @@ public interface SwaggerUserController {
 			@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
 		@ApiResponse(responseCode = "500", description = "Internal server error", content = {
 			@Content(schema = @Schema(implementation = ResponseDto.class))})})
-	public ResponseEntity<?> updateUserImage(@AuthenticationPrincipal UserDetails userDetails,
+	public ResponseEntity<?> updateUserImage(//@AuthenticationPrincipal UserDetails userDetails,
 		@ModelAttribute MultipartFile image);
 
 	@Operation(summary = "로그인", description = "email, password를 입력 받아 로그인을 시도합니다.")

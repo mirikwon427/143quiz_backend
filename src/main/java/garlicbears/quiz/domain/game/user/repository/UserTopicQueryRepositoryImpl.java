@@ -32,7 +32,8 @@ public class UserTopicQueryRepositoryImpl implements UserTopicQueryRepository {
 			.select(Projections.constructor(TopicsListDto.class,
 				topic.topicId,
 				topic.topicTitle,
-				reward.rewardNumberHearts
+				reward.rewardNumberHearts,
+				topic.topicImage.accessUrl
 			))
 			.from(topic)
 			.leftJoin(reward)

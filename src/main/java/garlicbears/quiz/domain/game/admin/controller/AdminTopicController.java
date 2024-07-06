@@ -107,20 +107,20 @@ public class AdminTopicController implements SwaggerAdminTopicController {
 		return ResponseEntity.ok(ResponseDto.success());
 	}
 
-	@PostMapping("/topic/{topicId}/image")
-	public ResponseEntity<?> uploadTopicImage(
-		@PathVariable Long topicId, @ModelAttribute MultipartFile image) {
-
-		Optional<Topic> topic = topicService.findByTopicId(topicId);
-		if (topic.isPresent()) {
-			Image newImage = imageService.processImage(topic.get(), image, null);
-			topicService.updateImage(topic.get(), newImage);
-			// 이미지 URL을 JSON 형식으로 반환
-			ResponseImageDto responseImageDto = new ResponseImageDto(newImage.getAccessUrl());
-			return ResponseEntity.ok(responseImageDto);
-		} else {
-			logger.error("해당 topicId의 주제가 없습니다");
-			throw new CustomException(ErrorCode.TOPIC_NOT_FOUND);
-		}
-	}
+	// @PostMapping("/topic/{topicId}/image")
+	// public ResponseEntity<?> uploadTopicImage(
+	// 	@PathVariable Long topicId, @ModelAttribute MultipartFile image) {
+	//
+	// 	Optional<Topic> topic = topicService.findByTopicId(topicId);
+	// 	if (topic.isPresent()) {
+	// 		Image newImage = imageService.processImage(topic.get(), image, null);
+	// 		topicService.updateImage(topic.get(), newImage);
+	// 		// 이미지 URL을 JSON 형식으로 반환
+	// 		ResponseImageDto responseImageDto = new ResponseImageDto(newImage.getAccessUrl());
+	// 		return ResponseEntity.ok(responseImageDto);
+	// 	} else {
+	// 		logger.error("해당 topicId의 주제가 없습니다");
+	// 		throw new CustomException(ErrorCode.TOPIC_NOT_FOUND);
+	// 	}
+	// }
 }

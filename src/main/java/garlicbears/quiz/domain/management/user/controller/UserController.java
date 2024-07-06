@@ -222,17 +222,27 @@ public class UserController implements SwaggerUserController {
 	 * 회원 프로필 이미지 수정
 	 */
 	@PatchMapping("/image")
-	public ResponseEntity<?> updateUserImage(@AuthenticationPrincipal UserDetails userDetails,
+	// public ResponseEntity<?> updateUserImage(@AuthenticationPrincipal UserDetails userDetails,
+	// 	@ModelAttribute MultipartFile image) {
+	//
+	// 	if (userDetails == null) {
+	// 		logger.warning("AccessToken에 관리자 정보가 없습니다.");
+	// 		throw new CustomException(ErrorCode.UNAUTHORIZED);
+	// 	}
+	//
+	// 	User user = userService.findByEmail(userDetails.getUsername());
+	// 	Image newImage = imageService.processImage(user, image, 1L);
+	// 	userService.updateImage(user, newImage);
+	//
+	// 	// 이미지 URL을 JSON 형식으로 반환
+	// 	ResponseImageDto responseImageDto = new ResponseImageDto(newImage.getAccessUrl());
+	// 	return ResponseEntity.ok(responseImageDto);
+	// }
+
+	public ResponseEntity<?> updateUserImage(
 		@ModelAttribute MultipartFile image) {
+		Image newImage = imageService.processImage(image, 1L);
 
-		if (userDetails == null) {
-			logger.warning("AccessToken에 관리자 정보가 없습니다.");
-			throw new CustomException(ErrorCode.UNAUTHORIZED);
-		}
-
-		User user = userService.findByEmail(userDetails.getUsername());
-		Image newImage = imageService.processImage(user, image, 1L);
-		userService.updateImage(user, newImage);
 
 		// 이미지 URL을 JSON 형식으로 반환
 		ResponseImageDto responseImageDto = new ResponseImageDto(newImage.getAccessUrl());
