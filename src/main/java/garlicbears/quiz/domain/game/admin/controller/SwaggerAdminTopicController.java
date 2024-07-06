@@ -78,16 +78,16 @@ public interface SwaggerAdminTopicController {
 			@Content(schema = @Schema(implementation = ResponseUserDto.class))})})
 	public ResponseEntity<?> deleteTopic(@PathVariable Long topicId);
 
-	// @Operation(summary = "주제 이미지 업로드", description = "주제 이미지를 업로드합니다.")
-	// @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
-	// 	@Content(schema = @Schema(implementation = ResponseImageDto.class))}),
-	// 	@ApiResponse(responseCode = "404", description = "Topic Not Found", content = {
-	// 		@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
-	// 	@ApiResponse(responseCode = "404", description = "Image Not Found", content = {
-	// 		@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
-	// 	@ApiResponse(responseCode = "500", description = "Internal Server Error", content = {
-	// 		@Content(schema = @Schema(implementation = ResponseDto.class))})})
-	// @PostMapping("/topic/{topicId}/image")
-	// public ResponseEntity<?> uploadTopicImage(@PathVariable Long topicId,
-	// 	@ModelAttribute MultipartFile image);
+	@Operation(summary = "주제 이미지 업로드", description = "주제 이미지를 업로드합니다.")
+	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successfully retrieved", content = {
+		@Content(schema = @Schema(implementation = ResponseImageDto.class))}),
+		@ApiResponse(responseCode = "404", description = "Topic Not Found", content = {
+			@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+		@ApiResponse(responseCode = "404", description = "Image Not Found", content = {
+			@Content(schema = @Schema(implementation = ResponseUserDto.class))}),
+		@ApiResponse(responseCode = "500", description = "Internal Server Error", content = {
+			@Content(schema = @Schema(implementation = ResponseDto.class))})})
+	@PostMapping("/topic/{topicId}/image")
+	public ResponseEntity<?> uploadTopicImage(@PathVariable Long topicId,
+		@ModelAttribute MultipartFile image);
 }
