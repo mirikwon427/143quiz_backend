@@ -1,4 +1,4 @@
-package garlicbears._quiz;
+package garlicbears.quiz;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
