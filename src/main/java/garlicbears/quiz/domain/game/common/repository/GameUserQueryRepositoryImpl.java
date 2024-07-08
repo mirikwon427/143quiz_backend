@@ -83,6 +83,7 @@ public class GameUserQueryRepositoryImpl implements GameUserQueryRepository {
 				.and(user.userActive.eq(Active.active))
 			)
 			.groupBy(user.userId, user.userNickname)
+			.having(reward.rewardNumberHearts.sum().gt(0L))	// 하트가 0개인 사용자는 제외
 			.orderBy(reward.rewardNumberHearts.sum().desc())
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
