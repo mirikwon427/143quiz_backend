@@ -86,6 +86,7 @@ public class AuthService {
 
 		// 레디스에 저장된 토큰과 클라이언트로부터 받은 토큰이 일치하는지 확인
 		if (!redisRefreshToken.equals(refreshToken)) {
+			logger.error("클라이언트로부터 받은 리프레시 토큰과 레디스에 저장된 토큰이 일치하지 않습니다.");
 			throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
 		}
 
