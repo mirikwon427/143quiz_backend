@@ -81,8 +81,13 @@ public class AuthService {
 		String email = claims.getSubject();
 
 		// 전달받은 이메일로 리프레시 토큰이 존재하는지 확인하고, 존재하지 않으면 예외를 발생
-		refreshTokenService.findRefreshToken(email)
+		String redisRefreshToken = refreshTokenService.findRefreshToken(email)
 			.orElseThrow(() -> new CustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND));
+
+		// 레디스에 저장된 토큰과 클라이언트로부터 받은 토큰이 일치하는지 확인
+		if (!redisRefreshToken.equals(refreshToken)) {
+			throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+		}
 
 		long userId = Long.valueOf((Integer)claims.get("id"));
 		List roles = (List)claims.get("roles");
@@ -93,7 +98,7 @@ public class AuthService {
 
 		// 기존 리프레시 토큰 삭제 후 새로운 리프레시 토큰 저장
 		refreshTokenService.deleteRefreshToken(email);
-		refreshTokenService.save(email, refreshToken, JwtTokenizer.REFRESH_TOKEN_EXPIRE_COUNT);
+		refreshTokenService.save(email, newRefreshToken, JwtTokenizer.REFRESH_TOKEN_EXPIRE_COUNT);
 
 		// 새로운 리프레시 토큰을 쿠키에 저장
 		addRefreshTokenCookie(response, newRefreshToken);
