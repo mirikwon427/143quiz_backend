@@ -36,7 +36,7 @@ public class AdminGameSessionQueryRepositoryImpl implements AdminGameSessionQuer
 			.select(Projections.constructor(GameStatDto.class,
 				gameSession.topic.topicId,
 				topic.topicTitle,
-				gameSession.gameSessionId.count().as("totalPlayCount"),
+				topic.topicUsageCount,
 				gameSession.heartsCount.sum().as("totalCorrectCount"),
 				Expressions.as(
 					queryFactory

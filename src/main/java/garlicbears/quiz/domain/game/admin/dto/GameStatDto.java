@@ -3,7 +3,7 @@ package garlicbears.quiz.domain.game.admin.dto;
 public class GameStatDto {
 	private long topicId;
 	private String title;
-	private long usageCount;
+	private int usageCount;
 	private long completeCount;
 	private int totalCorrectCount;
 	private int totalPlayTime;
@@ -12,7 +12,7 @@ public class GameStatDto {
 	private double averagePlayTime;
 	private double averageCorrectionRate;
 
-	public GameStatDto(long topicId, String title, long usageCount, int totalCorrectCount, long questionCount) {
+	public GameStatDto(long topicId, String title, int usageCount, int totalCorrectCount, long questionCount) {
 		this.topicId = topicId;
 		this.title = title;
 		this.usageCount = usageCount;
@@ -46,7 +46,7 @@ public class GameStatDto {
 		return title;
 	}
 
-	public long getUsageCount() {
+	public int getUsageCount() {
 		return usageCount;
 	}
 
