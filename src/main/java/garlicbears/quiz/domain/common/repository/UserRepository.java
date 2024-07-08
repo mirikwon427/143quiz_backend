@@ -21,5 +21,4 @@ public interface UserRepository extends JpaRepository<User, Long>, GameUserQuery
 
 	Optional<User> findByUserEmailAndUserActive(String email, Active active);
 
-	Long countByUserActiveIsFalse();
 }

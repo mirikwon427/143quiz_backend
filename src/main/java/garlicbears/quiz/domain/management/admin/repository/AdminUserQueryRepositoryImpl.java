@@ -25,12 +25,21 @@ public class AdminUserQueryRepositoryImpl implements AdminUserQueryRepository {
 
 	private OrderSpecifier<?> getOrderSpecifier(QUser user, String sortBy) {
 		return switch (sortBy) {
+			case "idDesc" -> user.userId.desc();
 			case "nicknameAsc" -> user.userNickname.asc();
 			case "nicknameDesc" -> user.userNickname.desc();
+			case "emailAsc" -> user.userEmail.asc();
+			case "emailDesc" -> user.userEmail.desc();
+			case "birthYearAsc" -> user.userBirthYear.asc();
+			case "birthYearDesc" -> user.userBirthYear.desc();
 			case "ageAsc" -> user.userAge.asc();
 			case "ageDesc" -> user.userAge.desc();
-			case "createdAtAsc" -> user.createdAt.asc();
-			case "createdAtDesc" -> user.createdAt.desc();
+			case "genderAsc" -> user.userGender.asc();
+			case "genderDesc" -> user.userGender.desc();
+			case "locationAsc" -> user.userLocation.asc();
+			case "locationDesc" -> user.userLocation.desc();
+			case "activeAsc" -> user.userActive.asc();
+			case "activeDesc" -> user.userActive.desc();
 			default -> user.userId.asc();
 		};
 	}

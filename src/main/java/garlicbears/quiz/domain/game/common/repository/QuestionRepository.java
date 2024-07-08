@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import garlicbears.quiz.domain.common.entity.Active;
 import garlicbears.quiz.domain.game.admin.repository.AdminQuestionQueryRepository;
 import garlicbears.quiz.domain.game.common.entity.Question;
 import garlicbears.quiz.domain.game.common.entity.Topic;
 import garlicbears.quiz.domain.game.user.repository.UserQuestionQueryRepository;
-
+@Repository
 public interface QuestionRepository extends JpaRepository<Question, Long>, UserQuestionQueryRepository,
 	AdminQuestionQueryRepository {
 

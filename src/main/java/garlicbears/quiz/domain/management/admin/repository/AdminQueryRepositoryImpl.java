@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.OrderSpecifier;
@@ -18,7 +19,7 @@ import garlicbears.quiz.domain.common.entity.QAdmin;
 import garlicbears.quiz.domain.common.entity.QRole;
 import garlicbears.quiz.domain.management.admin.dto.ResponseAdminDto;
 import jakarta.persistence.EntityManager;
-
+@Repository
 public class AdminQueryRepositoryImpl implements AdminQueryRepository {
 	private final JPAQueryFactory queryFactory;
 
