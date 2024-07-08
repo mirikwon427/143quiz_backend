@@ -57,7 +57,7 @@ public class AdminStatController implements SwaggerAdminStatController{
 	@GetMapping("/game")
 	public ResponseEntity<?> getGameStatList(@RequestParam(defaultValue = "createdAtDesc") @Parameter(schema = @Schema(allowableValues = {"titleDesc",
 		"titleAsc", "createdAtDesc", "createdAtAsc", "updatedAtDesc", "updatedAtAsc", "usageCountDesc",
-		"usageCountAsc"})) String sort, @RequestParam(defaultValue = "0") int pageNumber,
+		"usageCountAsc", "questionCountAsc", "questionCountDesc"})) String sort, @RequestParam(defaultValue = "0") int pageNumber,
 		@RequestParam(defaultValue = "10") int pageSize) {
 		return ResponseEntity.ok(gameStatService.getGameStatList(pageNumber, pageSize, sort));
 	}

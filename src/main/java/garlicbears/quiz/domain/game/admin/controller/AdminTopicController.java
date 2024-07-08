@@ -54,7 +54,7 @@ public class AdminTopicController implements SwaggerAdminTopicController {
 	public ResponseEntity<?> listTopics(
 		@RequestParam(defaultValue = "createdAtDesc") @Parameter(schema = @Schema(allowableValues = {"titleDesc",
 			"titleAsc", "createdAtDesc", "createdAtAsc", "updatedAtDesc", "updatedAtAsc", "usageCountDesc",
-			"usageCountAsc"})) String sort, @RequestParam(defaultValue = "0") int pageNumber,
+			"usageCountAsc", "questionCountAsc", "questionCountDesc"})) String sort, @RequestParam(defaultValue = "0") int pageNumber,
 		@RequestParam(defaultValue = "10") int pageSize) {
 		// 정렬 조건에 따른 전체 주제 목록 조회
 		return ResponseEntity.ok(topicService.getTopicList(pageNumber, pageSize, sort));
