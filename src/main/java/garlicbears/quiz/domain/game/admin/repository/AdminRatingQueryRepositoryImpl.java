@@ -4,7 +4,7 @@ import org.springframework.stereotype.Repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-
+import garlicbears.quiz.domain.common.entity.QRating;
 import jakarta.persistence.EntityManager;
 
 @Repository

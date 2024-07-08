@@ -13,6 +13,8 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import garlicbears.quiz.domain.common.entity.QUser;
+import garlicbears.quiz.domain.game.common.entity.QReward;
 import garlicbears.quiz.domain.game.user.dto.UserRankingDto;
 import jakarta.persistence.EntityManager;
 @Repository

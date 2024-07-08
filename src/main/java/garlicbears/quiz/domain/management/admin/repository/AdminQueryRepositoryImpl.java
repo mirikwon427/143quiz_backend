@@ -15,6 +15,8 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLTemplates;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import garlicbears.quiz.domain.common.entity.QAdmin;
+import garlicbears.quiz.domain.common.entity.QRole;
 import garlicbears.quiz.domain.management.admin.dto.ResponseAdminDto;
 import jakarta.persistence.EntityManager;
 @Repository

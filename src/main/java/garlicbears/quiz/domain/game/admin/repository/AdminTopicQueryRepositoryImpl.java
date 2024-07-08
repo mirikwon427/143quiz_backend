@@ -13,6 +13,8 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import garlicbears.quiz.domain.game.admin.dto.ResponseTopicDto;
+import garlicbears.quiz.domain.game.common.entity.QQuestion;
+import garlicbears.quiz.domain.game.common.entity.QTopic;
 
 @Repository
 public class AdminTopicQueryRepositoryImpl implements AdminTopicQueryRepository {

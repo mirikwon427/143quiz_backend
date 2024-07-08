@@ -13,6 +13,7 @@ import com.querydsl.core.types.dsl.DateTemplate;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import garlicbears.quiz.domain.common.entity.QLog;
 import garlicbears.quiz.domain.game.admin.dto.VisitorCountDto;
 @Repository
 public class AdminLogQueryRepositoryImpl implements AdminLogQueryRepository{
