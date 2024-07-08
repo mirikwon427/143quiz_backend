@@ -6,15 +6,14 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import garlicbears.quiz.domain.game.admin.dto.GameStatDto;
-import garlicbears.quiz.domain.game.common.entity.QGameSession;
-import garlicbears.quiz.domain.game.common.entity.QTopic;
-
+@Repository
 public class AdminGameSessionQueryRepositoryImpl implements AdminGameSessionQueryRepository{
 	private final JPAQueryFactory queryFactory;
 

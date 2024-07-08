@@ -9,8 +9,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import garlicbears.quiz.domain.common.entity.Active;
-import garlicbears.quiz.domain.game.common.entity.QReward;
-import garlicbears.quiz.domain.game.common.entity.QTopic;
 import garlicbears.quiz.domain.game.user.dto.TopicsListDto;
 import jakarta.persistence.EntityManager;
 

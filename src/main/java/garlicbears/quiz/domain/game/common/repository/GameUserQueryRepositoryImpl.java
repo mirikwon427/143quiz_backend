@@ -7,16 +7,15 @@ import java.util.stream.IntStream;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import garlicbears.quiz.domain.common.entity.QUser;
-import garlicbears.quiz.domain.game.common.entity.QReward;
 import garlicbears.quiz.domain.game.user.dto.UserRankingDto;
 import jakarta.persistence.EntityManager;
-
+@Repository
 public class GameUserQueryRepositoryImpl implements GameUserQueryRepository {
 	private final JPAQueryFactory queryFactory;
 

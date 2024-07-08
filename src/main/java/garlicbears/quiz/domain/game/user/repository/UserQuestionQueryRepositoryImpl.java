@@ -7,13 +7,10 @@ import org.springframework.stereotype.Repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import garlicbears.quiz.domain.common.entity.Active;
-import garlicbears.quiz.domain.game.common.entity.QQuestion;
-import garlicbears.quiz.domain.game.common.entity.QUserAnswer;
 import garlicbears.quiz.domain.game.common.entity.UserAnswer;
 import garlicbears.quiz.domain.game.user.dto.GameStartQuestionDto;
 import jakarta.persistence.EntityManager;

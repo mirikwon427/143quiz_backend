@@ -14,7 +14,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import garlicbears.quiz.domain.common.entity.Active;
 import garlicbears.quiz.domain.game.admin.dto.ResponseQuestionDto;
-import garlicbears.quiz.domain.game.common.entity.QQuestion;
 import garlicbears.quiz.domain.game.common.entity.Topic;
 
 @Repository
