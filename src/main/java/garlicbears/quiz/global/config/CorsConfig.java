@@ -15,6 +15,7 @@ public class CorsConfig {
 		config.setAllowCredentials(true);
 		config.addAllowedOriginPattern("http://localhost:3000");
 		config.addAllowedOriginPattern("https://garlicbears.com");
+		config.addAllowedOriginPattern("https://garlicbears.github.io");
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
 

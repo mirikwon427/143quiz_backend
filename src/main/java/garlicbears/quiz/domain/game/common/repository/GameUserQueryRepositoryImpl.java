@@ -13,6 +13,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import garlicbears.quiz.domain.common.entity.Active;
 import garlicbears.quiz.domain.common.entity.QUser;
 import garlicbears.quiz.domain.game.common.entity.QReward;
 import garlicbears.quiz.domain.game.user.dto.UserRankingDto;
@@ -37,6 +38,7 @@ public class GameUserQueryRepositoryImpl implements GameUserQueryRepository {
 					reward.rewardNumberHearts.sum().as("totalHearts"), Expressions.constant(0L)))
 			.from(reward)
 			.join(reward.user, user)
+			.where(user.userActive.eq(Active.active))
 			.groupBy(user.userId, user.userNickname)
 			.orderBy(reward.rewardBadgeStatus.when(true).then(1).otherwise(0).sum().desc(),
 				reward.rewardNumberHearts.sum().desc())
@@ -76,7 +78,10 @@ public class GameUserQueryRepositoryImpl implements GameUserQueryRepository {
 					reward.rewardNumberHearts.sum().as("totalHearts"), Expressions.constant(0L)))
 			.from(reward)
 			.join(reward.user, user)
-			.where(reward.topic.topicId.eq(topicId))
+			.where(
+				reward.topic.topicId.eq(topicId)
+				.and(user.userActive.eq(Active.active))
+			)
 			.groupBy(user.userId, user.userNickname)
 			.orderBy(reward.rewardNumberHearts.sum().desc())
 			.offset(pageable.getOffset())
