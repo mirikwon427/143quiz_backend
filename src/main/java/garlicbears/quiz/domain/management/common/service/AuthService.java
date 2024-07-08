@@ -61,7 +61,7 @@ public class AuthService {
 
 		refreshTokenService.save(email, refreshToken, JwtTokenizer.REFRESH_TOKEN_EXPIRE_COUNT);
 
-		response.addCookie(createRefreshTokenCookie(refreshToken));
+		addRefreshTokenCookie(response, refreshToken);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", accessToken);
@@ -81,8 +81,14 @@ public class AuthService {
 		String email = claims.getSubject();
 
 		// 전달받은 이메일로 리프레시 토큰이 존재하는지 확인하고, 존재하지 않으면 예외를 발생
-		refreshTokenService.findRefreshToken(email)
+		String redisRefreshToken = refreshTokenService.findRefreshToken(email)
 			.orElseThrow(() -> new CustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND));
+
+		// 레디스에 저장된 토큰과 클라이언트로부터 받은 토큰이 일치하는지 확인
+		if (!redisRefreshToken.equals(refreshToken)) {
+			logger.error("클라이언트로부터 받은 리프레시 토큰과 레디스에 저장된 토큰이 일치하지 않습니다.");
+			throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+		}
 
 		long userId = Long.valueOf((Integer)claims.get("id"));
 		List roles = (List)claims.get("roles");
@@ -93,10 +99,10 @@ public class AuthService {
 
 		// 기존 리프레시 토큰 삭제 후 새로운 리프레시 토큰 저장
 		refreshTokenService.deleteRefreshToken(email);
-		refreshTokenService.save(email, refreshToken, JwtTokenizer.REFRESH_TOKEN_EXPIRE_COUNT);
+		refreshTokenService.save(email, newRefreshToken, JwtTokenizer.REFRESH_TOKEN_EXPIRE_COUNT);
 
 		// 새로운 리프레시 토큰을 쿠키에 저장
-		response.addCookie(createRefreshTokenCookie(newRefreshToken));
+		addRefreshTokenCookie(response, newRefreshToken);
 
 		return accessToken;
 	}
@@ -112,18 +118,17 @@ public class AuthService {
 		// 리프레시 토큰 삭제
 		refreshTokenService.deleteRefreshToken(email);
 		// 쿠키에서 리프레시 토큰 삭제
-		response.addCookie(deleteRefreshTokenCookie());
+		deleteRefreshTokenCookie(response);
 	}
 
 	/**
 	 * 리프레시 토큰을 쿠키에 저장
 	 */
-	private Cookie createRefreshTokenCookie(String refreshToken) {
-		Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
-		refreshTokenCookie.setHttpOnly(true); // JavaScript에서 접근 불가능하도록 설정
-		refreshTokenCookie.setPath("/");
-		refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
-		return refreshTokenCookie;
+	private void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
+		// SameSite 속성 추가 ( SameSite = None )
+		String cookieHeader = String.format("refreshToken=%s; Max-Age=%d; Path=/; Secure; HttpOnly; SameSite=None",
+			refreshToken, 7 * 24 * 60 * 60);
+		response.addHeader("Set-Cookie", cookieHeader);
 	}
 
 	/**
@@ -144,11 +149,9 @@ public class AuthService {
 	/**
 	 * 리프레시 토큰을 쿠키에서 삭제하는 메서드.
 	 */
-	private Cookie deleteRefreshTokenCookie() {
-		Cookie refreshTokenCookie = new Cookie("refreshToken", null);
-		refreshTokenCookie.setHttpOnly(true); // JavaScript에서 접근 불가능하도록 설정
-		refreshTokenCookie.setPath("/");
-		refreshTokenCookie.setMaxAge(0); // 쿠키 삭제
-		return refreshTokenCookie;
+	private void deleteRefreshTokenCookie(HttpServletResponse response) {
+		// SameSite 속성 추가 ( SameSite = None )
+		String cookieHeader = "refreshToken=; Max-Age=0; Path=/; Secure; HttpOnly; SameSite=None";
+		response.addHeader("Set-Cookie", cookieHeader);
 	}
 }

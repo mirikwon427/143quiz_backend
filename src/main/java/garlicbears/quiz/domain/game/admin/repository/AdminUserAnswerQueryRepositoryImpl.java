@@ -1,5 +1,7 @@
 package garlicbears.quiz.domain.game.admin.repository;
 
+import org.springframework.stereotype.Repository;
+
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -7,6 +9,7 @@ import garlicbears.quiz.domain.game.admin.dto.TopicPlayTimeDto;
 import garlicbears.quiz.domain.game.common.entity.QGameSession;
 import garlicbears.quiz.domain.game.common.entity.QUserAnswer;
 
+@Repository
 public class AdminUserAnswerQueryRepositoryImpl implements AdminUserAnswerQueryRepository{
 	private final JPAQueryFactory queryFactory;
 

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.DateTemplate;
@@ -14,7 +15,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import garlicbears.quiz.domain.common.entity.QLog;
 import garlicbears.quiz.domain.game.admin.dto.VisitorCountDto;
-
+@Repository
 public class AdminLogQueryRepositoryImpl implements AdminLogQueryRepository{
 	private final JPAQueryFactory queryFactory;
 

@@ -16,8 +16,6 @@ public enum ErrorCode {
 	TOPIC_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 주제입니다."),
 	QUESTION_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 문제입니다."),
 	ALREADY_RATED(HttpStatus.CONFLICT, "이미 존재하는 문제입니다."),
-	UNKNOWN_LOCATION(HttpStatus.NOT_FOUND, "주소가 틀렸습니다."),
-	UNKNOWN_GENDER(HttpStatus.NOT_FOUND, "성별이 틀렸습니다."),
 	UNKNOWN_TOPIC(HttpStatus.NOT_FOUND, "주제를 찾을 수 없습니다."),
 	UNKNOWN_QUESTION(HttpStatus.NOT_FOUND, "문제를 찾을 수 없습니다."),
 	UNKNOWN_GAMESESSION(HttpStatus.NOT_FOUND, "게임세션을 찾을 수 없습니다."),
@@ -31,6 +29,7 @@ public enum ErrorCode {
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류입니다."),
 	FILE_IO_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 처리중 발생한 오류입니다."),
 	INVALID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 토큰입니다."),
+	INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 리프레시 토큰입니다."),
 	REFRESH_TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "Refresh token을 찾을 수 없음");
 
 	private final HttpStatus status;
