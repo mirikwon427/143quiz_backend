@@ -10,10 +10,12 @@ import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import garlicbears.quiz.domain.game.admin.dto.GameStatDto;
 import garlicbears.quiz.domain.game.common.entity.QGameSession;
+import garlicbears.quiz.domain.game.common.entity.QQuestion;
 import garlicbears.quiz.domain.game.common.entity.QTopic;
 
 @Repository
@@ -28,13 +30,21 @@ public class AdminGameSessionQueryRepositoryImpl implements AdminGameSessionQuer
 	public Page<GameStatDto> calculateGameStat(String sort, Pageable pageable) {
 		QGameSession gameSession = QGameSession.gameSession;
 		QTopic topic = QTopic.topic;
+		QQuestion question = QQuestion.question;
 
 		List<GameStatDto> results = queryFactory
 			.select(Projections.constructor(GameStatDto.class,
 				gameSession.topic.topicId,
 				topic.topicTitle,
-				gameSession.gameSessionId.count().as("totalPlayCount"),
-				gameSession.heartsCount.sum().as("totalCorrectCount")
+				topic.topicUsageCount,
+				gameSession.heartsCount.sum().as("totalCorrectCount"),
+				Expressions.as(
+					queryFactory
+						.select(question.count())
+						.from(question)
+						.where(question.topic.eq(topic)),
+					"questionCount"
+				)
 			))
 			.from(gameSession)
 			.leftJoin(gameSession.topic, topic)
@@ -62,6 +72,8 @@ public class AdminGameSessionQueryRepositoryImpl implements AdminGameSessionQuer
 			case "updatedAtDesc" -> topic.updatedAt.desc();
 			case "usageCountAsc" -> topic.topicUsageCount.asc();
 			case "usageCountDesc" -> topic.topicUsageCount.desc();
+			case "questionCountAsc" -> Expressions.numberPath(Long.class, "questionCount").asc();
+			case "questionCountDesc" -> Expressions.numberPath(Long.class, "questionCount").desc();
 			default -> topic.topicId.desc();
 		};
 	}

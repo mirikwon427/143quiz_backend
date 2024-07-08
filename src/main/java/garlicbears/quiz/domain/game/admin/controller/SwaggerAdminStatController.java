@@ -50,7 +50,7 @@ public interface SwaggerAdminStatController {
 	public ResponseEntity<?> getGameStatList(
 		@RequestParam(defaultValue = "createdAtDesc") @Parameter(schema = @Schema(allowableValues = {"titleDesc",
 		"titleAsc", "createdAtDesc", "createdAtAsc", "updatedAtDesc", "updatedAtAsc", "usageCountDesc",
-		"usageCountAsc"})) String sort, @RequestParam(defaultValue = "0") int pageNumber,
+		"usageCountAsc", "questionCountAsc", "questionCountDesc"})) String sort, @RequestParam(defaultValue = "0") int pageNumber,
 		@RequestParam(defaultValue = "10") int pageSize);
 
 	@Operation(summary = "총 방문자 수 조회", description = "총 방문자 수를 반환합니다. (누적) 일일 방문자 수")
