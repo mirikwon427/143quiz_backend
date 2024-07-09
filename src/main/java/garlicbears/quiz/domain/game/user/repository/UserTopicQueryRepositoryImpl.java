@@ -63,6 +63,7 @@ public class UserTopicQueryRepositoryImpl implements UserTopicQueryRepository {
 				.and(reward.user.userId.eq(userId)))
 			.where(reward.rewardBadgeStatus.eq(true)
 				.and(topic.topicActive.eq(Active.active)))
+			.groupBy(topic.topicId)
 			.fetch();
 
 	}
