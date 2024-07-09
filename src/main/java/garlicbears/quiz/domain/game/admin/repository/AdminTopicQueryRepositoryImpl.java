@@ -43,7 +43,8 @@ public class AdminTopicQueryRepositoryImpl implements AdminTopicQueryRepository 
 						.from(question)
 						.where(question.topic.eq(topic)),
 					"questionCount"
-				)
+				),
+				topic.topicImage.accessUrl
 			))
 			.from(topic)
 			.orderBy(getOrderSpecifier(topic, sortBy))
