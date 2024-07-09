@@ -8,6 +8,7 @@ public class TopicExcelUploadedDto {
 	private long topicId;
 	private String topicTitle;
 	private int questionCount;
+	private String imageUrl;
 	private List<ResponseQuestionDto> questions;
 
 	public TopicExcelUploadedDto(Topic topic, List<ResponseQuestionDto> questions) {
@@ -31,5 +32,13 @@ public class TopicExcelUploadedDto {
 
 	public List<ResponseQuestionDto> getQuestions() {
 		return questions;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 }

@@ -25,6 +25,8 @@ import garlicbears.quiz.domain.common.dto.ResponseDto;
 import garlicbears.quiz.domain.common.dto.ResponseImageDto;
 import garlicbears.quiz.domain.common.entity.Image;
 import garlicbears.quiz.domain.common.service.ImageService;
+import garlicbears.quiz.domain.game.admin.dto.ResponseTopicListDto;
+import garlicbears.quiz.domain.game.admin.dto.TopicExcelUploadedDto;
 import garlicbears.quiz.domain.game.admin.service.TopicService;
 import garlicbears.quiz.domain.game.common.entity.Topic;
 import garlicbears.quiz.global.exception.CustomException;
@@ -65,10 +67,20 @@ public class AdminTopicController implements SwaggerAdminTopicController {
 	public ResponseEntity<?> createTopicsByExcel(
 		@Parameter(description = "multipart/form-data 형식의 엑셀 파일을 받습니다.",
 			content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
-		@RequestPart("excel") MultipartFile file) {
+		@RequestPart("excel") MultipartFile file,
+		@RequestPart("image") MultipartFile image) {
 		// 엑셀 파일을 통해 주제 생성
 		// 파일명 = 주제명, 첫 번째 시트만 사용, 첫 번째 열 = 주제명
-		return ResponseEntity.ok(topicService.saveTopicWithExcel(file));
+		TopicExcelUploadedDto topicExcelUploadedDto = topicService.saveTopicWithExcel(file);
+		Topic topic = topicService.findByTopicId(topicExcelUploadedDto.getTopicId())
+			.orElseThrow(() -> new CustomException(ErrorCode.TOPIC_NOT_FOUND));
+
+		Image newImage = imageService.processImage(topic, image, null);
+		topicService.updateImage(topic, newImage);
+		// 이미지 URL을 JSON 형식으로 반환
+
+		topicExcelUploadedDto.setImageUrl(newImage.getAccessUrl());
+		return ResponseEntity.ok(topicExcelUploadedDto);
 	}
 
 	@PostMapping("/topic")
@@ -107,9 +119,12 @@ public class AdminTopicController implements SwaggerAdminTopicController {
 		return ResponseEntity.ok(ResponseDto.success());
 	}
 
-	@PostMapping("/topic/{topicId}/image")
+	@PostMapping(value = "/topic/{topicId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+		produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> uploadTopicImage(
-		@PathVariable Long topicId, @ModelAttribute MultipartFile image) {
+		@PathVariable Long topicId, @Parameter(description = "multipart/form-data 형식의 이미지 파일을 받습니다.",
+		content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
+	@RequestPart("image") MultipartFile image) {
 
 		Optional<Topic> topic = topicService.findByTopicId(topicId);
 		if (topic.isPresent()) {
