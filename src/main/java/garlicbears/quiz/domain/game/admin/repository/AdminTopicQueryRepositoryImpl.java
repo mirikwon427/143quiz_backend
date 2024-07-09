@@ -70,6 +70,8 @@ public class AdminTopicQueryRepositoryImpl implements AdminTopicQueryRepository 
 			case "updatedAtDesc" -> topic.updatedAt.desc();
 			case "usageCountAsc" -> topic.topicUsageCount.asc();
 			case "usageCountDesc" -> topic.topicUsageCount.desc();
+			case "questionCountAsc" -> Expressions.numberPath(Long.class, "questionCount").asc();
+			case "questionCountDesc" -> Expressions.numberPath(Long.class, "questionCount").desc();
 			default -> topic.topicId.desc();
 		};
 	}

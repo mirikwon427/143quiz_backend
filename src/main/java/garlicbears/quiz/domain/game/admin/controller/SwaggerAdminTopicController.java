@@ -34,7 +34,7 @@ public interface SwaggerAdminTopicController {
 	public ResponseEntity<?> listTopics(
 		@RequestParam(defaultValue = "createdAtDesc") @Parameter(schema = @Schema(allowableValues = {"titleDesc",
 			"titleAsc", "createdAtDesc", "createdAtAsc", "updatedAtDesc", "updatedAtAsc", "usageCountDesc",
-			"usageCountAsc"})) String sort, @RequestParam(defaultValue = "0") int pageNumber,
+			"usageCountAsc", "questionCountAsc", "questionCountDesc"})) String sort, @RequestParam(defaultValue = "0") int pageNumber,
 		@RequestParam(defaultValue = "10") int pageSize);
 
 	@Operation(summary = "엑셀 파일로 주제 생성", description = "엑셀 파일을 통해 주제를 생성합니다. 파일명 = 주제명, A열에 작성된 문제들을 등록합니다.")

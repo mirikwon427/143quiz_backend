@@ -1,4 +1,4 @@
-package garlicbears.quiz.domain.controller;
+package garlicbears.quiz.domain.common.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
