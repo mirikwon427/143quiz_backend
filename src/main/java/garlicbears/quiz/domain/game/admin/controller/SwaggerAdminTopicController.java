@@ -41,7 +41,8 @@ public interface SwaggerAdminTopicController {
 	public ResponseEntity<?> createTopicsByExcel(
 		@Parameter(description = "multipart/form-data 형식의 엑셀 파일을 받습니다.",
 			content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
-		@RequestPart("excel") MultipartFile file);
+		@RequestPart("excel") MultipartFile file,
+		@RequestPart("image") MultipartFile image);
 
 	@Operation(summary = "주제 생성", description = "입력된 주제를 생성합니다.",
 		requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schemaProperties = {
@@ -88,6 +89,8 @@ public interface SwaggerAdminTopicController {
 		@ApiResponse(responseCode = "500", description = "Internal Server Error", content = {
 			@Content(schema = @Schema(implementation = ResponseDto.class))})})
 	@PostMapping("/topic/{topicId}/image")
-	public ResponseEntity<?> uploadTopicImage(@PathVariable Long topicId,
-		@ModelAttribute MultipartFile image);
+	public ResponseEntity<?> uploadTopicImage(
+		@PathVariable Long topicId, @Parameter(description = "multipart/form-data 형식의 이미지 파일을 받습니다.",
+		content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
+	@RequestPart("image") MultipartFile image);
 }
