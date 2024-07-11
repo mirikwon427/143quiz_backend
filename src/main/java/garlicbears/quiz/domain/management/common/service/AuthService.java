@@ -115,8 +115,11 @@ public class AuthService {
 	 */
 	public void logout(HttpServletRequest request, HttpServletResponse response) {
 		String refreshToken = getRefreshTokenFromCookies(request);
+		logger.error("refreshToken : " +refreshToken);
 		Claims claims = jwtTokenizer.parseRefreshToken(refreshToken);
+		logger.error("claims : " +claims);
 		String email = claims.getSubject();
+		logger.error("email : " +email);
 		// 리프레시 토큰 삭제
 		refreshTokenService.deleteRefreshToken(email);
 		// 쿠키에서 리프레시 토큰 삭제
@@ -127,7 +130,8 @@ public class AuthService {
 	 * 리프레시 토큰을 쿠키에 저장
 	 */
 	private void addRefreshTokenCookie(String userAgent, HttpServletResponse response, String refreshToken) {
-		String domain = "garlicbears.github.io";
+		//String domain = "garlicbears.github.io";
+		String domain = "localhost";
 
 		// 사파리 브라우저인지 확인
 		boolean isSafari = userAgent.contains("Safari") && !userAgent.contains("Chrome");
@@ -166,7 +170,7 @@ public class AuthService {
 	 */
 	private void deleteRefreshTokenCookie(HttpServletResponse response) {
 		// SameSite 속성 추가 ( SameSite = None )
-		String cookieHeader = "refreshToken=; Max-Age=0; Path=/; Secure; HttpOnly; SameSite=None; Domain=%s";
+		String cookieHeader = "refreshToken=; Max-Age=0; Path=/; Secure; HttpOnly; SameSite=None;";
 		response.addHeader("Set-Cookie", cookieHeader);
 	}
 }
