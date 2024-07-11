@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import garlicbears.quiz.domain.common.dto.ResponseDto;
@@ -33,7 +34,7 @@ public interface SwaggerAdminController {
 			content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
 		@ApiResponse(responseCode = "401", description = "Unauthorized",
 			content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
-	public ResponseEntity<?> login(@Valid @RequestBody LoginDto loginDto, BindingResult bindingResult,
+	public ResponseEntity<?> login(@RequestHeader("User-Agent") String userAgent, @Valid @RequestBody LoginDto loginDto, BindingResult bindingResult,
 		HttpServletResponse response);
 
 	@Operation(summary = "Reissue Token", description = "Access Token 만료 시 재발급")
@@ -45,7 +46,7 @@ public interface SwaggerAdminController {
 		@ApiResponse(responseCode = "401", description = "Unauthorized",
 			content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
 	@GetMapping("/reissue")
-	public ResponseEntity<?> requestRefresh(HttpServletRequest request, HttpServletResponse response);
+	public ResponseEntity<?> requestRefresh(@RequestHeader("User-Agent") String userAgent, HttpServletRequest request, HttpServletResponse response);
 
 	@Operation(summary = "관리자 로그아웃", description = "로그아웃 처리")
 	@ApiResponses(value = {

@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,13 +30,14 @@ public class AuthService {
 	private final JwtTokenizer jwtTokenizer;
 	private final RefreshTokenService refreshTokenService;
 
+
 	@Autowired
 	public AuthService(JwtTokenizer jwtTokenizer, RefreshTokenService refreshTokenService) {
 		this.jwtTokenizer = jwtTokenizer;
 		this.refreshTokenService = refreshTokenService;
 	}
 
-	public ResponseEntity<?> createTokensAndRespond(Object member, HttpServletResponse response) {
+	public ResponseEntity<?> createTokensAndRespond(String domainUserAgent, Object member, HttpServletResponse response) {
 		List<String> roles;
 		String email;
 		Long memberId;
@@ -61,7 +63,7 @@ public class AuthService {
 
 		refreshTokenService.save(email, refreshToken, JwtTokenizer.REFRESH_TOKEN_EXPIRE_COUNT);
 
-		addRefreshTokenCookie(response, refreshToken);
+		addRefreshTokenCookie(domainUserAgent, response, refreshToken);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", accessToken);
@@ -72,7 +74,7 @@ public class AuthService {
 	/**
 	 * 리프레시 토큰을 이용해 새로운 액세스 토큰을 발급.
 	 */
-	public String requestRefresh(HttpServletRequest request, HttpServletResponse response) {
+	public String requestRefresh(String domainUserAgent, HttpServletRequest request, HttpServletResponse response) {
 		// 쿠키에서 리프레시 토큰을 읽기
 		String refreshToken = getRefreshTokenFromCookies(request);
 
@@ -102,7 +104,7 @@ public class AuthService {
 		refreshTokenService.save(email, newRefreshToken, JwtTokenizer.REFRESH_TOKEN_EXPIRE_COUNT);
 
 		// 새로운 리프레시 토큰을 쿠키에 저장
-		addRefreshTokenCookie(response, newRefreshToken);
+		addRefreshTokenCookie(domainUserAgent, response, newRefreshToken);
 
 		return accessToken;
 	}
@@ -124,10 +126,23 @@ public class AuthService {
 	/**
 	 * 리프레시 토큰을 쿠키에 저장
 	 */
-	private void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
+	private void addRefreshTokenCookie(String userAgent, HttpServletResponse response, String refreshToken) {
+		String domain = "garlicbears.github.io";
+
+		// 사파리 브라우저인지 확인
+		boolean isSafari = userAgent.contains("Safari") && !userAgent.contains("Chrome");
+		logger.info("domainUserAgent : "+ userAgent);
+		// 사파리일 경우 secure를 false로 설정
+		boolean isSecure = !isSafari;
+
 		// SameSite 속성 추가 ( SameSite = None )
-		String cookieHeader = String.format("refreshToken=%s; Max-Age=%d; Path=/; Secure; HttpOnly; SameSite=None",
-			refreshToken, 7 * 24 * 60 * 60);
+		String cookieHeader = String.format(
+			"refreshToken=%s; Max-Age=%d; Path=/; %s; HttpOnly; SameSite=None; Domain=%s",
+			refreshToken,
+			7 * 24 * 60 * 60,
+			isSecure ? "Secure" : "",
+			domain
+		);
 		response.addHeader("Set-Cookie", cookieHeader);
 	}
 
@@ -151,7 +166,7 @@ public class AuthService {
 	 */
 	private void deleteRefreshTokenCookie(HttpServletResponse response) {
 		// SameSite 속성 추가 ( SameSite = None )
-		String cookieHeader = "refreshToken=; Max-Age=0; Path=/; Secure; HttpOnly; SameSite=None";
+		String cookieHeader = "refreshToken=; Max-Age=0; Path=/; Secure; HttpOnly; SameSite=None; Domain=%s";
 		response.addHeader("Set-Cookie", cookieHeader);
 	}
 }
