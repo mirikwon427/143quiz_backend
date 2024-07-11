@@ -130,22 +130,31 @@ public class AuthService {
 	 * 리프레시 토큰을 쿠키에 저장
 	 */
 	private void addRefreshTokenCookie(String userAgent, HttpServletResponse response, String refreshToken) {
-		String domain = "garlicbears.github.io";
+		//String domain = "garlicbears.github.io";
+		String domain = "localhost:3000";
 
 		// 사파리 브라우저인지 확인
 		boolean isSafari = userAgent.contains("Safari") && !userAgent.contains("Chrome");
 		logger.info("domainUserAgent : "+ userAgent);
 		// 사파리일 경우 secure를 false로 설정
 		boolean isSecure = !isSafari;
+		String cookieHeader = "";
+		if (isSecure) {
+			cookieHeader = String.format(
+				"refreshToken=%s; Max-Age=%d; Path=/; Secure; HttpOnly; SameSite=None",
+				refreshToken,
+				7 * 24 * 60 * 60
+			);
+		} else {
+			// SameSite 속성 추가 ( SameSite = None )
+			cookieHeader = String.format(
+				"refreshToken=%s; Max-Age=%d; Path=/; HttpOnly; SameSite=None; Domain=%s",
+				refreshToken,
+				7 * 24 * 60 * 60,
+				domain
+			);
+		}
 
-		// SameSite 속성 추가 ( SameSite = None )
-		String cookieHeader = String.format(
-			"refreshToken=%s; Max-Age=%d; Path=/; %s; HttpOnly; SameSite=None; Domain=%s",
-			refreshToken,
-			7 * 24 * 60 * 60,
-			isSecure ? "Secure" : "",
-			domain
-		);
 		response.addHeader("Set-Cookie", cookieHeader);
 	}
 
