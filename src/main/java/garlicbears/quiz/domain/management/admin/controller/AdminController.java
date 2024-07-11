@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,7 +58,7 @@ public class AdminController implements SwaggerAdminController {
 	 * 유효한 관리자 정보를 전달받아 액세스 토큰과 리프레시 토큰을 발급.
 	 */
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@Valid @RequestBody LoginDto loginDto, BindingResult bindingResult,
+	public ResponseEntity<?> login(@RequestHeader("User-Agent") String userAgent, @Valid @RequestBody LoginDto loginDto, BindingResult bindingResult,
 		HttpServletResponse response) {
 
 		if (bindingResult.hasErrors()) {
@@ -69,15 +70,15 @@ public class AdminController implements SwaggerAdminController {
 			throw new CustomException(ErrorCode.INVALID_INPUT);
 		}
 
-		return authService.createTokensAndRespond(admin, response);
+		return authService.createTokensAndRespond(userAgent, admin, response);
 	}
 
 	/**
 	 * 리프레시 토큰을 이용해 새로운 액세스 토큰을 발급.
 	 */
 	@GetMapping("/reissue")
-	public ResponseEntity<?> requestRefresh(HttpServletRequest request, HttpServletResponse response) {
-		String accessToken = authService.requestRefresh(request, response);
+	public ResponseEntity<?> requestRefresh(@RequestHeader("User-Agent") String userAgent, HttpServletRequest request, HttpServletResponse response) {
+		String accessToken = authService.requestRefresh(userAgent, request, response);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", accessToken);

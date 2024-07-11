@@ -11,6 +11,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import garlicbears.quiz.domain.common.entity.Active;
 import garlicbears.quiz.domain.common.entity.QUser;
 import garlicbears.quiz.domain.management.common.dto.ResponseUserDto;
 import jakarta.persistence.EntityManager;
@@ -57,10 +58,10 @@ public class AdminUserQueryRepositoryImpl implements AdminUserQueryRepository {
 				user.userAge,
 				user.userGender,
 				user.userLocation,
-				user.userActive,
 				user.image.accessUrl
 			))
 			.from(user)
+			.where(user.userActive.eq(Active.active))
 			.orderBy(getOrderSpecifier(user, sortBy))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())

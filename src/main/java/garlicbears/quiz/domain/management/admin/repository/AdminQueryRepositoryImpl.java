@@ -15,6 +15,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLTemplates;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import garlicbears.quiz.domain.common.entity.Active;
 import garlicbears.quiz.domain.common.entity.QAdmin;
 import garlicbears.quiz.domain.common.entity.QRole;
 import garlicbears.quiz.domain.management.admin.dto.ResponseAdminDto;
@@ -45,10 +46,10 @@ public class AdminQueryRepositoryImpl implements AdminQueryRepository {
 			.select(Projections.constructor(ResponseAdminDto.class,
 				admin.adminId,
 				admin.adminEmail,
-				admin.active,
 				admin.createdAt,
 				admin.updatedAt))
 			.from(admin)
+			.where(admin.active.eq(Active.active))
 			.orderBy(getOrderSpecifier(admin, sortBy))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())

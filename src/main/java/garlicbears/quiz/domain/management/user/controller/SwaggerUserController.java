@@ -12,6 +12,7 @@ import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.multipart.MultipartFile;
 
 import garlicbears.quiz.domain.common.dto.ResponseDto;
@@ -75,7 +76,8 @@ public interface SwaggerUserController {
 		@Content(schema = @Schema(implementation = ResponseDto.class))}),
 		@ApiResponse(responseCode = "403", description = "Forbidden (Invalid token)", content = {
 			@Content(schema = @Schema(implementation = ResponseDto.class))})})
-	public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserDetails userDetails);
+	public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserDetails userDetails,
+		HttpServletRequest request, HttpServletResponse response);
 
 	@Operation(summary = "평점 주기", description = "jwt token을 받아 유저 정보를 확인. request body로 평점을 전달받아 저장합니다.", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(schemaProperties = {
 		@SchemaProperty(name = "ratingValue", schema = @Schema(type = "double", format = "json"))})))
@@ -108,7 +110,7 @@ public interface SwaggerUserController {
 			content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
 		@ApiResponse(responseCode = "401", description = "Unauthorized",
 			content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
-	public ResponseEntity<?> login(@Valid @RequestBody LoginDto loginDto, BindingResult bindingResult,
+	public ResponseEntity<?> login(@RequestHeader("User-Agent") String userAgent, @Valid @RequestBody LoginDto loginDto, BindingResult bindingResult,
 		HttpServletResponse response);
 
 	@Operation(summary = "Reissue Token", description = "Access Token 만료 시 재발급")
@@ -120,7 +122,7 @@ public interface SwaggerUserController {
 		@ApiResponse(responseCode = "401", description = "Unauthorized",
 			content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
 	@GetMapping("/reissue")
-	public ResponseEntity<?> requestRefresh(HttpServletRequest request, HttpServletResponse response);
+	public ResponseEntity<?> requestRefresh(@RequestHeader("User-Agent") String userAgent, HttpServletRequest request, HttpServletResponse response);
 
 	@Operation(summary = "로그아웃", description = "로그아웃 처리")
 	@ApiResponses(value = {
