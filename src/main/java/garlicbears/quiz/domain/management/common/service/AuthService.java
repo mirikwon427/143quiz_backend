@@ -130,8 +130,7 @@ public class AuthService {
 	 * 리프레시 토큰을 쿠키에 저장
 	 */
 	private void addRefreshTokenCookie(String userAgent, HttpServletResponse response, String refreshToken) {
-		//String domain = "garlicbears.github.io";
-		String domain = "localhost";
+		String domain = "garlicbears.github.io";
 
 		// 사파리 브라우저인지 확인
 		boolean isSafari = userAgent.contains("Safari") && !userAgent.contains("Chrome");
