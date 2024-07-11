@@ -8,18 +8,16 @@ import garlicbears.quiz.domain.game.common.entity.Topic;
 public class ResponseTopicDto {
 	private long topicId;
 	private String topicText;
-	private String topicStatus;
 	private LocalDateTime topicCreationDate;
 	private LocalDateTime topicUpdateDate;
 	private int topicUsageCount;
 	private long topicQuestionCount;
 	private String topicImage;
 
-	public ResponseTopicDto(long topicId, String topicText, Active topicStatus, LocalDateTime topicCreationDate,
+	public ResponseTopicDto(long topicId, String topicText, LocalDateTime topicCreationDate,
 		LocalDateTime topicUpdateDate, int topicUsageCount, long topicQuestionCount, String topicImage) {
 		this.topicId = topicId;
 		this.topicText = topicText;
-		this.topicStatus = topicStatus.toString();
 		this.topicCreationDate = topicCreationDate;
 		this.topicUpdateDate = topicUpdateDate;
 		this.topicUsageCount = topicUsageCount;
@@ -33,10 +31,6 @@ public class ResponseTopicDto {
 
 	public String getTopicText() {
 		return topicText;
-	}
-
-	public String getTopicStatus() {
-		return topicStatus;
 	}
 
 	public LocalDateTime getTopicCreationDate() {
