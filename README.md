@@ -4,23 +4,12 @@
 
 # Stack
 
-사용언어
-Java 17
-개발도구
-Spring Boot 3.2.3
-Spring Data JPA
-Query DSL
-서버
-Apache Tomcat
-JWT (JSON Web Token)
-DB
-MariaDB (AWS RDS)
-Redis
-배포
-AWS EC2 / Load Balancer
-형상관리
-Git
-
+* 사용언어 : Java 17
+* 개발도구 : Spring Boot 3.2.3, Spring Data, JPAQuery DSL
+* 서버 : Apache Tomcat, JWT (JSON Web Token)
+* DB : MariaDB (AWS RDS), Redis
+* 배포 : AWS EC2 / Load Balancer
+* 형상관리 :  Git
 
 # Getting Started
 
