@@ -11,12 +11,13 @@
 * 배포 : AWS EC2 / Load Balancer
 * 형상관리 :  Git
 
-# Getting Started
-
-Click this [URL](https://garlicbears.github.io/143quiz_frontend/)!!
-
 # 아키텍처 다이어그램
 
 ![image](https://github.com/mirikwon427/143quiz_backend/blob/main/src/main/java/garlicbears/quiz/image/Architecture%20Diagram.drawio.png)
+
+
+# Getting Started
+
+Click this [URL](https://garlicbears.github.io/143quiz_frontend/)!!
 
 
