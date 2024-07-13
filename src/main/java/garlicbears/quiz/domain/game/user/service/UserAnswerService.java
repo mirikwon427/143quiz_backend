@@ -1,6 +1,7 @@
 package garlicbears.quiz.domain.game.user.service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -100,7 +101,7 @@ public class UserAnswerService {
 		validateRewardBadgeStatus(reward.getRewardBadgeStatus());
 		if (updatedHeartsCount == totalQuestions) {
 			reward.setRewardBadgeStatus(true);
-			reward.setRewardBadgeCreatedAt(LocalDateTime.now());
+			reward.setRewardBadgeCreatedAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
 			return true;
 		}
 		return false;
@@ -190,7 +191,7 @@ public class UserAnswerService {
 		// 하트 개수가 0을 체크한 후 게임 종료 여부를 업데이트한다.
 		if (gameSession.getHeartsCount() == 0) {
 			gameSession.setGameDropout(true);
-			gameSession.setGameEndTime(LocalDateTime.now());
+			gameSession.setGameEndTime(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
 			gameSessionRepository.save(gameSession);
 		} else {
 			throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);

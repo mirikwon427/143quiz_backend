@@ -1,6 +1,7 @@
 package garlicbears.quiz.domain.common.entity;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import org.hibernate.annotations.ColumnDefault;
 
@@ -39,6 +40,6 @@ public class Rating {
 	public Rating(User user, double ratingValue) {
 		this.user = user;
 		this.ratingValue = ratingValue;
-		this.ratingDate = LocalDateTime.now();
+		this.ratingDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
 	}
 }

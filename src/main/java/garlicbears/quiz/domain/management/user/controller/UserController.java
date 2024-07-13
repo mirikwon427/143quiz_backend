@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -146,14 +147,32 @@ public class UserController implements SwaggerUserController {
 	}
 
 	@DeleteMapping("/")
-	public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserDetails userDetails) {
+	public ResponseEntity<?> deleteUser(@AuthenticationPrincipal UserDetails userDetails,
+		HttpServletRequest request, HttpServletResponse response) {
+		logger.info("deleteUser 메서드 호출");
+
 		if (userDetails == null) {
+			logger.warning("AccessToken에 유저 정보가 없습니다. : UserController/deleteUser");
 			throw new CustomException(ErrorCode.UNAUTHORIZED);
 		}
+
 		// 현재 인증된 사용자의 정보를 UserDetails로부터 가져올 수 있습니다.
 		User user = userService.findByEmail(userDetails.getUsername());
 
+		if (user == null) {
+			logger.warning("User not found: " + userDetails.getUsername());
+			throw new CustomException(ErrorCode.USER_NOT_FOUND);
+		}
+
+		logger.info("User found: " + user.getUserEmail());
+
+		// 로그아웃 처리
+		logger.info("Logging out user: " + user.getUserEmail());
+		authService.logout(request, response);
+
+		// 사용자 삭제
 		userService.delete(user);
+		logger.info("User deleted: " + user.getUserEmail());
 
 		return ResponseEntity.ok(ResponseDto.success());
 	}
@@ -178,7 +197,7 @@ public class UserController implements SwaggerUserController {
 	 * 유효한 사용자 정보를 전달받아 액세스 토큰과 리프레시 토큰을 발급.
 	 */
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@Valid @RequestBody LoginDto loginDto, BindingResult bindingResult,
+	public ResponseEntity<?> login(@RequestHeader("User-Agent") String userAgent, @Valid @RequestBody LoginDto loginDto, BindingResult bindingResult,
 		HttpServletResponse response) {
 
 		if (bindingResult.hasErrors()) {
@@ -190,15 +209,16 @@ public class UserController implements SwaggerUserController {
 			throw new CustomException(ErrorCode.INVALID_INPUT);
 		}
 
-		return authService.createTokensAndRespond(user, response);
+		return authService.createTokensAndRespond(userAgent, user, response);
 	}
 
 	/**
 	 * 리프레시 토큰을 이용해 새로운 액세스 토큰을 발급.
 	 */
 	@GetMapping("/reissue")
-	public ResponseEntity<?> requestRefresh(HttpServletRequest request, HttpServletResponse response) {
-		String accessToken = authService.requestRefresh(request, response);
+	public ResponseEntity<?> requestRefresh(@RequestHeader("User-Agent") String userAgent, HttpServletRequest request, HttpServletResponse response) {
+		// 리프레시 토큰을 이용해 새로운 액세스 토큰 발급
+		String accessToken = authService.requestRefresh(userAgent, request, response);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", accessToken);
