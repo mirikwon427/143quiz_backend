@@ -11,11 +11,10 @@ public class ResponseUserDto {
 	private int age;
 	private User.Gender gender;
 	private User.Location location;
-	private String active;
 	private String imageUrl;
 
 	public ResponseUserDto(long userId, String email, String nickname, int birthYear, int age, User.Gender gender,
-		User.Location location, Active active, String imageUrl) {
+		User.Location location, String imageUrl) {
 		this.userId = userId;
 		this.email = email;
 		this.nickname = nickname;
@@ -23,7 +22,6 @@ public class ResponseUserDto {
 		this.age = age;
 		this.gender = gender;
 		this.location = location;
-		this.active = active.name();
 		this.imageUrl = imageUrl;
 	}
 
@@ -55,10 +53,6 @@ public class ResponseUserDto {
 		return location;
 	}
 
-	public String getActive() {
-		return active;
-	}
-
 	public String getImageUrl() {
 		return imageUrl;
 	}
@@ -66,6 +60,6 @@ public class ResponseUserDto {
 	public static ResponseUserDto fromUser(User user) {
 		return new ResponseUserDto(user.getUserId(), user.getUserEmail(), user.getUserNickname(),
 			user.getUserBirthYear(), user.getUserAge(), user.getUserGender(),
-			user.getUserLocation(), user.getUserActive(),user.getImage().getAccessUrl());
+			user.getUserLocation(), user.getImage().getAccessUrl());
 	}
 }

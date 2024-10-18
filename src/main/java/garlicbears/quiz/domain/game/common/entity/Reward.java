@@ -16,9 +16,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "rewards")
+@Table(name = "rewards",uniqueConstraints = @UniqueConstraint(columnNames = {"user_seq", "topic_seq"}))
 @DynamicInsert
 @DynamicUpdate
 public class Reward {
@@ -28,11 +29,11 @@ public class Reward {
 	private Long rewardId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_seq")
+	@JoinColumn(name = "user_seq", nullable = false)
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "topic_seq")
+	@JoinColumn(name = "topic_seq", nullable = false)
 	private Topic topic;
 
 	@Column(name = "reward_number_hearts", nullable = false)

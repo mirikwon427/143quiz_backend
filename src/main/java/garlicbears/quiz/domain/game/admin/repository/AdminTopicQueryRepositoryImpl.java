@@ -12,6 +12,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import garlicbears.quiz.domain.common.entity.Active;
 import garlicbears.quiz.domain.game.admin.dto.ResponseTopicDto;
 import garlicbears.quiz.domain.game.common.entity.QQuestion;
 import garlicbears.quiz.domain.game.common.entity.QTopic;
@@ -33,7 +34,6 @@ public class AdminTopicQueryRepositoryImpl implements AdminTopicQueryRepository 
 			.select(Projections.constructor(ResponseTopicDto.class,
 				topic.topicId,
 				topic.topicTitle,
-				topic.topicActive,
 				topic.createdAt,
 				topic.updatedAt,
 				topic.topicUsageCount,
@@ -47,6 +47,7 @@ public class AdminTopicQueryRepositoryImpl implements AdminTopicQueryRepository 
 				topic.topicImage.accessUrl
 			))
 			.from(topic)
+			.where(topic.topicActive.eq(Active.active))
 			.orderBy(getOrderSpecifier(topic, sortBy))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())

@@ -42,8 +42,8 @@ public class UserTopicQueryRepositoryImpl implements UserTopicQueryRepository {
 			.where(topic.topicActive.eq(Active.active)
 				.and((reward.topic.topicId.isNull()
 					.or(reward.rewardBadgeStatus.eq(false)))))
+			.groupBy(topic.topicId)
 			.fetch();
-
 	}
 
 	@Override
@@ -63,6 +63,7 @@ public class UserTopicQueryRepositoryImpl implements UserTopicQueryRepository {
 				.and(reward.user.userId.eq(userId)))
 			.where(reward.rewardBadgeStatus.eq(true)
 				.and(topic.topicActive.eq(Active.active)))
+			.groupBy(topic.topicId)
 			.fetch();
 
 	}

@@ -1,6 +1,7 @@
 package garlicbears.quiz.domain.common.entity;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
@@ -44,7 +45,7 @@ public class Log {
 		this.user = user;
 		this.ipAddress = ipAddress;
 		this.url = url;
-		this.createdAt = LocalDateTime.now();
+		this.createdAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
 	}
 
 	public Log(long logId, User user, String ipAddress, String url, LocalDateTime createdAt) {

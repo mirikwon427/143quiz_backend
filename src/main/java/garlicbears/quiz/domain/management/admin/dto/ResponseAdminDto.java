@@ -9,17 +9,15 @@ import garlicbears.quiz.domain.common.entity.Active;
 public class ResponseAdminDto {
 	private long adminId;
 	private String adminEmail;
-	private String adminActive;
 	private String createdAt;
 	private String updatedAt;
 
 	private List<String> adminRole;
 
-	public ResponseAdminDto(long adminId, String adminEmail, Active adminActive,
+	public ResponseAdminDto(long adminId, String adminEmail,
 		LocalDateTime createdAt, LocalDateTime updatedAt) {
 		this.adminId = adminId;
 		this.adminEmail = adminEmail;
-		this.adminActive = adminActive.name();
 		this.createdAt = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		this.updatedAt = updatedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
@@ -30,10 +28,6 @@ public class ResponseAdminDto {
 
 	public String getAdminEmail() {
 		return adminEmail;
-	}
-
-	public String getAdminActive() {
-		return adminActive;
 	}
 
 	public String getCreatedAt() {
