@@ -15,6 +15,9 @@
 
 ![image](https://github.com/mirikwon427/143quiz_backend/blob/main/src/main/java/garlicbears/quiz/image/Architecture%20Diagram.drawio.png)
 
+# ERD
+
+![image](https://github.com/mirikwon427/143quiz_backend/blob/main/src/main/java/garlicbears/quiz/image/143chosung-ERD.png)
 
 # Getting Started
 
