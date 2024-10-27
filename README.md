@@ -8,7 +8,7 @@
 * 개발도구 : Spring Boot 3.2.3, Spring Data, JPAQuery DSL
 * 서버 : Apache Tomcat, JWT (JSON Web Token)
 * DB : MariaDB (AWS RDS), Redis
-* 배포 : AWS EC2 / Load Balancer
+* 배포 : AWS EC2
 * 형상관리 :  Git
 
 # 아키텍처 다이어그램
