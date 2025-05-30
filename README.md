@@ -32,8 +32,6 @@
 
 ![image](https://github.com/mirikwon427/143quiz_backend/blob/main/src/main/java/garlicbears/quiz/image/143chosung-ERD.png)
 
-# Getting Started
 
-Click this [URL](https://garlicbears.github.io/143quiz_frontend/)!!
 
 
